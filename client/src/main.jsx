@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 
 import App from './App';
-import './app.css';
+import './App.css';
 import { store } from './stores/store';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
