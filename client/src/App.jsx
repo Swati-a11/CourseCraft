@@ -1,33 +1,37 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Routes, Route, Navigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import Login from './pages/auths/Login';
-import Register from './pages/auths/Register';
+// Auth Pages
+import Login from "./pages/auths/Login";
+import Register from "./pages/auths/Register";
 
-import Dashboard from './pages/student/Dashboard';
-import CourseDetails from './pages/student/CourseDetails';
-import TopicPage from './pages/student/TopicPage';
-import StudyPlan from './pages/student/StudyPlan';
-import ProgressPage from './pages/student/ProgressPage';
-import WeakTopics from './pages/student/WeakTopics';
-import Gamification from './pages/student/Gamification';
-import Reminders from './pages/student/Reminders';
-import BrowseCourses from './pages/student/BrowseCourses';
-import MyCourses from './pages/student/MyCourses';
-import Achievements from './pages/student/Achievements';
-import Settings from './pages/student/Settings';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import YoutubeNotes from './pages/student/YoutubeNotes';
+// Student Pages
+import Dashboard from "./pages/student/Dashboard";
+import CourseDetails from "./pages/student/CourseDetails";
+import TopicPage from "./pages/student/TopicPage";
+import StudyPlan from "./pages/student/StudyPlan";
+import ProgressPage from "./pages/student/ProgressPage";
+import WeakTopics from "./pages/student/WeakTopics";
+import Gamification from "./pages/student/Gamification";
+import Reminders from "./pages/student/Reminders";
+import BrowseCourses from "./pages/student/BrowseCourses";
+import MyCourses from "./pages/student/MyCourses";
+import Achievements from "./pages/student/Achievements";
+import Settings from "./pages/student/Settings";
+import YoutubeNotes from "./pages/student/YoutubeNotes";
+
+// Admin
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 function App() {
   return (
     <>
       <Routes>
-        {/* Redirect root to login */}
+        {/* Root redirect */}
         <Route path="/" element={<Navigate to="/login" replace />} />
 
-        {/* Authentication Routes */}
+        {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
@@ -35,10 +39,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/course/:id" element={<CourseDetails />} />
 
-        {/* Existing Topic Route */}
         <Route path="/topic/:id" element={<TopicPage />} />
-
-        {/* New Topic Route with courseId and topicIndex */}
         <Route
           path="/courses/:courseId/topics/:topicIndex"
           element={<TopicPage />}
@@ -53,22 +54,23 @@ function App() {
         <Route path="/my-courses" element={<MyCourses />} />
         <Route path="/achievements" element={<Achievements />} />
         <Route path="/settings" element={<Settings />} />
-        {/* Admin Route */}
-        <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/youtube-notes" element={<YoutubeNotes />} />
 
-        {/* 404 Route */}
+        {/* Admin Route */}
+        <Route path="/admin" element={<AdminDashboard />} />
+
+        {/* 404 Page */}
         <Route
           path="*"
           element={
-            <div className="min-h-screen bg-black text-red-500 flex items-center justify-center text-3xl font-bold">
+            <div className="min-h-screen flex items-center justify-center bg-black text-red-500 text-3xl font-bold">
               404 - Page Not Found
             </div>
           }
         />
       </Routes>
 
-      {/* Global Toast Notifications */}
+      {/* Toast Notifications */}
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -78,9 +80,9 @@ function App() {
         pauseOnHover
         theme="dark"
         toastStyle={{
-          background: '#18181b',
-          color: '#ffffff',
-          border: '1px solid #14532d',
+          background: "#18181b",
+          color: "#ffffff",
+          border: "1px solid #14532d",
         }}
       />
     </>
