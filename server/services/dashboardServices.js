@@ -1,14 +1,8 @@
-// src/services/dashboardService.js
+import api from './api';
 
-import axios from 'axios';
-
-// Create axios instance pointing to backend server
-const API = axios.create({
-  baseURL: 'http://localhost:5000/api/dashboard',
-});
-
-// Attach token from localStorage before every request
-API.interceptors.request.use((config) => {
+// Attach token automatically (already handled in api.js if you added it there)
+// Keeping it safe here too in case you didn’t
+api.interceptors.request.use((config) => {
   const user = JSON.parse(localStorage.getItem('user'));
 
   if (user?.token) {
@@ -18,10 +12,12 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-// Fetch dashboard stats
+// ===============================
+// FETCH DASHBOARD STATS
+// ===============================
 export const getDashboardStats = async () => {
   try {
-    const response = await API.get('/stats');
+    const response = await api.get('/api/dashboard/stats');
     return response.data;
   } catch (error) {
     console.error(
