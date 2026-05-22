@@ -4,27 +4,27 @@ import api from './api';
 
 // Get all courses
 export const getAllCourses = (params = {}) => {
-  return api.get('/courses', { params });
+  return api.get('/api/courses', { params });
 };
 
 // Get single course
 export const getCourseById = (courseId) => {
-  return api.get(`/courses/${courseId}`);
+  return api.get(`/api/courses/${courseId}`);
 };
 
 // Get quizzes by difficulty
 export const getQuizzesByDifficulty = (courseId, params = {}) => {
-  return api.get(`/courses/${courseId}/quiz`, { params });
+  return api.get(`/api/courses/${courseId}/quiz`, { params });
 };
 
 // Enroll in a course
 export const enrollInCourse = (courseId) => {
-  return api.post('/enrollments/enroll', { courseId });
+  return api.post('/api/enrollments/enroll', { courseId });
 };
 
 // Create course manually
 export const createCourse = (courseData) => {
-  return api.post('/courses', courseData);
+  return api.post('/api/courses', courseData);
 };
 
 // Generate AI course
