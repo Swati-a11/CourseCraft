@@ -33,18 +33,22 @@ const app = express();
 // Middleware
 // Configure CORS to accept origins from an environment variable (comma-separated)
 const rawOrigins = process.env.CORS_ORIGINS || 'http://localhost:5173';
-const allowedOrigins = rawOrigins.split(',').map((s) => s.trim()).filter(Boolean);
-
-// Also allow the Vercel deployment origin so production builds can call the API
-const vercelOrigin = 'https://course-craft-ten.vercel.app';
-if (!allowedOrigins.includes(vercelOrigin)) allowedOrigins.push(vercelOrigin);
+const allowedOrigins = rawOrigins
+  .split(',')
+  .map(s => s.trim())
+  .filter(Boolean);
 
 app.use(
   cors({
-    origin: (incomingOrigin, callback) => {
-      if (!incomingOrigin) return callback(null, true);
-      if (allowedOrigins.includes(incomingOrigin)) return callback(null, true);
-      return callback(new Error('Not allowed by CORS'));
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // ❌ DO NOT THROW ERROR — just block safely
+      return callback(null, false);
     },
     credentials: true,
   })
