@@ -30,7 +30,7 @@ const NotesTab = ({ title, notes, completed, onComplete }) => {
               : 'bg-green-600 hover:bg-green-700 text-black'
           }`}
         >
-          {completed ? 'Notes Completed ✅' : 'Mark Notes as Complete'}
+          {completed ? 'Notes Completed ' : 'Mark Notes as Complete'}
         </button>
       </div>
     </div>

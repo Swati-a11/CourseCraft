@@ -54,9 +54,9 @@ Instructions:
 6. Include code examples when helpful.
 7. Use emojis to improve readability.
 8. At the end, include:
-   - 🎯 Final Project Suggestion
-   - 📚 Additional Resources
-   - 🚀 Next Steps
+   -  Final Project Suggestion
+   -  Additional Resources
+   -  Next Steps
 9. Keep the content beginner-friendly and practical.
 10. Make the study plan personalized to the user's goal and level.
 

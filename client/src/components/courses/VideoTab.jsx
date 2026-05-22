@@ -50,7 +50,7 @@ const VideoTab = ({ title, videoUrl, completed, onComplete }) => {
             : 'bg-green-600 hover:bg-green-700 text-black'
         }`}
       >
-        {completed ? 'Video Completed ✅' : 'Mark Video as Complete'}
+        {completed ? 'Video Completed ' : 'Mark Video as Complete'}
       </button>
     </div>
   );

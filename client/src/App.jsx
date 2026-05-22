@@ -22,7 +22,7 @@ import Settings from "./pages/student/Settings";
 import YoutubeNotes from "./pages/student/YoutubeNotes";
 
 // Admin
-import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminDashboard from "./pages/admin/adminDashboard";
 
 function App() {
   return (
