@@ -13,37 +13,37 @@ export const getAchievements = (type = null) => {
 
 // Get specific achievement by ID
 export const getAchievementById = (achievementId) => {
-  return api.get(`/achievements/${achievementId}`);
+  return api.get(`/api/achievements/${achievementId}`);
 };
 
 // Get certificate for a specific course
 export const getCourseCertificate = (courseId) => {
-  return api.get(`/achievements/course/${courseId}`);
+  return api.get(`/api/achievements/course/${courseId}`);
 };
 
 // Get achievement statistics
 export const getAchievementStats = () => {
-  return api.get('/achievements/stats/user');
+  return api.get('/api/achievements/stats/user');
 };
 
 // Get certificates only
 export const getCertificates = () => {
-  return api.get('/achievements', { params: { type: 'certificate' } });
+  return api.get('/api/achievements', { params: { type: 'certificate' } });
 };
 
 // Get badges only
 export const getBadges = () => {
-  return api.get('/achievements', { params: { type: 'badge' } });
+  return api.get('/api/achievements', { params: { type: 'badge' } });
 };
 
 // Create an achievement (admin only)
 export const createAchievement = (achievementData) => {
-  return api.post('/achievements', achievementData);
+  return api.post('/api/achievements', achievementData);
 };
 
 // Delete an achievement (admin only)
 export const deleteAchievement = (achievementId) => {
-  return api.delete(`/achievements/${achievementId}`);
+  return api.delete(`/api/achievements/${achievementId}`);
 };
 
 // Download certificate
