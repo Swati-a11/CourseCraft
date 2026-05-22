@@ -16,53 +16,62 @@ import courseRoutes from "./routes/courseRoutes.js";
 import courseProgressRoutes from "./routes/courseProgressRoutes.js";
 import achievementRoutes from "./routes/achievementRoutes.js";
 import quizRoutes from './routes/quizRoutes.js';
-import Progress from './models/Progress.js';
 import enrollmentRoutes from './routes/enrollmentRoutes.js';
 import youtubeRoutes from './routes/youtubeRoutes.js';
 import pdfRoutes from './routes/pdfRoutes.js';
+import Progress from './models/Progress.js';
 
-
-// Load environment variables from server/.env
-dotenv.config({
-  path: path.resolve('./.env'),
-  override: true,
-});
+// ENV
+dotenv.config({ path: path.resolve('./.env') });
 
 const app = express();
 
-// Middleware
-// Configure CORS to accept origins from an environment variable (comma-separated)
-const rawOrigins = process.env.CORS_ORIGINS || 'http://localhost:5173';
-const allowedOrigins = rawOrigins
-  .split(',')
-  .map(s => s.trim())
-  .filter(Boolean);
+/* =========================
+   CORS CONFIG (FIXED)
+========================= */
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://course-craft-ten.vercel.app"
+];
 
 app.use(
   cors({
     origin: function (origin, callback) {
+      // allow tools like Postman
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
 
-      // ❌ DO NOT THROW ERROR — just block safely
       return callback(null, false);
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
   })
 );
 
-// Remove any unexpected Content-Security-Policy header from backend responses
-app.use((req, res, next) => {
-  res.removeHeader('Content-Security-Policy');
-  next();
-});
+// IMPORTANT: handle preflight requests
+app.options("*", cors());
+
+/* =========================
+   MIDDLEWARE
+========================= */
 
 app.use(express.json());
 
-// API Routes
+// remove unwanted headers
+app.use((req, res, next) => {
+  res.removeHeader("Content-Security-Policy");
+  next();
+});
+
+/* =========================
+   ROUTES
+========================= */
+
 app.use('/api/auths', authRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/course-progress', courseProgressRoutes);
@@ -78,39 +87,38 @@ app.use('/api/enrollments', enrollmentRoutes);
 app.use('/api/youtube', youtubeRoutes);
 app.use('/api/pdf', pdfRoutes);
 
-// Serve uploads folder statically for PDF downloads
+// static files
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
-// Root Route
+/* =========================
+   BASIC ROUTES
+========================= */
+
 app.get('/', (req, res) => {
   res.send('CourseCraft API is running...');
 });
 
-// Prevent favicon 404 warning
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
-// Debug Logs
+/* =========================
+   DEBUG LOGS
+========================= */
+
 console.log('CWD:', process.cwd());
-console.log(
-  'MONGODB_URI:',
-  process.env.MONGODB_URI ? 'LOADED' : 'MISSING'
-);
-console.log(
-  'JWT_SECRET:',
-  process.env.JWT_SECRET ? 'LOADED' : 'MISSING'
-);
-console.log(
-  'GEMINI_API_KEY:',
-  process.env.GEMINI_API_KEY ? 'LOADED' : 'MISSING'
-);
+console.log('MONGODB_URI:', process.env.MONGODB_URI ? 'LOADED' : 'MISSING');
+console.log('JWT_SECRET:', process.env.JWT_SECRET ? 'LOADED' : 'MISSING');
+console.log('GEMINI_API_KEY:', process.env.GEMINI_API_KEY ? 'LOADED' : 'MISSING');
 console.log(Progress.schema.obj);
 
-// Database Connection and Server Start
+/* =========================
+   DB + SERVER START
+========================= */
+
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGODB_URI;
 
 if (!MONGO_URI) {
-  console.error('❌ MONGODB_URI is missing in .env file');
+  console.error('❌ MONGODB_URI is missing');
   process.exit(1);
 }
 
@@ -121,10 +129,9 @@ mongoose
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`🌐 http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
-    console.error('❌ MongoDB Connection Error:', err.message);
+    console.error('❌ MongoDB Error:', err.message);
     process.exit(1);
   });
