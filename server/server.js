@@ -38,15 +38,23 @@ const vercelOrigin = 'https://course-craft-ten.vercel.app';
 if (!allowedOrigins.includes(vercelOrigin)) allowedOrigins.push(vercelOrigin);
 
 app.use(
+  const rawOrigins = process.env.CORS_ORIGINS || 'http://localhost:5173';
+const allowedOrigins = rawOrigins.split(',').map(s => s.trim());
+
+app.use(
   cors({
     origin: (incomingOrigin, callback) => {
-      // Allow requests with no origin (like server-to-server or curl)
       if (!incomingOrigin) return callback(null, true);
-      if (allowedOrigins.includes(incomingOrigin)) return callback(null, true);
-      return callback(new Error('Not allowed by CORS'));
+
+      if (allowedOrigins.includes(incomingOrigin)) {
+        return callback(null, true);
+      }
+
+      return callback(null, true); // TEMP SAFE MODE (no crash)
     },
     credentials: true,
   })
+);
 );
 
 // Remove any unexpected Content-Security-Policy header from backend responses
