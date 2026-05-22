@@ -1,32 +1,35 @@
-// client/src/services/courseProgressService.js
-
 import api from './api';
+
+// ======================
+// COURSE PROGRESS
+// ======================
 
 // Get progress for a specific course
 export const getCourseProgress = (courseId) => {
-  return api.get(`/course-progress/${courseId}`);
+  return api.get(`/api/course-progress/${courseId}`);
 };
 
-// Get all courses progress for the logged-in user
+// Get all courses progress
 export const getAllCoursesProgress = () => {
-  return api.get('/course-progress/all');
+  return api.get('/api/course-progress/all');
 };
 
-// Update progress for a topic in a course
+// Update topic progress
 export const updateTopicProgress = (courseId, topicData) => {
-  return api.post(`/course-progress/${courseId}/topic`, topicData);
+  return api.post(`/api/course-progress/${courseId}/topic`, topicData);
 };
 
 // Update overall course progress
 export const updateCourseProgress = (courseId, progressData) => {
-  return api.put(`/course-progress/${courseId}`, progressData);
+  return api.put(`/api/course-progress/${courseId}`, progressData);
 };
 
-// Calculate completion percentage
+// ======================
+// UTILITY (OK AS IS)
+// ======================
+
 export const calculateCompletionPercentage = (progress) => {
-  if (!progress || !progress.completedTopics) {
-    return 0;
-  }
+  if (!progress || !progress.completedTopics) return 0;
 
   const totalTopics = progress.completedTopics.length;
   if (totalTopics === 0) return 0;

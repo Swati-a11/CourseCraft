@@ -1,6 +1,8 @@
-// client/src/services/courseService.js
-
 import api from './api';
+
+// ======================
+// COURSES
+// ======================
 
 // Get all courses
 export const getAllCourses = (params = {}) => {
@@ -12,52 +14,54 @@ export const getCourseById = (courseId) => {
   return api.get(`/api/courses/${courseId}`);
 };
 
-// Get quizzes by difficulty
-export const getQuizzesByDifficulty = (courseId, params = {}) => {
-  return api.get(`/api/courses/${courseId}/quiz`, { params });
-};
-
-// Enroll in a course
-export const enrollInCourse = (courseId) => {
-  return api.post('/api/enrollments/enroll', { courseId });
-};
-
 // Create course manually
 export const createCourse = (courseData) => {
   return api.post('/api/courses', courseData);
 };
 
-// Generate AI course
-export const generateCourse = (topic) => {
-  const token = localStorage.getItem('token');
-
-  return api.post(
-    '/courses/generate',
-    { topic },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-};
-
 // Update course
 export const updateCourse = (courseId, courseData) => {
-  return api.put(`/courses/${courseId}`, courseData);
+  return api.put(`/api/courses/${courseId}`, courseData);
 };
 
 // Delete course
 export const deleteCourse = (courseId) => {
-  return api.delete(`/courses/${courseId}`);
+  return api.delete(`/api/courses/${courseId}`);
 };
 
 // Search courses
 export const searchCourses = (searchTerm, filters = {}) => {
-  return api.get('/courses', {
+  return api.get('/api/courses', {
     params: {
       search: searchTerm,
       ...filters,
     },
   });
+};
+
+// ======================
+// QUIZZES
+// ======================
+
+export const getQuizzesByDifficulty = (courseId, params = {}) => {
+  return api.get(`/api/courses/${courseId}/quiz`, { params });
+};
+
+// ======================
+// AI COURSE GENERATION
+// ======================
+
+export const generateCourse = (topic) => {
+  return api.post(
+    '/api/courses/generate',
+    { topic }
+  );
+};
+
+// ======================
+// ENROLLMENT
+// ======================
+
+export const enrollInCourse = (courseId) => {
+  return api.post('/api/enrollments/enroll', { courseId });
 };
