@@ -1,53 +1,48 @@
-// client/src/services/achievementService.js
-
 import api from './api';
 
-// Get all achievements/certificates for the logged-in user
+// Get all achievements/certificates
 export const getAchievements = (type = null) => {
   const params = {};
-  if (type) {
-    params.type = type;
-  }
-  return api.get('/achievements', { params });
+  if (type) params.type = type;
+
+  return api.get('/api/achievements', { params });
 };
 
-// Get specific achievement by ID
-export const getAchievementById = (achievementId) => {
-  return api.get(`/api/achievements/${achievementId}`);
+// Get specific achievement
+export const getAchievementById = (id) => {
+  return api.get(`/api/achievements/${id}`);
 };
 
-// Get certificate for a specific course
+// Course certificate
 export const getCourseCertificate = (courseId) => {
   return api.get(`/api/achievements/course/${courseId}`);
 };
 
-// Get achievement statistics
+// Stats
 export const getAchievementStats = () => {
   return api.get('/api/achievements/stats/user');
 };
 
-// Get certificates only
+// Certificates only
 export const getCertificates = () => {
-  return api.get('/api/achievements', { params: { type: 'certificate' } });
+  return api.get('/api/achievements', {
+    params: { type: 'certificate' }
+  });
 };
 
-// Get badges only
+// Badges only
 export const getBadges = () => {
-  return api.get('/api/achievements', { params: { type: 'badge' } });
+  return api.get('/api/achievements', {
+    params: { type: 'badge' }
+  });
 };
 
-// Create an achievement (admin only)
-export const createAchievement = (achievementData) => {
-  return api.post('/api/achievements', achievementData);
+// Create (admin)
+export const createAchievement = (data) => {
+  return api.post('/api/achievements', data);
 };
 
-// Delete an achievement (admin only)
-export const deleteAchievement = (achievementId) => {
-  return api.delete(`/api/achievements/${achievementId}`);
-};
-
-// Download certificate
-export const downloadCertificate = (certificateUrl) => {
-  // This would typically use a third-party service or generate PDF
-  return api.get(certificateUrl);
+// Delete
+export const deleteAchievement = (id) => {
+  return api.delete(`/api/achievements/${id}`);
 };
