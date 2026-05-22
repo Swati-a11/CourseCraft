@@ -31,9 +31,20 @@ dotenv.config({
 const app = express();
 
 // Middleware
+// Configure CORS to accept origins from an environment variable (comma-separated)
+
+// Also allow the Vercel deployment origin so production builds can call the API
+const vercelOrigin = 'https://course-craft-ten.vercel.app';
+if (!allowedOrigins.includes(vercelOrigin)) allowedOrigins.push(vercelOrigin);
+
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: (incomingOrigin, callback) => {
+      // Allow requests with no origin (like server-to-server or curl)
+      if (!incomingOrigin) return callback(null, true);
+      if (allowedOrigins.includes(incomingOrigin)) return callback(null, true);
+      return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
   })
 );
