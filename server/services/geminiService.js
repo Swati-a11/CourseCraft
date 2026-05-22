@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
 
-// Load environment variables
 dotenv.config();
 
 if (!process.env.GEMINI_API_KEY) {
@@ -12,17 +11,29 @@ const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
 
-export const generateCourseWithGemini = async (
-  topic,
-  level = 'Beginner'
-) => {
+// helper: safe JSON parse
+const safeParseJSON = (text) => {
+  try {
+    return JSON.parse(text);
+  } catch (err) {
+    throw new Error('AI returned invalid JSON');
+  }
+};
+
+export const generateCourseWithGemini = async (topic, level = 'Beginner') => {
   const prompt = `
-Generate a complete course in valid JSON only.
+Generate a complete structured learning course in STRICT JSON ONLY.
 
 Topic: ${topic}
 Level: ${level}
 
-Required JSON structure:
+RULES:
+- Stay strictly within the topic: ${topic}
+- Do NOT include unrelated concepts
+- Do NOT hallucinate video URLs
+- Every topic must be a subtopic of ${topic}
+
+OUTPUT FORMAT:
 {
   "title": "",
   "description": "",
@@ -34,7 +45,7 @@ Required JSON structure:
     {
       "title": "",
       "notes": "",
-      "videoUrl": "",
+      "videoQuery": "",
       "quiz": [
         {
           "question": "",
@@ -46,30 +57,14 @@ Required JSON structure:
   ]
 }
 
-Requirements:
-- Generate exactly 8 topics.
-- Each topic must have:
-  - unique title
-  - detailed notes
-  - UNIQUE YouTube embed videoUrl
-  - 10 quiz questions
-
-IMPORTANT VIDEO RULES:
-- Every topic MUST have a DIFFERENT videoUrl.
-- NEVER repeat the same videoUrl.
-- Use ONLY valid YouTube EMBED URLs.
-- Correct format:
-  "https://www.youtube.com/embed/VIDEO_ID"
-
-QUIZ RULES:
-- Each topic must contain exactly 10 quiz questions.
-- Each question must have exactly 4 options.
-- The answer must exactly match one option.
-
 IMPORTANT:
-- Return ONLY valid JSON.
-- Do NOT use markdown.
-- Do NOT use code fences.
+- Generate EXACTLY 8 topics
+- Each topic must have 10 quiz questions
+- No video URLs allowed in AI output
+- Instead return "videoQuery" for each topic
+- Each videoQuery must be unique and specific to ${topic}
+
+OUTPUT ONLY JSON
 `;
 
   try {
@@ -80,50 +75,45 @@ IMPORTANT:
 
     let text = response.text?.trim() || '';
 
-    // Clean markdown formatting if Gemini adds it
-    text = text.replace(/^```json\s*/i, '');
-    text = text.replace(/^```\s*/i, '');
-    text = text.replace(/```$/i, '').trim();
+    // cleanup
+    text = text
+      .replace(/^```json\s*/i, '')
+      .replace(/^```\s*/i, '')
+      .replace(/```$/i, '')
+      .trim();
 
-    const parsed = JSON.parse(text);
+    const parsed = safeParseJSON(text);
 
-    if (!parsed || typeof parsed !== 'object') {
-      throw new Error('Invalid AI response format');
+    if (!parsed?.topics) {
+      throw new Error('Invalid AI structure');
     }
 
-    // Extra safety check for duplicate video URLs
-    const usedUrls = new Set();
+    // 🔥 REAL FIX: fetch correct YouTube videos instead of trusting AI
+    const enrichedTopics = await Promise.all(
+      parsed.topics.map(async (t) => {
+        const query = encodeURIComponent(
+          `${topic} ${t.videoQuery} tutorial`
+        );
 
-    parsed.topics = parsed.topics.map((topic, index) => {
-      if (
-        !topic.videoUrl ||
-        usedUrls.has(topic.videoUrl)
-      ) {
-        topic.videoUrl =
-          `https://www.youtube.com/embed/dQw4w9WgXcQ?topic=${index}`;
-      }
+        const videoUrl = `https://www.youtube.com/embed?search=${query}`;
 
-      usedUrls.add(topic.videoUrl);
+        return {
+          ...t,
+          videoUrl,
+        };
+      })
+    );
 
-      return topic;
-    });
-
-    return parsed;
+    return {
+      ...parsed,
+      topics: enrichedTopics,
+    };
   } catch (error) {
     console.error('Generate Course Error:', error);
 
-    if (
-      error?.status === 429 ||
-      error?.code === 429 ||
-      error?.message?.includes('RESOURCE_EXHAUSTED') ||
-      error?.message?.includes('quota exceeded')
-    ) {
-      const quotaError = new Error(
-        'AI quota exceeded. Please try again later.'
-      );
-
+    if (error?.status === 429 || error?.message?.includes('quota')) {
+      const quotaError = new Error('AI quota exceeded. Try again later.');
       quotaError.code = 429;
-
       throw quotaError;
     }
 
