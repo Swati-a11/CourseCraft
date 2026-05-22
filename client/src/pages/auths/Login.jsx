@@ -75,7 +75,7 @@ const Login = () => {
         })
       );
 
-      toast.success('Welcome to CourseCraft 🚀');
+      toast.success('Welcome to CourseCraft ');
 
       // Redirect to dashboard
       navigate('/dashboard');
