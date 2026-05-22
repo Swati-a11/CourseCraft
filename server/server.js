@@ -55,9 +55,6 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// IMPORTANT: handle preflight requests
-app.options("*", cors());
-
 /* =========================
    MIDDLEWARE
 ========================= */
