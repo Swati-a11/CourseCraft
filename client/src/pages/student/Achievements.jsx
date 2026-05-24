@@ -9,6 +9,7 @@ import {
   getAchievements,
   getAchievementStats,
 } from '../../services/achievementService';
+import { Award, Medal, CheckCircle, Star } from 'lucide-react';
 
 const Achievements = () => {
   const [achievements, setAchievements] = useState([]);
@@ -30,9 +31,10 @@ const Achievements = () => {
         const achievementsResponse =
           await getAchievements(filterType);
 
-        setAchievements(
-          achievementsResponse.data || []
-        );
+        const resData = achievementsResponse.data;
+        const finalAchievements = Array.isArray(resData) ? resData : (resData?.data || []);
+
+        setAchievements(finalAchievements);
 
         const statsResponse =
           await getAchievementStats();
@@ -239,42 +241,7 @@ const Achievements = () => {
           </p>
         </div>
 
-        {/* Stats */}
-        {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
 
-            <div className="bg-zinc-900 border border-green-900/30 rounded-lg p-4">
-              <div className="text-gray-400 text-sm mb-1">
-                Certificates
-              </div>
-
-              <div className="text-3xl font-bold text-green-400">
-                {stats.totalCertificates}
-              </div>
-            </div>
-
-            <div className="bg-zinc-900 border border-green-900/30 rounded-lg p-4">
-              <div className="text-gray-400 text-sm mb-1">
-                Badges
-              </div>
-
-              <div className="text-3xl font-bold text-blue-400">
-                {stats.totalBadges}
-              </div>
-            </div>
-
-            <div className="bg-zinc-900 border border-green-900/30 rounded-lg p-4">
-              <div className="text-gray-400 text-sm mb-1">
-                Completed Courses
-              </div>
-
-              <div className="text-3xl font-bold text-yellow-400">
-                {stats.completedCourses}
-              </div>
-            </div>
-
-          </div>
-        )}
 
         {/* Filter Buttons */}
         <div className="flex gap-3 mb-8">
@@ -283,35 +250,35 @@ const Achievements = () => {
             onClick={() =>
               setFilterType('certificate')
             }
-            className={`px-4 py-2 rounded-lg font-medium transition ${
+            className={`px-4 py-2 flex items-center gap-2 rounded-lg font-medium transition ${
               filterType === 'certificate'
                 ? 'bg-green-600 text-black'
-                : 'bg-zinc-900 text-gray-300'
+                : 'bg-zinc-900 text-gray-300 hover:text-white'
             }`}
           >
-            🎓 Certificates
+            <Award size={18} /> Completed & Certificates
           </button>
 
           <button
             onClick={() => setFilterType('badge')}
-            className={`px-4 py-2 rounded-lg font-medium transition ${
+            className={`px-4 py-2 flex items-center gap-2 rounded-lg font-medium transition ${
               filterType === 'badge'
                 ? 'bg-green-600 text-black'
-                : 'bg-zinc-900 text-gray-300'
+                : 'bg-zinc-900 text-gray-300 hover:text-white'
             }`}
           >
-            🏆 Badges
+            <Medal size={18} /> Badges
           </button>
 
           <button
             onClick={() => setFilterType(null)}
-            className={`px-4 py-2 rounded-lg font-medium transition ${
+            className={`px-4 py-2 flex items-center gap-2 rounded-lg font-medium transition ${
               filterType === null
                 ? 'bg-green-600 text-black'
-                : 'bg-zinc-900 text-gray-300'
+                : 'bg-zinc-900 text-gray-300 hover:text-white'
             }`}
           >
-            ⭐ All
+            <Star size={18} /> All
           </button>
         </div>
 
@@ -319,8 +286,8 @@ const Achievements = () => {
         {achievements.length === 0 ? (
           <div className="text-center py-12">
 
-            <div className="text-5xl mb-4">
-              🎓
+            <div className="flex justify-center mb-4 text-green-500/50">
+              <Award size={64} />
             </div>
 
             <p className="text-gray-400 text-lg">
@@ -338,11 +305,11 @@ const Achievements = () => {
               >
 
                 {/* Icon */}
-                <div className="text-5xl mb-4">
+                <div className="mb-4">
                   {achievement.type ===
                   'certificate'
-                    ? '🎓'
-                    : '🏆'}
+                    ? <Award size={48} className="text-green-400" />
+                    : <Medal size={48} className="text-blue-400" />}
                 </div>
 
                 {/* Title */}
@@ -509,8 +476,8 @@ const Achievements = () => {
                       </p>
                     </div>
 
-                    <div className="text-6xl">
-                      🏆
+                    <div className="text-yellow-500">
+                      <Award size={64} />
                     </div>
 
                     <div>

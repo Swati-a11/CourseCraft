@@ -72,6 +72,9 @@ const BrowseCourses = () => {
 
     try {
       const res = await generateCourse(topic);
+      console.log('Generate course response:', res.data);
+      const responseData = res.data?.data || res.data;
+      console.log('Generate course response data:', responseData);
       toast.success(res.data?.message || 'Course generated successfully');
       setGenerateTopic('');
       await fetchCourses('');
@@ -167,14 +170,14 @@ const BrowseCourses = () => {
 
             <div className="flex flex-col gap-3">
               <Link
-                to={`/course/${course.shortId || course._id}`}
-                className="w-full text-center px-4 py-2 bg-green-600 text-black rounded-lg font-medium hover:bg-green-700 transition"
+                to={`/courses/${course.shortId || course._id}`}
+                className="w-full text-center px-4 py-2 bg-zinc-800 text-white rounded-lg font-medium hover:bg-zinc-700 transition"
               >
                 View Course
               </Link>
               <button
                 onClick={() => handleEnroll(course._id)}
-                className="w-full px-4 py-2 bg-zinc-800 text-white rounded-lg font-medium hover:bg-zinc-700 transition"
+                className="w-full px-4 py-2 bg-green-600 text-black rounded-lg font-medium hover:bg-green-700 transition"
               >
                 Enroll Now
               </button>

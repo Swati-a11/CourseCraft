@@ -38,6 +38,24 @@ const userSchema = new mongoose.Schema(
         ref: 'Course',
       },
     ],
+    
+    // Gamification fields
+    xp: {
+      type: Number,
+      default: 0,
+    },
+    streak: {
+      type: Number,
+      default: 0,
+    },
+    level: {
+      type: Number,
+      default: 1,
+    },
+    lastActivityDate: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,

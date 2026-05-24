@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+
 import DashboardLayout from '../../layouts/DashboardLayout';
 
 import NotesTab from '../../components/courses/NotesTab';
 import VideoTab from '../../components/courses/VideoTab';
 import QuizTab from '../../components/courses/QuizTab';
 import PersonalNotesTab from '../../components/courses/PersonalNotesTab';
-import CompletionModal from '../../components/modals/CompletionModal';
 
 import { submitQuizResult } from '../../services/quizService';
 import { getCourseById } from '../../services/courseService';
+
 import {
   getCourseProgress,
   updateTopicProgress,
@@ -18,17 +19,24 @@ import {
 const tabs = ['Notes', 'Video', 'Quiz', 'Personal Notes'];
 
 const TopicPage = () => {
-  const { id } = useParams();
-  const courseId = localStorage.getItem('selectedCourseId');
-  const topicIndex = Number(id);
+  const navigate = useNavigate();
 
+  // URL PARAMS
+  const { courseId, topicIndex } = useParams();
+
+  // CONVERT TO NUMBER
+  const topicNumber = Number(topicIndex);
+
+  // STATES
   const [activeTab, setActiveTab] = useState('Notes');
-  const [loading, setLoading] = useState(true);
-  const [course, setCourse] = useState(null);
-  const [topicDetails, setTopicDetails] = useState(null);
-  const [error, setError] = useState('');
 
-  const isValidObjectId = (val) => typeof val === 'string' && /^[0-9a-fA-F]{24}$/.test(val);
+  const [loading, setLoading] = useState(true);
+
+  const [course, setCourse] = useState(null);
+
+  const [topicDetails, setTopicDetails] = useState(null);
+
+  const [error, setError] = useState('');
 
   const [progress, setProgress] = useState({
     notesCompleted: false,
@@ -39,138 +47,298 @@ const TopicPage = () => {
   });
 
   // =========================
-  // LOAD COURSE & PROGRESS
+  // LOAD COURSE + PROGRESS
   // =========================
+
   useEffect(() => {
     const loadData = async () => {
-      if (!courseId || isNaN(topicIndex) || !isValidObjectId(courseId)) {
-        setError(
-          'No selected course found. Please open the course details page first.'
-        );
-        setLoading(false);
-        return;
-      }
-
       try {
         setLoading(true);
+
         setError('');
 
-        const [courseRes, progressRes] = await Promise.all([
-          getCourseById(courseId),
-          getCourseProgress(courseId),
-        ]);
+        // VALIDATION
+        if (!courseId) {
+          setError('Course ID missing.');
+          return;
+        }
 
-        const fetchedCourse = courseRes.data;
-        const topics = (fetchedCourse.topics || []).map((topic, index) => ({
-          ...topic,
-          id: index + 1,
-        }));
+        if (!topicNumber || isNaN(topicNumber)) {
+          setError('Invalid topic.');
+          return;
+        }
 
-        setCourse({ ...fetchedCourse, topics });
+        console.log('Course ID:', courseId);
+        console.log('Topic Number:', topicNumber);
 
-        const currentTopic = topics[topicIndex - 1];
+        // FETCH COURSE
+        const courseRes = await getCourseById(courseId);
+
+        console.log('Course Response:', courseRes.data);
+
+        const fetchedCourse = courseRes?.data;
+
+        if (!fetchedCourse) {
+          setError('Course not found.');
+          return;
+        }
+
+        // SAFE TOPICS
+        const safeTopics = Array.isArray(
+          fetchedCourse.topics
+        )
+          ? fetchedCourse.topics
+          : [];
+
+        // ADD IDS
+        const topics = safeTopics.map(
+          (topic, index) => ({
+            ...topic,
+            id: index + 1,
+          })
+        );
+
+        const updatedCourse = {
+          ...fetchedCourse,
+          topics,
+        };
+
+        setCourse(updatedCourse);
+
+        // CURRENT TOPIC
+        const currentTopic =
+          topics[topicNumber - 1];
+
+        console.log(
+          'Current Topic:',
+          currentTopic
+        );
+
         if (!currentTopic) {
-          setError('Topic not found for this course.');
-          setLoading(false);
+          setError('Topic not found.');
           return;
         }
 
         setTopicDetails(currentTopic);
 
-        const topicProgress =
-          progressRes?.data?.completedTopics?.find(
-            (t) => t.topicIndex === topicIndex
+        // FETCH PROGRESS
+        try {
+          const progressRes =
+            await getCourseProgress(courseId);
+
+          console.log(
+            'Progress Response:',
+            progressRes.data
           );
 
-        setProgress({
-          notesCompleted: topicProgress?.notesCompleted || false,
-          videoCompleted: topicProgress?.videoCompleted || false,
-          quizPassed: topicProgress?.quizPassed || false,
-          quizAttempted:
-            topicProgress?.quizAttempted || topicProgress?.quizPassed || false,
-          score: topicProgress?.quizScore || 0,
-        });
+          const topicProgress =
+            progressRes?.data?.completedTopics?.find(
+              (t) =>
+                t.topicIndex === topicNumber
+            );
+
+          setProgress({
+            notesCompleted:
+              topicProgress?.notesCompleted ||
+              false,
+
+            videoCompleted:
+              topicProgress?.videoCompleted ||
+              false,
+
+            quizPassed:
+              topicProgress?.quizPassed ||
+              false,
+
+            quizAttempted:
+              topicProgress?.quizAttempted ||
+              topicProgress?.quizPassed ||
+              false,
+
+            score:
+              topicProgress?.quizScore || 0,
+          });
+        } catch (progressError) {
+          console.log(
+            'Progress not found yet:',
+            progressError.message
+          );
+        }
       } catch (error) {
-        console.error('Topic load error:', error?.response?.data || error.message);
-        setError('Unable to load topic or course details.');
+        console.error(
+          'Topic Load Error:',
+          error?.response?.data ||
+            error.message
+        );
+
+        if (
+          error?.response?.status === 404
+        ) {
+          setError(
+            'Course no longer exists.'
+          );
+
+          setTimeout(() => {
+            navigate('/dashboard');
+          }, 2500);
+        } else {
+          setError(
+            error?.response?.data?.message ||
+              'Failed to load topic.'
+          );
+        }
       } finally {
         setLoading(false);
       }
     };
 
     loadData();
-  }, [courseId, topicIndex]);
+  }, [courseId, topicNumber, navigate]);
 
   // =========================
   // SAVE PROGRESS
   // =========================
+
   useEffect(() => {
     if (
       loading ||
       !courseId ||
-      isNaN(topicIndex) ||
-      !isValidObjectId(courseId) ||
       !topicDetails
-    )
+    ) {
       return;
+    }
 
     const saveProgress = async () => {
       try {
-        await updateTopicProgress(courseId, {
-          topicIndex,
-          notesCompleted: progress.notesCompleted,
-          videoCompleted: progress.videoCompleted,
-          quizPassed: progress.quizPassed,
-          quizScore: progress.score,
-        });
+        await updateTopicProgress(
+          courseId,
+          {
+            topicIndex: topicNumber,
+
+            notesCompleted:
+              progress.notesCompleted,
+
+            videoCompleted:
+              progress.videoCompleted,
+
+            quizPassed:
+              progress.quizPassed,
+
+            quizScore: progress.score,
+          }
+        );
+
+        console.log(
+          'Progress Saved'
+        );
       } catch (error) {
-        console.error('Save error:', error?.response?.data || error?.message);
+        console.error(
+          'Progress Save Error:',
+          error?.response?.data ||
+            error.message
+        );
       }
     };
 
     saveProgress();
-  }, [progress, courseId, topicIndex, loading, topicDetails]);
+  }, [
+    progress,
+    courseId,
+    topicNumber,
+    loading,
+    topicDetails,
+  ]);
+
+  // =========================
+  // PROGRESS %
+  // =========================
 
   const completionPercent =
     (progress.notesCompleted ? 33 : 0) +
     (progress.videoCompleted ? 33 : 0) +
     (progress.quizAttempted ? 34 : 0);
 
-  const quizUnlocked = progress.notesCompleted && progress.videoCompleted;
-  const topicCompleted = progress.notesCompleted && progress.videoCompleted && progress.quizPassed;
+  const quizUnlocked =
+    progress.notesCompleted &&
+    progress.videoCompleted;
+
+  const topicCompleted =
+    progress.notesCompleted &&
+    progress.videoCompleted &&
+    progress.quizPassed;
+
+  // =========================
+  // RENDER TAB
+  // =========================
 
   const renderTab = () => {
-    if (!topicDetails) return <div className="text-gray-400">Topic details not available.</div>;
+    if (!topicDetails) {
+      return (
+        <div className="text-gray-400">
+          Topic details unavailable.
+        </div>
+      );
+    }
 
     switch (activeTab) {
+      // NOTES
       case 'Notes':
         return (
           <NotesTab
             title={topicDetails.title}
             notes={topicDetails.notes}
-            completed={progress.notesCompleted}
-            onComplete={() => setProgress((prev) => ({ ...prev, notesCompleted: true }))}
+            completed={
+              progress.notesCompleted
+            }
+            onComplete={() =>
+              setProgress((prev) => ({
+                ...prev,
+                notesCompleted: true,
+              }))
+            }
           />
         );
 
+      // VIDEO
       case 'Video':
         return (
           <VideoTab
             title={topicDetails.title}
-            videoUrl={topicDetails.videoUrl}
-            completed={progress.videoCompleted}
-            onComplete={() => setProgress((prev) => ({ ...prev, videoCompleted: true }))}
+            videoUrl={
+              topicDetails.videoUrl
+            }
+            completed={
+              progress.videoCompleted
+            }
+            onComplete={() =>
+              setProgress((prev) => ({
+                ...prev,
+                videoCompleted: true,
+              }))
+            }
           />
         );
 
+      // QUIZ
       case 'Quiz':
         return quizUnlocked ? (
           <QuizTab
-            topicId={topicIndex}
-            topicTitle={topicDetails.title}
-            questions={topicDetails.quiz}
-            onComplete={async (data) => {
-              const { score, percentage, passed, answers } = data;
+            topicId={topicNumber}
+            topicTitle={
+              topicDetails.title
+            }
+            questions={
+              topicDetails.quiz || []
+            }
+            onComplete={async (
+              data
+            ) => {
+              const {
+                score,
+                percentage,
+                passed,
+                answers,
+              } = data;
 
               setProgress((prev) => ({
                 ...prev,
@@ -181,26 +349,45 @@ const TopicPage = () => {
 
               try {
                 await submitQuizResult({
-                  topicId: topicIndex,
-                  topicTitle: topicDetails.title,
+                  topicId:
+                    topicNumber,
+
+                  topicTitle:
+                    topicDetails.title,
+
                   courseId,
+
                   score,
-                  totalQuestions: topicDetails.quiz?.length || 10,
+
+                  totalQuestions:
+                    topicDetails.quiz
+                      ?.length || 0,
+
                   percentage,
+
                   passed,
+
                   answers,
                 });
+                
+                // Navigate to progress page after successful quiz submission
+                navigate('/progress');
               } catch (error) {
-                console.error(error.message);
+                console.error(
+                  'Quiz Submit Error:',
+                  error.message
+                );
               }
             }}
           />
         ) : (
           <div className="text-center py-10 text-gray-400">
-            Complete Notes + Video to unlock quiz 🔒
+            Complete Notes +
+            Video to unlock Quiz 🔒
           </div>
         );
 
+      // PERSONAL NOTES
       case 'Personal Notes':
         return <PersonalNotesTab />;
 
@@ -209,41 +396,74 @@ const TopicPage = () => {
     }
   };
 
+  // =========================
+  // LOADING
+  // =========================
+
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="flex justify-center items-center min-h-[60vh] text-green-400">
+        <div className="flex justify-center items-center min-h-[60vh] text-green-400 text-lg">
           Loading topic details...
         </div>
       </DashboardLayout>
     );
   }
 
+  // =========================
+  // ERROR
+  // =========================
+
   if (error) {
     return (
       <DashboardLayout>
-        <div className="text-center text-red-400 mt-10">{error}</div>
+        <div className="flex flex-col items-center justify-center min-h-[50vh]">
+          <p className="text-red-400 text-lg mb-4">
+            {error}
+          </p>
+
+          <button
+            onClick={() =>
+              navigate('/dashboard')
+            }
+            className="bg-green-500 hover:bg-green-600 text-black px-5 py-2 rounded-lg font-semibold"
+          >
+            Go To Dashboard
+          </button>
+        </div>
       </DashboardLayout>
     );
   }
 
+  // =========================
+  // MAIN UI
+  // =========================
+
   return (
     <DashboardLayout>
+      {/* TITLE */}
+
       <div className="mb-4">
         <h1 className="text-2xl font-bold text-white">
-          Topic {topicIndex}: {topicDetails?.title || ''}
+          Topic {topicNumber}:{' '}
+          {topicDetails?.title}
         </h1>
       </div>
+
+      {/* PROGRESS */}
 
       <div className="w-full bg-zinc-800 h-3 rounded-full mt-3">
         <div
           className="bg-green-500 h-3 rounded-full transition-all duration-500"
-          style={{ width: `${completionPercent}%` }}
+          style={{
+            width: `${completionPercent}%`,
+          }}
         />
       </div>
 
       <p className="text-sm text-gray-400 mt-2 mb-6">
         {completionPercent}% Complete
+
         {topicCompleted && (
           <span className="text-green-400 ml-3 font-semibold">
             ✔ Completed
@@ -251,22 +471,36 @@ const TopicPage = () => {
         )}
       </p>
 
+      {/* TABS */}
+
       <div className="flex gap-3 mb-6 flex-wrap">
         {tabs.map((tab) => (
           <button
             key={tab}
-            disabled={tab === 'Quiz' && !quizUnlocked}
-            onClick={() => setActiveTab(tab)}
+            disabled={
+              tab === 'Quiz' &&
+              !quizUnlocked
+            }
+            onClick={() =>
+              setActiveTab(tab)
+            }
             className={`px-4 py-2 rounded-lg font-medium transition ${
               activeTab === tab
                 ? 'bg-green-600 text-black'
                 : 'bg-zinc-800 text-gray-300 hover:bg-zinc-700'
-            } ${tab === 'Quiz' && !quizUnlocked ? 'opacity-50 cursor-not-allowed' : ''}`}
+            } ${
+              tab === 'Quiz' &&
+              !quizUnlocked
+                ? 'opacity-50 cursor-not-allowed'
+                : ''
+            }`}
           >
             {tab}
           </button>
         ))}
       </div>
+
+      {/* CONTENT */}
 
       <div className="bg-zinc-900 p-6 rounded-xl border border-white/5 shadow-xl">
         {renderTab()}

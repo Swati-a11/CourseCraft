@@ -5,13 +5,13 @@ import {
   getAllCoursesProgress,
 } from "../controllers/courseProgressController.js";
 
-import { protect } from "../middleware/auth.js";
+import authMiddleware from '../middleware/auth.js';
 const router = express.Router();
 
-router.get("/all", protect, getAllCoursesProgress);
+router.get("/all", authMiddleware, getAllCoursesProgress);
 
-router.get("/:courseId", protect, getCourseProgress);
+router.get("/:courseId", authMiddleware, getCourseProgress);
 
-router.post("/:courseId/topic", protect, updateTopicProgress);
+router.post("/:courseId/topic", authMiddleware, updateTopicProgress);
 
 export default router;

@@ -30,7 +30,7 @@ const YoutubeNotes = () => {
     try {
       setLoading(true);
 
-      const res = await api.post('/api/youtube/generate-notes', {
+      const res = await api.post('/youtube/generate-notes', {
         videoUrl: url,
       });
 
@@ -59,7 +59,7 @@ const YoutubeNotes = () => {
       const formData = new FormData();
       formData.append('pdf', pdfFile);
 
-      const res = await api.post('/api/pdf/generate-notes', formData, {
+      const res = await api.post('/pdf/generate-notes', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

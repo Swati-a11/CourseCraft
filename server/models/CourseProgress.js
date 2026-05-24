@@ -45,6 +45,11 @@ const courseProgressSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+
+    personalNotes: {
+      type: String,
+      default: ''
+    }
   },
   { timestamps: true }
 );

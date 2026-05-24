@@ -28,7 +28,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/login');
+    window.location.href = '/login';
   };
   return (
     <aside className="w-72 bg-zinc-950 border-r border-green-900/30 flex flex-col">

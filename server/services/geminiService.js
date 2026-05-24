@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
+import { searchYouTubeVideo } from './youtubeServices.js';
 
 dotenv.config();
 
@@ -59,7 +60,10 @@ OUTPUT FORMAT:
 
 IMPORTANT:
 - Generate EXACTLY 8 topics
-- Each topic must have 10 quiz questions
+- Each topic must have a quiz with EXACTLY 10 questions
+- Every quiz question MUST be multiple choice with EXACTLY 4 options
+- Every quiz question MUST have exactly 1 correct answer (must match one of the options exactly)
+- The "notes" field for each topic MUST be highly detailed, comprehensive, and contain a minimum of 15 lines/paragraphs of rich educational content. Use newline characters (\n\n) to format the notes nicely.
 - No video URLs allowed in AI output
 - Instead return "videoQuery" for each topic
 - Each videoQuery must be unique and specific to ${topic}
@@ -91,11 +95,12 @@ OUTPUT ONLY JSON
     // 🔥 REAL FIX: fetch correct YouTube videos instead of trusting AI
     const enrichedTopics = await Promise.all(
       parsed.topics.map(async (t) => {
-        const query = encodeURIComponent(
-          `${topic} ${t.videoQuery} tutorial`
-        );
-
-        const videoUrl = `https://www.youtube.com/embed?search=${query}`;
+        const videoQuery =
+          t.videoQuery ||
+          t.title ||
+          `${topic} tutorial`;
+        const query = `${topic} ${videoQuery} tutorial`;
+        const videoUrl = await searchYouTubeVideo(query);
 
         return {
           ...t,

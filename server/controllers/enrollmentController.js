@@ -1,39 +1,37 @@
-import Enrollment from '../models/Enrollment.js';
-import CourseProgress from '../models/CourseProgress.js';
-import Course from '../models/Course.js';
+import Enrollment from "../models/Enrollment.js";
+import Course from "../models/Course.js";
 
-// =====================
-// ENROLL COURSE
-// =====================
+/* ---------------- ENROLL COURSE ---------------- */
 export const enrollCourse = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const { courseId } = req.body;
 
     if (!courseId) {
       return res.status(400).json({
         success: false,
-        message: 'Course ID is required',
+        message: "courseId required",
       });
     }
 
     const course = await Course.findById(courseId);
+
     if (!course) {
       return res.status(404).json({
         success: false,
-        message: 'Course not found',
+        message: "Course not found",
       });
     }
 
-    const existing = await Enrollment.findOne({
+    const exists = await Enrollment.findOne({
       user: userId,
       course: courseId,
     });
 
-    if (existing) {
+    if (exists) {
       return res.status(400).json({
         success: false,
-        message: 'Already enrolled in this course',
+        message: "Already enrolled",
       });
     }
 
@@ -42,64 +40,55 @@ export const enrollCourse = async (req, res) => {
       course: courseId,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
-      message: 'Course enrolled successfully!',
-      enrollment,
+      message: "Enrolled successfully",
+      data: enrollment,
     });
-  } catch (error) {
-    res.status(500).json({
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Enrollment failed",
     });
   }
 };
 
-// =====================
-// GET MY COURSES
-// =====================
+/* ---------------- MY COURSES (FIXED) ---------------- */
 export const getMyCourses = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
 
-    const enrollments = await Enrollment.find({
-      user: userId,
-    }).populate('course');
+    const enrollments = await Enrollment.find({ user: userId })
+      .populate("course")
+      .lean();
 
-    const data = await Promise.all(
-      enrollments.map(async (enrollment) => {
-        const progress = await CourseProgress.findOne({
-          user: userId,
-          course: enrollment.course._id,
-        });
+    const courses = enrollments
+      .filter((e) => e.course)
+      .map((e) => ({
+        _id: e.course._id,
 
-        return {
-          course: enrollment.course,
-          enrolledAt: enrollment.enrolledAt,
-          progress: progress
-            ? {
-                totalProgress: progress.totalProgress,
-                isCompleted: progress.isCompleted,
-                completedTopics: progress.completedTopics,
-              }
-            : {
-                totalProgress: 0,
-                isCompleted: false,
-                completedTopics: [],
-              },
-        };
-      })
-    );
+        // ✅ IMPORTANT: FLATTEN DATA
+        title: e.course.title,
+        description: e.course.description,
+        category: e.course.category,
+        level: e.course.level,
+        thumbnail: e.course.thumbnail,
+        topics: e.course.topics || [],
 
-    res.status(200).json({
+        progress: 0,
+        enrolledAt: e.createdAt,
+      }));
+
+    return res.status(200).json({
       success: true,
-      data,
+      data: courses,
     });
-  } catch (error) {
-    res.status(500).json({
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
       success: false,
-      message: 'Failed to fetch enrolled courses',
-      error: error.message,
+      message: "Failed to fetch courses",
     });
   }
 };

@@ -1,41 +1,124 @@
-const VideoTab = ({ title, videoUrl, completed, onComplete }) => {
+const DEFAULT_EMBED =
+  "https://www.youtube.com/embed/ysEN5RaKOlE";
+
+const getEmbedUrl = (videoUrl) => {
+  if (!videoUrl || typeof videoUrl !== "string") {
+    return DEFAULT_EMBED;
+  }
+
+  // Already embed URL
+  if (
+    videoUrl.includes("youtube.com/embed/") &&
+    !videoUrl.includes("?search=")
+  ) {
+    return videoUrl;
+  }
+
+  // youtu.be short link
+  if (videoUrl.includes("youtu.be/")) {
+    const match = videoUrl.match(
+      /youtu\.be\/([\w-]{11})/
+    );
+
+    return match
+      ? `https://www.youtube.com/embed/${match[1]}`
+      : DEFAULT_EMBED;
+  }
+
+  // watch?v=
+  if (videoUrl.includes("watch?v=")) {
+    const match = videoUrl.match(/[?&]v=([\w-]{11})/);
+
+    return match
+      ? `https://www.youtube.com/embed/${match[1]}`
+      : DEFAULT_EMBED;
+  }
+
+  // invalid generated search embed
+  if (videoUrl.includes("youtube.com/embed?search=")) {
+    return DEFAULT_EMBED;
+  }
+
+  // Generic extractor
+  const match = videoUrl.match(
+    /(?:v=|\/watch\?v=|\/embed\/|\/v\/)([\w-]{11})/
+  );
+
+  return match
+    ? `https://www.youtube.com/embed/${match[1]}`
+    : DEFAULT_EMBED;
+};
+
+const VideoTab = ({
+  title,
+  videoUrl,
+  completed,
+  onComplete,
+}) => {
+  const embedUrl = getEmbedUrl(videoUrl);
+
+  console.log("VideoTab Debug:", {
+    title,
+    sourceVideoUrl: videoUrl,
+    embedUrl,
+  });
+
   return (
-    <div>
+    <div className="w-full">
+      {/* Title */}
       <h2 className="text-2xl font-bold text-white mb-4">
-        {title ? `${title} Video` : 'Topic Video'}
+        {title
+          ? `${title} Video`
+          : "Topic Video"}
       </h2>
 
-      {/* YouTube Video */}
-      {videoUrl && (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) ? (
-        <div className="w-full aspect-video rounded-2xl overflow-hidden bg-black mb-6">
-          <iframe
-            className="w-full h-full"
-            src={videoUrl.replace('watch?v=', 'embed/')} // Ensure embed format
-            title={title || "Topic Video"}
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          />
-        </div>
-      ) : (
-        <div className="w-full aspect-video rounded-2xl overflow-hidden bg-zinc-800 mb-6 flex flex-col items-center justify-center border border-zinc-700">
-          <span className="text-4xl mb-4">🎥</span>
-          <p className="text-gray-400 italic">No valid YouTube video available for this topic.</p>
-        </div>
-      )}
+      {/* Video Player */}
+      <div
+        className="w-full h-[400px] rounded-2xl overflow-hidden bg-black mb-6 border border-zinc-700 shadow-lg"
+        style={{
+          position: "relative",
+          zIndex: 10,
+        }}
+      >
+        <iframe
+          width="100%"
+          height="400"
+          className="w-full h-full"
+          src={embedUrl}
+          title={title || "Topic Video"}
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+        />
+      </div>
 
-      {/* Progress Bar */}
+      {/* Debug URL */}
+      <div className="mb-4 p-3 rounded-lg bg-zinc-900 border border-zinc-800">
+        <p className="text-xs text-gray-400 break-all">
+          <span className="font-semibold text-green-400">
+            Embed URL:
+          </span>{" "}
+          {embedUrl}
+        </p>
+      </div>
+
+      {/* Progress */}
       <div className="mb-6">
         <div className="flex justify-between text-sm text-gray-400 mb-2">
           <span>Watch Progress</span>
-          <span>{completed ? '100%' : '0%'}</span>
+
+          <span>
+            {completed ? "100%" : "0%"}
+          </span>
         </div>
 
-        <div className="w-full bg-zinc-800 rounded-full h-2">
+        <div className="w-full bg-zinc-800 rounded-full h-2 overflow-hidden">
           <div
             className="bg-green-500 h-2 rounded-full transition-all duration-500"
-            style={{ width: completed ? '100%' : '0%' }}
+            style={{
+              width: completed ? "100%" : "0%",
+            }}
           />
         </div>
       </div>
@@ -44,13 +127,15 @@ const VideoTab = ({ title, videoUrl, completed, onComplete }) => {
       <button
         onClick={onComplete}
         disabled={completed}
-        className={`px-5 py-2 rounded-xl font-semibold transition ${
+        className={`px-5 py-2 rounded-xl font-semibold transition-all duration-300 ${
           completed
-            ? 'bg-green-500 text-black cursor-default'
-            : 'bg-green-600 hover:bg-green-700 text-black'
+            ? "bg-green-500 text-black cursor-default"
+            : "bg-green-600 hover:bg-green-700 text-black"
         }`}
       >
-        {completed ? 'Video Completed ' : 'Mark Video as Complete'}
+        {completed
+          ? "Video Completed ✅"
+          : "Mark Video as Complete"}
       </button>
     </div>
   );

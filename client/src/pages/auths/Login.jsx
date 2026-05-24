@@ -75,10 +75,10 @@ const Login = () => {
         })
       );
 
-      toast.success('Welcome to CourseCraft ');
+      toast.success('Welcome to CourseCraft');
 
-      // Redirect to dashboard
-      navigate('/dashboard');
+      // Force a hard redirect to ensure App.jsx re-evaluates the token from localStorage
+      window.location.href = '/dashboard';
     } catch (error) {
       console.error('Login Error:', error);
 

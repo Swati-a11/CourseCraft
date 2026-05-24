@@ -14,6 +14,12 @@ const topicSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    tags: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
     quiz: [
       {
         question: {

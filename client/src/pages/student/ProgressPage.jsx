@@ -4,12 +4,15 @@ import { Award, BarChart3, BookOpen, Flame, ShieldCheck, Sparkles, TrendingUp, C
 import DashboardLayout from '../../layouts/DashboardLayout';
 import StatCard from '../../components/dashboard/StatCard';
 import WeakTopicCard from '../../components/dashboard/WeakTopicCard';
+import WeakTopicsList from '../../components/dashboard/WeakTopicsList';
+import api from '../../services/api';
 import { getDashboardStats } from '../../services/dashboardService';
 
 const trendingColors = ['#22c55e', '#facc15', '#ef4444'];
 
 const ProgressPage = () => {
   const [stats, setStats] = useState(null);
+  const [learningData, setLearningData] = useState({ weakTopics: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -19,7 +22,19 @@ const ProgressPage = () => {
         const data = await getDashboardStats();
         setStats(data);
       } catch (err) {
-        setError('Unable to load progress insights. Please refresh.');
+        console.error("Dashboard Stats Error:", err);
+        // We do NOT set error state here so the rest of the page can load if possible, 
+        // or we handle it gracefully below.
+      }
+
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const lData = await api.get('/learning/progress');
+          setLearningData(lData.data);
+        }
+      } catch (err) {
+        console.error("Learning Progress API Error:", err);
       } finally {
         setLoading(false);
       }
@@ -268,7 +283,7 @@ const ProgressPage = () => {
               <div className="flex items-center gap-3">
                 <Clock className="text-purple-400" size={28} />
                 <div>
-                  <h2 className="text-2xl font-semibold text-white">Upcoming Reminders ⏰</h2>
+                  <h2 className="text-2xl font-semibold text-white">Upcoming Reminders</h2>
                   <p className="text-gray-400 mt-1">Stay on track with your learning goals.</p>
                 </div>
               </div>
@@ -345,23 +360,13 @@ const ProgressPage = () => {
               <div>
                 <h2 className="text-2xl font-semibold text-white flex items-center gap-3">
                   <AlertCircle className="text-red-400" size={24} />
-                  Weak Topics
+                  Weak Topics (AI Guided)
                 </h2>
-                <p className="text-gray-400 mt-1">Focus on areas needing improvement.</p>
+                <p className="text-gray-400 mt-1">Focus on areas needing improvement based on your quizzes.</p>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {(stats?.weakTopics || []).slice(0, 6).map((topic, index) => (
-                <div key={index} className="rounded-2xl bg-gradient-to-br from-red-900/30 to-pink-900/10 border border-red-500/30 hover:border-red-400/50 hover:bg-gradient-to-br hover:from-red-900/40 hover:to-pink-900/20 transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-red-500/20">
-                  <WeakTopicCard
-                    topic={topic.topic}
-                    averageScore={topic.averageScore}
-                    difficulty={topic.difficulty}
-                    recommendation={topic.recommendation}
-                    course={topic.course}
-                  />
-                </div>
-              ))}
+            <div className="mt-4">
+              <WeakTopicsList weakTopics={learningData.weakTopics} />
             </div>
           </div>
 
@@ -381,7 +386,7 @@ const ProgressPage = () => {
                   key={index}
                   className="rounded-2xl bg-gradient-to-br from-violet-900/30 to-purple-900/10 border border-violet-400/30 p-4 flex flex-col items-center justify-center text-center hover:border-violet-400/50 hover:bg-gradient-to-br hover:from-violet-900/40 hover:to-purple-900/20 transition-all duration-200 hover:scale-110 hover:shadow-lg hover:shadow-violet-500/20 group cursor-pointer"
                 >
-                  <span className="text-3xl mb-2 group-hover:scale-125 transition-transform duration-200">{badge.icon || '🏆'}</span>
+                  <span className="text-3xl mb-2 group-hover:scale-125 transition-transform duration-200">{badge.icon || ''}</span>
                   <p className="text-sm font-semibold text-violet-300 group-hover:text-violet-200 transition-colors">{badge.name || `Badge ${index + 1}`}</p>
                   <p className="text-xs text-gray-500 mt-1 group-hover:text-gray-400 transition-colors">{badge.description || 'Unlocked'}</p>
                 </div>

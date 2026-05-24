@@ -1,35 +1,20 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const progressSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
-      unique: true, // ONE progress per user
     },
 
-    topicId: {
-      type: String,
-      default: '',
+    course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
     },
 
-    completedTopics: {
-      type: [String],
-      default: [],
-    },
-
-    enrolledCourses: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Course',
-      },
-    ],
-
-    progressPercentage: {
-      type: Number,
-      default: 0,
-    },
+    topicId: Number,
 
     notesCompleted: {
       type: Boolean,
@@ -41,28 +26,17 @@ const progressSchema = new mongoose.Schema(
       default: false,
     },
 
-    quizPassed: {
+    quizCompleted: {
       type: Boolean,
       default: false,
     },
 
-    quizAttempted: {
-      type: Boolean,
-      default: false,
-    },
-
-    score: {
+    quizScore: {
       type: Number,
       default: 0,
-    },
-
-    lastVisitedTopic: {
-      type: String,
-      default: '',
     },
   },
   { timestamps: true }
 );
 
-const Progress = mongoose.model('Progress', progressSchema);
-export default Progress;
+export default mongoose.model("Progress", progressSchema);

@@ -7,5 +7,5 @@ export const saveTopicProgress = (data) => {
 
 // GET progress
 export const getTopicProgress = () => {
-  return api.get('/api/progress');
+  return api.get('/progress');
 };

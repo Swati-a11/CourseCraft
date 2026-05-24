@@ -50,7 +50,7 @@ const Dashboard = () => {
     xp: 0,
   });
 
-  const [courses, setCourses] = useState(fallbackCourses);
+  const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -121,7 +121,7 @@ const Dashboard = () => {
       >
         {/* Header */}
         <motion.div variants={itemVariants} className="mb-8">
-          <h1 className="text-4xl font-bold text-white">Welcome Back 👋</h1>
+          <h1 className="text-4xl font-bold text-white">Welcome Back</h1>
           <p className="text-gray-400 mt-2">
             Continue your AI-powered learning journey.
           </p>

@@ -19,6 +19,7 @@ import quizRoutes from './routes/quizRoutes.js';
 import enrollmentRoutes from './routes/enrollmentRoutes.js';
 import youtubeRoutes from './routes/youtubeRoutes.js';
 import pdfRoutes from './routes/pdfRoutes.js';
+import learningRoutes from './routes/learningRoutes.js';
 import Progress from './models/Progress.js';
 
 // ENV
@@ -85,6 +86,7 @@ app.use('/api/achievements', achievementRoutes);
 app.use('/api/enrollments', enrollmentRoutes);
 app.use('/api/youtube', youtubeRoutes);
 app.use('/api/pdf', pdfRoutes);
+app.use('/api/learning', learningRoutes);
 
 // static files
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
@@ -107,6 +109,7 @@ console.log('CWD:', process.cwd());
 console.log('MONGODB_URI:', process.env.MONGODB_URI ? 'LOADED' : 'MISSING');
 console.log('JWT_SECRET:', process.env.JWT_SECRET ? 'LOADED' : 'MISSING');
 console.log('GEMINI_API_KEY:', process.env.GEMINI_API_KEY ? 'LOADED' : 'MISSING');
+console.log('YOUTUBE_API_KEY:', process.env.YOUTUBE_API_KEY ? 'LOADED' : 'MISSING');
 console.log(Progress.schema.obj);
 
 /* =========================

@@ -19,21 +19,8 @@ const Navbar = () => {
   return (
     <header className="h-20 bg-zinc-950 border-b border-green-900/30 px-6 flex items-center justify-between">
       
-      {/* Search */}
-      <div className="relative w-96 max-w-full">
-        <Search
-          size={18}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-        />
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          type="text"
-          placeholder="Search courses..."
-          className="w-full pl-10 pr-4 py-2.5 bg-zinc-900 border border-green-900/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500/50"
-        />
-      </div>
+      {/* Search space placeholder if needed, otherwise empty div to keep flex-between aligned */}
+      <div></div>
 
       {/* Right Section */}
       <div className="flex items-center gap-4">

@@ -1,9 +1,11 @@
-import api from './api';
+import API from "./api";
 
-export const enrollCourse = (courseId) => {
-  return api.post('/api/enrollments/enroll', { courseId });
+export const enrollCourse = async (courseId) => {
+  const res = await API.post("/enrollments", { courseId });
+  return res.data;
 };
 
-export const getMyCourses = () => {
-  return api.get('/api/enrollments/my-courses');
+export const getMyCourses = async () => {
+  const res = await API.get("/enrollments/my-courses");
+  return res.data;
 };
