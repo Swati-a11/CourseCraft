@@ -8,7 +8,7 @@ import {
 
 const router = express.Router();
 
-router.get("/stats/user", authMiddleware, getAchievementStats);
+router.get("/api/stats/user", authMiddleware, getAchievementStats);
 router.post("/", authMiddleware, createAchievement);
 router.get("/", authMiddleware, getAchievements);
 

@@ -4,7 +4,7 @@ import authMiddleware from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get("/my-courses", authMiddleware, getMyCourses);
+router.get("/api/my-courses", authMiddleware, getMyCourses);
 router.post("/", authMiddleware, enrollCourse);
 
 export default router;

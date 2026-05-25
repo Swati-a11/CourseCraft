@@ -8,9 +8,9 @@ import {
 import authMiddleware from '../middleware/auth.js';
 const router = express.Router();
 
-router.get("/all", authMiddleware, getAllCoursesProgress);
+router.get("/api/all", authMiddleware, getAllCoursesProgress);
 
-router.get("/:courseId", authMiddleware, getCourseProgress);
+router.get("/api/:courseId", authMiddleware, getCourseProgress);
 
 router.post("/:courseId/topic", authMiddleware, updateTopicProgress);
 

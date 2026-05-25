@@ -10,7 +10,7 @@ const router = express.Router();
 const upload = multer();
 
 router.post(
-  '/generate-notes',
+  '/api/generate-notes',
   upload.single('pdf'),
   generatePdfNotes
 );

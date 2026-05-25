@@ -103,7 +103,7 @@ router.get('/:courseId', async (req, res) => {
 /**
  * POST /api/courses/generate
  */
-router.post('/generate', authMiddleware, generateCourse);
+router.post('/api/generate', authMiddleware, generateCourse);
 
 /**
  * POST /api/courses
@@ -121,7 +121,7 @@ router.post('/', async (req, res) => {
 /**
  * PUT refresh video
  */
-router.put('/:courseId/topics/:topicIndex/refresh-video', async (req, res) => {
+router.put('/api/:courseId/topics/:topicIndex/refresh-video', async (req, res) => {
   try {
     const { courseId, topicIndex } = req.params;
 
@@ -158,7 +158,7 @@ router.put('/:courseId/topics/:topicIndex/refresh-video', async (req, res) => {
 /**
  * ENROLL COURSE (FIXED)
  */
-router.post('/:courseId/enroll', authMiddleware, async (req, res) => {
+router.post('/api/:courseId/enroll', authMiddleware, async (req, res) => {
   try {
     const { courseId } = req.params;
     const userId = req.user._id;
@@ -190,7 +190,7 @@ router.post('/:courseId/enroll', authMiddleware, async (req, res) => {
 /**
  * ADD VIDEOS
  */
-router.put('/:courseId/add-videos', async (req, res) => {
+router.put('/api/:courseId/add-videos', async (req, res) => {
   try {
     const { courseId } = req.params;
 

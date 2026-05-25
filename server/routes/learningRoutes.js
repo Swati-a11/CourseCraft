@@ -13,11 +13,11 @@ const router = express.Router();
 
 router.use(authMiddleware);
 
-router.get('/course/:courseId', getLearningCourseData);
-router.put('/course/:courseId/notes', savePersonalNotes);
-router.get('/course/:courseId/topic/:topicIndex', getTopicData);
-router.post('/quiz/submit', submitQuiz);
-router.get('/progress', getProgressData);
-router.post('/quiz/adaptive-next', getNextAdaptiveQuestion);
+router.get('/api/course/:courseId', getLearningCourseData);
+router.put('/api/course/:courseId/notes', savePersonalNotes);
+router.get('/api/course/:courseId/topic/:topicIndex', getTopicData);
+router.post('/api/quiz/submit', submitQuiz);
+router.get('/api/progress', getProgressData);
+router.post('/api/quiz/adaptive-next', getNextAdaptiveQuestion);
 
 export default router;
