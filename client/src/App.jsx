@@ -50,9 +50,9 @@ function App() {
           path="/"
           element={
             token ? (
-              <Navigate to="/dashboard" replace />
-            ) : (
               <Navigate to="/login" replace />
+            ) : (
+              <Navigate to="/dashboard" replace />
             )
           }
         />

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://coursecraft-1-938d.onrender.com",
 });
 
 API.interceptors.request.use((req) => {
