@@ -6,22 +6,22 @@ import api from './api';
 
 // Get progress for a specific course
 export const getCourseProgress = (courseId) => {
-  return api.get(`api/course-progress/${courseId}`);
+  return api.get(`/course-progress/${courseId}`);
 };
 
 // Get all courses progress
 export const getAllCoursesProgress = () => {
-  return api.get('api/course-progress/all');
+  return api.get('/course-progress/all');
 };
 
 // Update topic progress
 export const updateTopicProgress = (courseId, topicData) => {
-  return api.post(`api/course-progress/${courseId}/topic`, topicData);
+  return api.post(`/course-progress/${courseId}/topic`, topicData);
 };
 
 // Update overall course progress
 export const updateCourseProgress = (courseId, progressData) => {
-  return api.put(`/api/course-progress/${courseId}`, progressData);
+  return api.put(`/course-progress/${courseId}`, progressData);
 };
 
 // ======================
