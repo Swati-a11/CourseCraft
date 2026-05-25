@@ -39,10 +39,10 @@ export const getBadges = () => {
 
 // Create (admin)
 export const createAchievement = (data) => {
-  return api.post('/api/achievements', data);
+  return api.post('/achievements', data);
 };
 
 // Delete
 export const deleteAchievement = (id) => {
-  return api.delete(`/api/achievements/${id}`);
+  return api.delete(`/achievements/${id}`);
 };
