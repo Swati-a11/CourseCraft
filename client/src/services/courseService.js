@@ -63,5 +63,5 @@ export const generateCourse = (topic) => {
 // ======================
 
 export const enrollInCourse = (courseId) => {
-  return api.post('api/enrollments/enroll', { courseId });
+  return api.post('/api/enrollments/enroll', { courseId });
 };
