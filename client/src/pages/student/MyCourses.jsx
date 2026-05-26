@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import API from "../../services/api";
 import { toast } from "react-toastify";
 import DashboardLayout from "../../layouts/DashboardLayout";
+import RobotLoader from "../../components/common/RobotLoader";
 
 const MyCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -86,10 +87,7 @@ const MyCourses = () => {
   if (loading)
   return (
     <DashboardLayout>
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[70vh]">
-        <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(34,197,94,0.5)]"></div>
-        <p className="mt-6 text-green-400 font-semibold animate-pulse text-lg tracking-wider">Loading your courses...</p>
-      </div>
+      <RobotLoader text="Loading your courses..." />
     </DashboardLayout>
   );
 
