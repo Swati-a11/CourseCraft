@@ -1,13 +1,13 @@
 const NotesTab = ({ title, notes, completed, onComplete }) => {
   return (
     <div className="prose prose-invert max-w-none">
-      <h2 className="text-2xl font-bold text-white mb-4">
+      <h2 className=" font-condiment text-2xl font-bold text-white mb-4">
         {title || 'Topic Notes'}
       </h2>
 
       {notes ? (
         <div 
-          className="text-gray-300 leading-8 mb-6 whitespace-pre-wrap"
+          className="font-condiment text-gray-300 leading-8 mb-6 whitespace-pre-wrap"
           dangerouslySetInnerHTML={{ __html: notes }}
         />
       ) : (

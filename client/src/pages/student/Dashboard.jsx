@@ -130,8 +130,8 @@ const Dashboard = () => {
       >
         {/* Header */}
         <motion.div variants={itemVariants} className="mb-8">
-          <h1 className="text-4xl font-text1 text-white">Welcome Back</h1>
-          <p className="text-gray-400 mt-2">
+          <h1 className="font-merriweather text-7xl">Welcome Back</h1>
+          <p className="font-condiment text-3xl text-green-600 mt-2">
             Continue your AI-powered learning journey.
           </p>
         </motion.div>
@@ -170,11 +170,11 @@ const Dashboard = () => {
         {/* My Courses */}
         <motion.div variants={itemVariants}>
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
-            <h2 className="text-2xl font-semibold text-white">My Courses</h2>
+            <h2 className="text-2xl font-condiment text-white">My Courses</h2>
 
             <button
               onClick={() => navigate('/browse-courses')}
-              className="bg-green-500 hover:bg-green-400 text-black px-5 py-2 rounded-xl font-semibold shadow-lg shadow-green-500/20 transition-all duration-300 hover:scale-105"
+              className="bg-green-500 hover:bg-green-400 font-cabin text-black px-5 py-2 rounded-xl font-semibold shadow-lg shadow-green-500/20 transition-all duration-300 hover:scale-105"
             >
               Browse Courses
             </button>
