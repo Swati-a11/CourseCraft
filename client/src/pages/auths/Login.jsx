@@ -77,8 +77,9 @@ const Login = () => {
 
       toast.success('Welcome to CourseCraft');
 
-      // Force a hard redirect to ensure App.jsx re-evaluates the token from localStorage
-      window.location.href = '/dashboard';
+      // Force a hard redirect to the root URL so the static server loads index.html
+      // React Router will then handle the redirect to /dashboard securely without throwing a 404
+      window.location.href = '/';
     } catch (error) {
       console.error('Login Error:', error);
 

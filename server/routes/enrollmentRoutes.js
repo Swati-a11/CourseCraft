@@ -1,5 +1,5 @@
 import express from "express";
-import { getMyCourses, enrollCourse } from "../controllers/enrollmentController.js";
+import { getMyCourses, enrollCourse, unenrollCourse } from "../controllers/enrollmentController.js";
 import authMiddleware from "../middleware/auth.js";
 
 const router = express.Router();
@@ -8,5 +8,6 @@ const router = express.Router();
 router.get("/my-courses", authMiddleware, getMyCourses);
 
 router.post("/", authMiddleware, enrollCourse);
+router.delete("/:courseId", authMiddleware, unenrollCourse);
 
 export default router;
