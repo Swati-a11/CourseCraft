@@ -1,5 +1,6 @@
 import Enrollment from "../models/Enrollment.js";
 import Course from "../models/Course.js";
+import CourseProgress from "../models/CourseProgress.js";
 
 /* ---------------- ENROLL COURSE ---------------- */
 export const enrollCourse = async (req, res) => {
@@ -63,22 +64,30 @@ export const getMyCourses = async (req, res) => {
       .populate("course")
       .lean();
 
+    const courseProgressRecords = await CourseProgress.find({ user: userId }).lean();
+
     const courses = enrollments
       .filter((e) => e.course)
-      .map((e) => ({
-        _id: e.course._id,
+      .map((e) => {
+        const progressRecord = courseProgressRecords.find(
+          (p) => p.course?.toString() === e.course._id.toString()
+        );
 
-        // ✅ IMPORTANT: FLATTEN DATA
-        title: e.course.title,
-        description: e.course.description,
-        category: e.course.category,
-        level: e.course.level,
-        thumbnail: e.course.thumbnail,
-        topics: e.course.topics || [],
+        return {
+          _id: e.course._id,
 
-        progress: 0,
-        enrolledAt: e.createdAt,
-      }));
+          // ✅ IMPORTANT: FLATTEN DATA
+          title: e.course.title,
+          description: e.course.description,
+          category: e.course.category,
+          level: e.course.level,
+          thumbnail: e.course.thumbnail,
+          topics: e.course.topics || [],
+
+          progress: progressRecord ? progressRecord.totalProgress : 0,
+          enrolledAt: e.createdAt,
+        };
+      });
 
     return res.status(200).json({
       success: true,

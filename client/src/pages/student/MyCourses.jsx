@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../services/api";
 import { toast } from "react-toastify";
+import DashboardLayout from "../../layouts/DashboardLayout";
 
 const MyCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -84,41 +85,20 @@ const MyCourses = () => {
 
   if (loading)
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "linear-gradient(135deg, #000000, #0b1f14, #003d1f)",
-        color: "#00ff88",
-        fontSize: "18px",
-        fontWeight: "600",
-      }}
-    >
-      Loading your courses...
-    </div>
+    <DashboardLayout>
+      <div className="flex-1 flex flex-col items-center justify-center min-h-[70vh]">
+        <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(34,197,94,0.5)]"></div>
+        <p className="mt-6 text-green-400 font-semibold animate-pulse text-lg tracking-wider">Loading your courses...</p>
+      </div>
+    </DashboardLayout>
   );
 
   return (
-    <div
-      style={{
-        padding: "30px",
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #000000, #0b1f14, #003d1f)",
-        color: "#fff",
-      }}
-    >
-      <h2
-        style={{
-          marginBottom: "25px",
-          fontSize: "28px",
-          fontWeight: "700",
-          color: "#00ff88",
-        }}
-      >
-        My Courses
-      </h2>
+    <DashboardLayout>
+      <div className="p-8">
+        <h2 className="text-3xl font-bold text-green-400 mb-8">
+          My Courses
+        </h2>
 
       {courses.length === 0 ? (
         <h3 style={{ color: "#aaa" }}>No courses enrolled</h3>
@@ -185,14 +165,29 @@ const MyCourses = () => {
                 </button>
               </div>
 
-              <p style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.5" }}>
+              <p style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.5", marginBottom: "15px" }}>
                 {item.description || item.course?.description || "No description available."}
               </p>
+
+              {/* PROGRESS BAR */}
+              <div className="mt-auto">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs text-gray-400 uppercase tracking-wider font-semibold">Progress</span>
+                  <span className="text-sm font-bold text-cyan-400">{item.progress || 0}%</span>
+                </div>
+                <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden border border-green-500/20">
+                  <div 
+                    className="h-full bg-gradient-to-r from-green-500 to-cyan-400 transition-all duration-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]" 
+                    style={{ width: `${item.progress || 0}%` }}
+                  ></div>
+                </div>
+              </div>
             </div>
           ))}
         </div>
       )}
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
 
