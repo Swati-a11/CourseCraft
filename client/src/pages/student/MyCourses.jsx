@@ -8,21 +8,54 @@ const MyCourses = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const handleDelete = async (e, courseId) => {
+  const handleDelete = (e, courseId) => {
     e.stopPropagation();
-    if (!window.confirm("Are you sure you want to unenroll from this course?")) return;
-
-    try {
-      const token = localStorage.getItem("token");
-      await API.delete(`/enrollments/${courseId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setCourses(courses.filter(c => (c.course?._id || c._id) !== courseId));
-      toast.success("Course deleted successfully!");
-    } catch (error) {
-      console.error("Failed to delete course", error);
-      toast.error("Failed to delete course");
-    }
+    
+    // Create a custom confirmation toast
+    toast(
+      (t) => (
+        <div className="flex flex-col gap-3">
+          <p className="font-semibold text-white">Are you sure you want to unenroll?</p>
+          <div className="flex gap-2 justify-end mt-2">
+            <button 
+              onClick={() => {
+                toast.dismiss(t.id);
+              }}
+              className="px-3 py-1.5 bg-zinc-700 hover:bg-zinc-600 text-white rounded text-sm transition"
+            >
+              Cancel
+            </button>
+            <button 
+              onClick={async () => {
+                toast.dismiss(t.id);
+                try {
+                  const token = localStorage.getItem("token");
+                  await API.delete(`/enrollments/${courseId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                  });
+                  setCourses(courses.filter(c => (c.course?._id || c._id) !== courseId));
+                  toast.success("Course deleted successfully!");
+                } catch (error) {
+                  console.error("Failed to delete course", error);
+                  toast.error("Failed to delete course");
+                }
+              }}
+              className="px-3 py-1.5 bg-red-600 hover:bg-red-500 text-white rounded text-sm transition font-medium"
+            >
+              Yes, Unenroll
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        autoClose: false,
+        closeOnClick: false,
+        draggable: false,
+        position: "top-center",
+        theme: "dark",
+        style: { border: "1px solid #450a0a", background: "#18181b" }
+      }
+    );
   };
 
   useEffect(() => {

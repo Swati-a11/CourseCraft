@@ -112,6 +112,17 @@ const Dashboard = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="flex-1 flex flex-col items-center justify-center min-h-[70vh]">
+          <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(34,197,94,0.5)]"></div>
+          <p className="mt-6 text-green-400 font-semibold animate-pulse text-lg tracking-wider">Loading Dashboard...</p>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout>
       <motion.div

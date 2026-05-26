@@ -53,10 +53,21 @@ export const getDashboardStats = async (req, res) => {
         ?.map((e) => e?.course)
         .filter(Boolean) || [];
 
+    const enrolledCourseIds = enrolledCourses.map(c => c._id.toString());
+
+    // Filter out orphaned records from unenrolled courses
+    const validCourseProgressRecords = (courseProgressRecords || []).filter(
+      r => r?.course && enrolledCourseIds.includes(r.course._id.toString())
+    );
+
+    const validQuizResults = (quizResults || []).filter(
+      r => r?.course && enrolledCourseIds.includes(r.course._id.toString())
+    );
+
     const coursesEnrolled = enrolledCourses.length;
 
     // TOPICS COMPLETED (SAFE)
-    const topicsCompleted = courseProgressRecords?.reduce((count, record) => {
+    const topicsCompleted = validCourseProgressRecords.reduce((count, record) => {
       const topics = Array.isArray(record?.completedTopics)
         ? record.completedTopics
         : [];
@@ -68,17 +79,17 @@ export const getDashboardStats = async (req, res) => {
       return count + completed;
     }, 0) || 0;
 
-    const quizAttempts = quizResults?.length || 0;
+    const quizAttempts = validQuizResults.length;
 
     const averageQuizScore = quizAttempts
       ? Math.round(
-          quizResults.reduce((sum, r) => sum + (r?.percentage || 0), 0) /
+          validQuizResults.reduce((sum, r) => sum + (r?.percentage || 0), 0) /
             quizAttempts
         )
       : 0;
 
     // QUIZ STATS MAP
-    const topicStats = (quizResults || []).reduce((acc, result) => {
+    const topicStats = validQuizResults.reduce((acc, result) => {
       const topic = result?.topicTitle || 'Unknown Topic';
       const courseTitle = result?.course?.title || 'Unknown Course';
 
@@ -117,7 +128,7 @@ export const getDashboardStats = async (req, res) => {
       averageScore: Math.round(t.totalScore / t.attempts),
     }));
 
-    const quizTrend = (quizResults || [])
+    const quizTrend = validQuizResults
       .sort(
         (a, b) =>
           new Date(a?.createdAt || 0) - new Date(b?.createdAt || 0)
@@ -128,7 +139,7 @@ export const getDashboardStats = async (req, res) => {
       }));
 
     const courseProgress = enrolledCourses.map((course) => {
-      const progress = courseProgressRecords.find(
+      const progress = validCourseProgressRecords.find(
         (r) =>
           r?.course?._id?.toString() === course?._id?.toString()
       );
@@ -154,13 +165,13 @@ export const getDashboardStats = async (req, res) => {
     });
 
     const coursesCompleted =
-      courseProgressRecords?.filter((r) => r?.isCompleted).length || 0;
+      validCourseProgressRecords.filter((r) => r?.isCompleted).length || 0;
 
     const perfectScores =
-      quizResults?.filter((r) => r?.percentage === 100).length || 0;
+      validQuizResults.filter((r) => r?.percentage === 100).length || 0;
 
     // STREAK SAFE
-    const accessDates = (courseProgressRecords || [])
+    const accessDates = validCourseProgressRecords
       .map((r) => normalizeDateKey(r?.lastAccessedAt || r?.createdAt))
       .filter(Boolean);
 
