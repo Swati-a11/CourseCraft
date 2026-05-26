@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Bot } from "lucide-react";
 
-const RobotLoader = ({ text = "AI is analyzing your progress..." }) => {
+const RobotLoader = ({ text = " Analyzing your progress..." }) => {
   return (
     <div className="flex-1 flex flex-col items-center justify-center min-h-[70vh]">
       <div className="relative flex items-center justify-center">
