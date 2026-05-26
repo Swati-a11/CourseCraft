@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import api from '../../services/api';
 import DashboardLayout from '../../layouts/DashboardLayout';
+import { toast } from 'react-toastify';
 
 const YoutubeNotes = () => {
   // ===============================
@@ -36,9 +37,10 @@ const YoutubeNotes = () => {
 
       setSummary(res.data.summary);
       setPdfUrl(res.data.pdfUrl);
+      toast.success("Notes generated successfully!");
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || 'Failed to generate notes');
+      toast.error(error.response?.data?.message || 'Failed to generate notes');
     } finally {
       setLoading(false);
     }
@@ -66,9 +68,10 @@ const YoutubeNotes = () => {
       });
 
       setPdfSummary(res.data.summary);
+      toast.success("PDF Notes generated successfully!");
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || 'Failed to generate PDF notes');
+      toast.error(error.response?.data?.message || 'Failed to generate PDF notes');
     } finally {
       setPdfLoading(false);
     }

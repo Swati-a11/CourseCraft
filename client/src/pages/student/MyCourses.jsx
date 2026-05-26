@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../services/api";
+import { toast } from "react-toastify";
 
 const MyCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -17,9 +18,10 @@ const MyCourses = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCourses(courses.filter(c => (c.course?._id || c._id) !== courseId));
+      toast.success("Course deleted successfully!");
     } catch (error) {
       console.error("Failed to delete course", error);
-      alert("Failed to delete course");
+      toast.error("Failed to delete course");
     }
   };
 
