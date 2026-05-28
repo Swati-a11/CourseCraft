@@ -6,32 +6,32 @@ import api from './api';
 
 // Get all courses
 export const getAllCourses = (params = {}) => {
-  return api.get('/api/courses', { params });
+  return api.get('/courses', { params });
 };
 
 // Get single course
 export const getCourseById = (courseId) => {
-  return api.get(`/api/courses/${courseId}`);
+  return api.get(`/courses/${courseId}`);
 };
 
 // Create course manually
 export const createCourse = (courseData) => {
-  return api.post('/api/courses', courseData);
+  return api.post('/courses', courseData);
 };
 
 // Update course
 export const updateCourse = (courseId, courseData) => {
-  return api.put(`/api/courses/${courseId}`, courseData);
+  return api.put(`/courses/${courseId}`, courseData);
 };
 
 // Delete course
 export const deleteCourse = (courseId) => {
-  return api.delete(`/api/courses/${courseId}`);
+  return api.delete(`/courses/${courseId}`);
 };
 
 // Search courses
 export const searchCourses = (searchTerm, filters = {}) => {
-  return api.get('/api/courses', {
+  return api.get('/courses', {
     params: {
       search: searchTerm,
       ...filters,
@@ -44,7 +44,7 @@ export const searchCourses = (searchTerm, filters = {}) => {
 // ======================
 
 export const getQuizzesByDifficulty = (courseId, params = {}) => {
-  return api.get(`/api/courses/${courseId}/quiz`, { params });
+  return api.get(`/courses/${courseId}/quiz`, { params });
 };
 
 // ======================
