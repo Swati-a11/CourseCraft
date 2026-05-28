@@ -103,7 +103,7 @@ router.get('/:courseId', async (req, res) => {
 /**
  * POST /api/courses/generate
  */
-router.post('/api/generate', authMiddleware, generateCourse);
+router.post('/generate', authMiddleware, generateCourse);
 
 /**
  * POST /api/courses

@@ -53,7 +53,7 @@ export const getQuizzesByDifficulty = (courseId, params = {}) => {
 
 export const generateCourse = (topic) => {
   return api.post(
-    '/api/courses/generate',
+    '/courses/generate',
     { topic }
   );
 };
