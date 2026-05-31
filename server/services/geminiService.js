@@ -12,16 +12,28 @@ const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
 
-// helper: safe JSON parse
 const safeParseJSON = (text) => {
   try {
-    return JSON.parse(text);
+    const cleaned = text
+      .replace(/```json/g, '')
+      .replace(/```/g, '')
+      .trim();
+
+    return JSON.parse(cleaned);
   } catch (err) {
+    console.error('=================================');
+    console.error('JSON PARSE FAILED');
+    console.error(text);
+    console.error('=================================');
+
     throw new Error('AI returned invalid JSON');
   }
 };
 
-export const generateCourseWithGemini = async (topic, level = 'Beginner') => {
+export const generateCourseWithGemini = async (
+  topic,
+  level = 'Beginner'
+) => {
   const prompt = `
 Generate a complete structured learning course in STRICT JSON ONLY.
 
@@ -60,52 +72,82 @@ OUTPUT FORMAT:
 
 IMPORTANT:
 - Generate EXACTLY 8 topics
-- Each topic must have a quiz with EXACTLY 10 questions
-- Every quiz question MUST be multiple choice with EXACTLY 4 options
-- Every quiz question MUST have exactly 1 correct answer (must match one of the options exactly)
-- The "notes" field for each topic MUST be highly detailed, comprehensive, and contain a minimum of 30 lines/paragraphs of rich, in-depth educational content, explanations, and examples. Use newline characters (\n\n) to format the notes nicely.
-- No video URLs allowed in AI output
-- Instead return "videoQuery" for each topic
-- Each videoQuery must be unique and specific to ${topic}
-
-OUTPUT ONLY JSON
+- Each topic must have EXACTLY 10 quiz questions
+- Every quiz question must have EXACTLY 4 options
+- Every quiz question must have exactly 1 correct answer
+- The answer must exactly match one option
+- Notes should be detailed with 8-10 paragraphs
+- No video URLs in output
+- Return videoQuery instead
+- Each videoQuery should be unique
+- OUTPUT ONLY VALID JSON
 `;
 
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
+      config: {
+        responseMimeType: 'application/json',
+      },
     });
 
     let text = response.text?.trim() || '';
 
-    // cleanup
+    console.log('=================================');
+    console.log('RAW GEMINI RESPONSE');
+    console.log('Length:', text.length);
+    console.log(text);
+    console.log('=================================');
+
+    if (!text) {
+      throw new Error('Empty response from Gemini');
+    }
+
     text = text
       .replace(/^```json\s*/i, '')
       .replace(/^```\s*/i, '')
       .replace(/```$/i, '')
       .trim();
 
+    if (!text.startsWith('{')) {
+      console.error('Non-JSON response:', text);
+      throw new Error('Gemini did not return JSON');
+    }
+
     const parsed = safeParseJSON(text);
 
-    if (!parsed?.topics) {
+    if (!parsed || !Array.isArray(parsed.topics)) {
       throw new Error('Invalid AI structure');
     }
 
-    // 🔥 REAL FIX: fetch correct YouTube videos instead of trusting AI
     const enrichedTopics = await Promise.all(
-      parsed.topics.map(async (t) => {
-        const videoQuery =
-          t.videoQuery ||
-          t.title ||
-          `${topic} tutorial`;
-        const query = `${topic} ${videoQuery} tutorial`;
-        const videoUrl = await searchYouTubeVideo(query);
+      parsed.topics.map(async (topicItem) => {
+        try {
+          const videoQuery =
+            topicItem.videoQuery ||
+            topicItem.title ||
+            `${topic} tutorial`;
 
-        return {
-          ...t,
-          videoUrl,
-        };
+          const query = `${topic} ${videoQuery} tutorial`;
+
+          const videoUrl = await searchYouTubeVideo(query);
+
+          return {
+            ...topicItem,
+            videoUrl,
+          };
+        } catch (err) {
+          console.error(
+            `YouTube search failed for ${topicItem.title}:`,
+            err
+          );
+
+          return {
+            ...topicItem,
+            videoUrl: '',
+          };
+        }
       })
     );
 
@@ -116,8 +158,13 @@ OUTPUT ONLY JSON
   } catch (error) {
     console.error('Generate Course Error:', error);
 
-    if (error?.status === 429 || error?.message?.includes('quota')) {
-      const quotaError = new Error('AI quota exceeded. Try again later.');
+    if (
+      error?.status === 429 ||
+      error?.message?.toLowerCase().includes('quota')
+    ) {
+      const quotaError = new Error(
+        'AI quota exceeded. Please try again later.'
+      );
       quotaError.code = 429;
       throw quotaError;
     }
