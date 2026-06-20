@@ -30,16 +30,18 @@ const YoutubeNotes = () => {
 
     try {
       setLoading(true);
+      console.log('Frontend: Request started');
 
       const res = await api.post('/youtube/generate-notes', {
         videoUrl: url,
       });
 
+      console.log('Frontend: Response received', res.data);
       setSummary(res.data.summary);
       setPdfUrl(res.data.pdfUrl);
       toast.success("Notes generated successfully!");
     } catch (error) {
-      console.error(error);
+      console.error('Frontend: Error received', error);
       toast.error(error.response?.data?.message || 'Failed to generate notes');
     } finally {
       setLoading(false);

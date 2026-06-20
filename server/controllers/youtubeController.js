@@ -2,12 +2,14 @@ import { YoutubeTranscript } from 'youtube-transcript';
 import { GoogleGenAI } from '@google/genai';
 
 export const generateYoutubeNotes = async (req, res) => {
+  console.log('Backend: Request received');
   try {
     console.log(req.body);
 
     const { videoUrl } = req.body;
 
     if (!videoUrl) {
+      console.log('Backend: Missing video URL');
       return res.status(400).json({
         success: false,
         message: 'YouTube URL is required',
@@ -25,6 +27,7 @@ export const generateYoutubeNotes = async (req, res) => {
     console.log('API Key loaded:', process.env.GEMINI_API_KEY ? process.env.GEMINI_API_KEY.slice(0, 10) : 'NOT FOUND');
 
     if (!videoId) {
+      console.log('Backend: Invalid video ID');
       return res.status(400).json({
         success: false,
         message: 'Invalid YouTube URL',
@@ -33,9 +36,14 @@ export const generateYoutubeNotes = async (req, res) => {
 
     let transcript;
     try {
-      transcript = await YoutubeTranscript.fetchTranscript(videoId);
+      console.log('Backend: Fetching transcript...');
+      transcript = await Promise.race([
+        YoutubeTranscript.fetchTranscript(videoId),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Transcript fetch timeout')), 10000))
+      ]);
+      console.log('Backend: Transcript fetched');
     } catch (err) {
-      console.warn('youtube-transcript failed, using fallback dummy transcript.');
+      console.warn('Backend: youtube-transcript failed or timed out, using fallback dummy transcript. Reason:', err.message);
       transcript = [
         { text: 'Welcome to this educational video about coding.' },
         { text: 'Today we will learn how to build amazing apps.' },
@@ -43,13 +51,14 @@ export const generateYoutubeNotes = async (req, res) => {
         { text: 'Then, you write the backend routes and controllers.' },
         { text: 'Finally, you connect the frontend to display the data beautifully.' }
       ];
+      console.log('Backend: Transcript fetched (using fallback)');
     }
 
     const text = transcript
       .map((item) => item.text)
       .join(' ');
 
-    console.log('Transcript:', text ? text.slice(0, 100) : 'EMPTY');
+    console.log('Transcript snippet:', text ? text.slice(0, 100) : 'EMPTY');
 
     // =========================
     // GEMINI AI Notes Generation
@@ -72,15 +81,21 @@ Transcript Content:
 ${text}
 `;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
-      contents: prompt,
-    });
+    console.log('Backend: Gemini request started');
+    const response = await Promise.race([
+      ai.models.generateContent({
+        model: 'gemini-2.0-flash',
+        contents: prompt,
+      }),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Gemini API request timeout')), 15000))
+    ]);
+    console.log('Backend: Gemini request completed');
 
     const summary = response.text || '';
 
-    console.log('Gemini response:', summary);
+    console.log('Gemini response:', summary.slice(0, 100));
 
+    console.log('Backend: Response sent');
     res.status(200).json({
       success: true,
       summary: summary,
