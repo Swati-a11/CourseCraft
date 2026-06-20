@@ -11,6 +11,7 @@ const YoutubeNotes = () => {
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState('');
   const [pdfUrl, setPdfUrl] = useState('');
+  const [statusText, setStatusText] = useState('');
 
   // ===============================
   // PDF STATES
@@ -28,20 +29,31 @@ const YoutubeNotes = () => {
       return;
     }
 
+    let statusTimer;
     try {
+      console.log("Frontend: Generate Notes clicked");
       setLoading(true);
+      setStatusText('Fetching transcript...');
       console.log('Frontend: Request started');
+
+      statusTimer = setTimeout(() => {
+        setStatusText('Generating notes...');
+      }, 3000);
 
       const res = await api.post('/youtube/generate-notes', {
         videoUrl: url,
       });
 
+      clearTimeout(statusTimer);
       console.log('Frontend: Response received', res.data);
+      setStatusText('Notes generated');
       setSummary(res.data.summary);
       setPdfUrl(res.data.pdfUrl);
       toast.success("Notes generated successfully!");
     } catch (error) {
+      if (statusTimer) clearTimeout(statusTimer);
       console.error('Frontend: Error received', error);
+      setStatusText('Generation failed');
       toast.error(error.response?.data?.message || 'Failed to generate notes');
     } finally {
       setLoading(false);
@@ -104,13 +116,20 @@ const YoutubeNotes = () => {
             className="w-full p-4 rounded-2xl bg-zinc-800 text-white"
           />
 
-          <button
-            onClick={handleGenerate}
-            disabled={loading}
-            className="mt-5 px-6 py-3 bg-green-500 rounded-2xl font-bold"
-          >
-            {loading ? 'Generating...' : 'Generate Notes'}
-          </button>
+          <div className="flex items-center gap-4 mt-5">
+            <button
+              onClick={handleGenerate}
+              disabled={loading}
+              className="px-6 py-3 bg-green-500 rounded-2xl font-bold text-black disabled:bg-zinc-700 disabled:text-gray-400"
+            >
+              {loading ? 'Generating...' : 'Generate Notes'}
+            </button>
+            {statusText && (
+              <span className="text-sm font-semibold text-gray-400">
+                Status: <span className="text-green-400">{statusText}</span>
+              </span>
+            )}
+          </div>
         </div>
 
         {/* OUTPUT */}
