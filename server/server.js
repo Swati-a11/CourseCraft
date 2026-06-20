@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 dotenv.config({ path: path.resolve('./.env') });
+process.env.JWT_SECRET = process.env.JWT_SECRET ? process.env.JWT_SECRET.trim().replace(/\r/g, '') : undefined;
 
 import express from 'express';
 import mongoose from 'mongoose';

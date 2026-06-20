@@ -3,8 +3,8 @@ import User from "../models/User.js";
 
 const authMiddleware = async (req, res, next) => {
   if (!process.env.JWT_SECRET) {
-    console.error("FATAL ERROR: process.env.JWT_SECRET is undefined. Halting server execution.");
-    process.exit(1);
+    console.error("WARNING: JWT_SECRET environment variable is missing or empty. Authentication denied.");
+    return res.status(500).json({ message: "Authentication service misconfiguration" });
   }
 
   try {
@@ -22,9 +22,10 @@ const authMiddleware = async (req, res, next) => {
       return res.status(401).json({ message: "No token provided" });
     }
 
-    const token = authHeader.split(" ")[1];
+    const rawToken = authHeader.split(" ")[1];
+    const cleanToken = rawToken.replace(/^["']|["']$/g, '').trim();
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(cleanToken, process.env.JWT_SECRET);
 
     // IMPORTANT FIX HERE 👇
     const userId = decoded.id || decoded._id;
