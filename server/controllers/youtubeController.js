@@ -1,5 +1,5 @@
 import { YoutubeTranscript } from 'youtube-transcript';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
 
 export const generateYoutubeNotes = async (req, res) => {
   try {
@@ -54,12 +54,8 @@ export const generateYoutubeNotes = async (req, res) => {
     // =========================
     // GEMINI AI Notes Generation
     // =========================
-    const genAI = new GoogleGenerativeAI(
-      process.env.GEMINI_API_KEY
-    );
-
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+    const ai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
     });
 
     const prompt = `
@@ -76,9 +72,12 @@ Transcript Content:
 ${text}
 `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const summary = response.text();
+    const response = await ai.models.generateContent({
+      model: 'gemini-1.5-flash',
+      contents: prompt,
+    });
+
+    const summary = response.text || '';
 
     console.log('Gemini response:', summary);
 
