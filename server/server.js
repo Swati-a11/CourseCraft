@@ -1,5 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
+dotenv.config({ path: path.resolve('./.env') });
+
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -21,9 +23,6 @@ import youtubeRoutes from './routes/youtubeRoutes.js';
 import pdfRoutes from './routes/pdfRoutes.js';
 import learningRoutes from './routes/learningRoutes.js';
 import Progress from './models/Progress.js';
-
-// ENV
-dotenv.config({ path: path.resolve('./.env') });
 
 const app = express();
 

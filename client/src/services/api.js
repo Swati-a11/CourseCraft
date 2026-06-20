@@ -7,9 +7,10 @@ const API = axios.create({
 });
 
 API.interceptors.request.use((req) => {
-  const token = localStorage.getItem("token");
+  let token = localStorage.getItem("token");
 
   if (token) {
+    token = token.trim().replace(/^["']|["']$/g, '');
     req.headers.Authorization = `Bearer ${token}`;
   }
 

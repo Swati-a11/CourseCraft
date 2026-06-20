@@ -2,8 +2,21 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
 const authMiddleware = async (req, res, next) => {
+  if (!process.env.JWT_SECRET) {
+    console.error("FATAL ERROR: process.env.JWT_SECRET is undefined. Halting server execution.");
+    process.exit(1);
+  }
+
   try {
     const authHeader = req.headers.authorization;
+
+    if (authHeader) {
+      const parts = authHeader.split(" ");
+      console.log(`Auth Header total parts: ${parts.length}`);
+      parts.forEach((part, index) => {
+        console.log(`Auth Header part[${index}] length: ${part.length}`);
+      });
+    }
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ message: "No token provided" });
