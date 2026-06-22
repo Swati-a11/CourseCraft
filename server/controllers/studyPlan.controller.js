@@ -4,6 +4,8 @@ import { GoogleGenAI } from '@google/genai';
 dotenv.config();
 
 export const generateStudyPlan = async (req, res) => {
+  console.log('📦 STUDY PLAN GENERATION INCOMING BODY:', JSON.stringify(req.body, null, 2));
+  console.log('👤 AUTHENTICATED USER CONTEXT:', req.user);
   try {
     const { goal, level, duration, hoursPerDay } = req.body;
 
@@ -86,10 +88,16 @@ Generate the study plan now.
       throw new Error('Gemini returned an empty study plan');
     }
 
-    res.status(200).json({
-      success: true,
-      studyPlan,
-    });
+    try {
+      res.status(200).json({
+        success: true,
+        studyPlan,
+      });
+    } catch (dbError) {
+      console.error('❌ MONGOOSE STUDY PLAN VALIDATION/SAVE CRASH:', dbError.message);
+      console.error('Full Database Error Object:', dbError);
+      return res.status(500).json({ error: "Database mapping constraint failed.", details: dbError.message });
+    }
   } catch (error) {
     console.error('AI ERROR:', error);
 
