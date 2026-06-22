@@ -116,13 +116,14 @@ console.log(Progress.schema.obj);
 
 /* =========================
    DB + SERVER START
-========================= */
+ ========================= */
 
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGODB_URI;
+const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI;
 
 if (!MONGO_URI) {
-  console.error('❌ MONGODB_URI is missing');
+  console.error('❌ CRITICAL ENGINE ACCELERATION FAILURE: Both process.env.MONGODB_URI and process.env.MONGO_URI resolved to undefined.');
+  console.log('Current available process.env keys:', Object.keys(process.env));
   process.exit(1);
 }
 
