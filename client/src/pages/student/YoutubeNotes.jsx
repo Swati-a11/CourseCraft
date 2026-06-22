@@ -47,7 +47,13 @@ const YoutubeNotes = () => {
       clearTimeout(statusTimer);
       console.log('Frontend: Response received', res.data);
       setStatusText('Notes generated');
-      setSummary(res.data.summary);
+      if (res.data.isFallback) {
+        const { title, summary: fallbackSummary, keyPoints } = res.data.data || {};
+        const formattedNotes = `${title}\n\n${fallbackSummary}\n\nKey Takeaways:\n${(keyPoints || []).map(point => `• ${point}`).join('\n')}`;
+        setSummary(formattedNotes);
+      } else {
+        setSummary(res.data.summary);
+      }
       setPdfUrl(res.data.pdfUrl);
       toast.success("Notes generated successfully!");
     } catch (error) {
