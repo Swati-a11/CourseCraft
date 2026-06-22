@@ -43,6 +43,7 @@ app.use(cors({
     if (
       origin.startsWith("http://localhost:") ||
       origin.startsWith("http://127.0.0.1:") ||
+      origin.endsWith(".vercel.app") ||
       allowedOrigins.includes(origin)
     ) {
       return callback(null, true);
@@ -51,9 +52,11 @@ app.use(cors({
     return callback(null, false);
   },
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"]
 }));
+
+app.options('*', cors());
 
 /* =========================
    MIDDLEWARE
