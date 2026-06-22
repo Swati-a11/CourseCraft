@@ -103,6 +103,21 @@ app.get('/', (req, res) => {
   res.send('CourseCraft API is running...');
 });
 
+app.get('/api/status', (req, res) => {
+  const states = {
+    0: "disconnected",
+    1: "connected",
+    2: "connecting",
+    3: "disconnecting"
+  };
+  res.json({
+    status: "online",
+    database: states[mongoose.connection.readyState] || "unknown",
+    jwtSecretLoaded: !!process.env.JWT_SECRET,
+    port: PORT
+  });
+});
+
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 /* =========================
