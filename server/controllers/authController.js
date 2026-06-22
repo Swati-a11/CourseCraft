@@ -28,8 +28,10 @@ export const registerUser = async (req, res) => {
       user,
     });
   } catch (error) {
+    console.error('❌ Registration Error:', error);
     res.status(500).json({
       message: 'Registration failed',
+      error: error.message
     });
   }
 };
@@ -58,23 +60,24 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
+    if (!process.env.JWT_SECRET) {
+      console.error("❌ CRITICAL AUTH ENGINE FAILURE: process.env.JWT_SECRET is undefined inside the login route execution context.");
+      return res.status(500).json({ error: "Authentication system configuration signature missing." });
+    }
 
-    res.json({
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
-    });
+    try {
+      const sanitizedSecret = process.env.JWT_SECRET.trim().replace(/\\r/g, '');
+      const token = jwt.sign({ id: user._id }, sanitizedSecret, { expiresIn: '24h' });
+      return res.status(200).json({ token, user: { id: user._id, email: user.email } });
+    } catch (jwtError) {
+      console.error("❌ JWT SIGN EXCEPTION:", jwtError.message);
+      return res.status(500).json({ error: "Internal token compilation fault.", details: jwtError.message });
+    }
   } catch (error) {
+    console.error('❌ Login Error:', error);
     res.status(500).json({
       message: 'Login failed',
+      error: error.message
     });
   }
 };
