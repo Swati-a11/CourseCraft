@@ -36,7 +36,7 @@ const allowedOrigins = [
   "https://course-craft-ten.vercel.app"
 ];
 
-app.use(cors({
+const corsOptions = {
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
 
@@ -49,14 +49,16 @@ app.use(cors({
       return callback(null, true);
     }
 
+    console.warn(`⚠️ CORS Access Denied for Origin: ${origin}`);
     return callback(null, false);
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"]
-}));
+};
 
-app.options(/.*/, cors());
+app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 
 /* =========================
    MIDDLEWARE
@@ -127,16 +129,17 @@ if (!MONGO_URI) {
   process.exit(1);
 }
 
+// Start listening immediately so that Render health checks pass and preflight requests do not hang
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
+
 mongoose
   .connect(MONGO_URI)
   .then(() => {
-    console.log('✅ MongoDB Connected');
-
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-    });
+    console.log('✅ MongoDB Connected Successfully');
   })
   .catch((err) => {
-    console.error('❌ MongoDB Error:', err.message);
-    process.exit(1);
+    console.error('❌ MongoDB Connection Error:', err.message);
+    // Log the error but keep the server running so the routing proxy doesn't return 502/CORS errors
   });
