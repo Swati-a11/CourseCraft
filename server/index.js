@@ -67,9 +67,10 @@ app.options(/.*/, cors(corsOptions));
 
 app.use(express.json());
 
-// remove unwanted headers
+// remove unwanted headers & set permissions policy
 app.use((req, res, next) => {
   res.removeHeader("Content-Security-Policy");
+  res.setHeader('Permissions-Policy', 'compute-pressure=*');
   next();
 });
 
