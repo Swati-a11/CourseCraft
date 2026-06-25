@@ -17,6 +17,7 @@ const YoutubeNotes = () => {
   const [pdfUrl, setPdfUrl] = useState('');
   const [statusText, setStatusText] = useState('');
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [activeVideoId, setActiveVideoId] = useState(null);
 
   // ===============================
   // PDF STATES
@@ -59,6 +60,16 @@ const YoutubeNotes = () => {
         setSummary(res.data.summary);
       }
       setPdfUrl(res.data.pdfUrl);
+      
+      let extractedId = null;
+      const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+      if (match && match[1]) {
+        extractedId = match[1];
+      }
+      if (extractedId) {
+        setActiveVideoId(extractedId);
+      }
+
       toast.success("Notes generated successfully!");
     } catch (error) {
       if (statusTimer) clearTimeout(statusTimer);
@@ -84,6 +95,7 @@ const YoutubeNotes = () => {
       setPlaylistVideos([]);
       setSummary('');
       setSelectedVideo(null);
+      setActiveVideoId(null);
       setStatusText('Loading playlist...');
 
       const res = await api.post('/youtube/playlist', {
@@ -141,6 +153,14 @@ const YoutubeNotes = () => {
       toast.error(error.response?.data?.message || 'Failed to generate notes');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleVideoSelect = (video) => {
+    setActiveVideoId(video.videoId);
+    setStatusText(`Now Playing: ${video.title}`);
+    if (!loading) {
+      handleGenerateForVideo(video);
     }
   };
 
@@ -259,69 +279,187 @@ const YoutubeNotes = () => {
 
         {/* PLAYLIST VIDEOS LIST */}
         {mode === 'playlist' && playlistVideos.length > 0 && (
-          <div className="mt-8 bg-zinc-950/60 border border-white/10 rounded-3xl p-6">
-            <h3 className="text-xl font-bold text-white mb-5 flex items-center gap-2">
-              <ListVideo className="text-green-400" />
-              Playlist Videos ({playlistVideos.length})
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-              {playlistVideos.map((video, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => !loading && handleGenerateForVideo(video)}
-                  className={`group bg-zinc-900 border rounded-2xl overflow-hidden cursor-pointer transition-all hover:scale-[1.02] hover:border-green-500/40 hover:shadow-lg hover:shadow-green-500/5 ${
-                    selectedVideo === video.videoId ? 'border-green-500 shadow-lg shadow-green-500/10' : 'border-white/5'
-                  }`}
-                >
-                  <div className="aspect-video w-full bg-zinc-800 relative">
-                    {video.thumbnails?.medium ? (
-                      <img
-                        src={video.thumbnails.medium}
-                        alt={video.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-500">
-                        No Thumbnail
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
-                      <Play className="text-green-400 fill-green-400 scale-125" size={24} />
+          <div className="mt-8">
+            {activeVideoId ? (
+              <div className="flex flex-col lg:flex-row gap-6">
+                {/* Left Column - Active Video & Notes */}
+                <div className="flex-1 space-y-6">
+                  {/* Video Player */}
+                  <div className="bg-zinc-900 border border-green-500/20 rounded-3xl p-4 shadow-2xl">
+                    <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-inner bg-black">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${activeVideoId}?autoplay=1`}
+                        title="YouTube video player"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        className="w-full h-full"
+                      ></iframe>
+                    </div>
+                    <div className="mt-4 flex items-center justify-between">
+                      <h3 className="text-white font-bold truncate text-base sm:text-lg">
+                        {playlistVideos.find(v => v.videoId === activeVideoId)?.title || "Active Video Lecture"}
+                      </h3>
+                      <span className="text-xs px-2.5 py-1 bg-green-500/20 text-green-400 font-semibold rounded-full uppercase tracking-wider animate-pulse">
+                        Active Learning
+                      </span>
                     </div>
                   </div>
-                  <div className="p-4">
-                    <h4 className="text-white font-semibold line-clamp-2 text-sm group-hover:text-green-400 transition-colors">
-                      {video.title}
-                    </h4>
-                    <p className="text-xs text-gray-400 mt-2 line-clamp-2">
-                      {video.description || 'No description available.'}
-                    </p>
+
+                  {/* AI Generated Notes for Active Video */}
+                  {summary && (
+                    <div className="bg-zinc-900 p-6 sm:p-8 rounded-3xl border border-white/5 shadow-2xl animate-fade-in">
+                      <h2 className="text-green-400 text-2xl font-bold mb-4 flex items-center gap-2 border-b border-white/10 pb-3">
+                        📝 Generated Lecture Notes
+                      </h2>
+                      <pre className="text-gray-300 whitespace-pre-wrap font-sans text-sm sm:text-base leading-relaxed">
+                        {summary}
+                      </pre>
+                      {pdfUrl && (
+                        <a
+                          href={pdfUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="mt-6 inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-black px-6 py-3 rounded-2xl font-bold transition-all"
+                        >
+                          Download PDF
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Right Column - Scrollable Playlist sidebar */}
+                <div className="w-full lg:w-80 flex-shrink-0">
+                  <div className="bg-zinc-950/60 border border-white/10 rounded-3xl p-4 max-h-[750px] overflow-y-auto space-y-4 pr-1">
+                    <h3 className="text-base font-bold text-white flex items-center gap-2 pb-2 border-b border-white/5">
+                      <ListVideo className="text-green-400" size={18} />
+                      Playlist ({playlistVideos.length})
+                    </h3>
+                    <div className="space-y-3">
+                      {playlistVideos.map((video, idx) => (
+                        <div
+                          key={idx}
+                          onClick={() => !loading && handleVideoSelect(video)}
+                          className={`group flex gap-3 bg-zinc-900 border rounded-xl overflow-hidden cursor-pointer p-2 transition-all hover:scale-[1.01] hover:border-green-500/30 ${
+                            activeVideoId === video.videoId ? 'border-green-500 bg-green-500/5 shadow-md shadow-green-500/5' : 'border-white/5'
+                          }`}
+                        >
+                          <div className="w-20 h-14 bg-zinc-800 rounded overflow-hidden flex-shrink-0 relative">
+                            {video.thumbnails?.default ? (
+                              <img
+                                src={video.thumbnails.default}
+                                alt={video.title}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-500">
+                                No Preview
+                              </div>
+                            )}
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
+                              <Play className="text-green-400 fill-green-400" size={14} />
+                            </div>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className={`font-semibold line-clamp-2 text-[11px] leading-tight group-hover:text-green-400 transition-colors ${
+                              activeVideoId === video.videoId ? 'text-green-400' : 'text-white'
+                            }`}>
+                              {video.title}
+                            </h4>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ) : (
+              /* Grid Layout when no video is selected */
+              <div className="bg-zinc-950/60 border border-white/10 rounded-3xl p-6">
+                <h3 className="text-xl font-bold text-white mb-5 flex items-center gap-2">
+                  <ListVideo className="text-green-400" />
+                  Playlist Videos ({playlistVideos.length})
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[600px] overflow-y-auto pr-1">
+                  {playlistVideos.map((video, idx) => (
+                    <div
+                      key={idx}
+                      onClick={() => !loading && handleVideoSelect(video)}
+                      className={`group bg-zinc-900 border rounded-2xl overflow-hidden cursor-pointer transition-all hover:scale-[1.02] hover:border-green-500/40 hover:shadow-lg hover:shadow-green-500/5 ${
+                        activeVideoId === video.videoId ? 'border-green-500 shadow-lg shadow-green-500/10' : 'border-white/5'
+                      }`}
+                    >
+                      <div className="aspect-video w-full bg-zinc-800 relative">
+                        {video.thumbnails?.medium ? (
+                          <img
+                            src={video.thumbnails.medium}
+                            alt={video.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-500">
+                            No Thumbnail
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
+                          <Play className="text-green-400 fill-green-400 scale-125" size={24} />
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <h4 className="text-white font-semibold line-clamp-2 text-sm group-hover:text-green-400 transition-colors">
+                          {video.title}
+                        </h4>
+                        <p className="text-xs text-gray-400 mt-2 line-clamp-2">
+                          {video.description || 'No description available.'}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
-        {/* AI GENERATED NOTES OUTPUT */}
-        {summary && (
-          <div className="mt-8 bg-zinc-900 p-6 sm:p-8 rounded-3xl border border-white/5 shadow-2xl animate-fade-in">
-            <h2 className="text-green-400 text-2xl font-bold mb-4 flex items-center gap-2 border-b border-white/10 pb-3">
-              📝 Generated Lecture Notes
-            </h2>
-            <pre className="text-gray-300 whitespace-pre-wrap font-sans text-sm sm:text-base leading-relaxed">
-              {summary}
-            </pre>
+        {/* SINGLE VIDEO PLAYER & NOTES OUTPUT */}
+        {mode === 'single' && activeVideoId && (
+          <div className="mt-8 space-y-6">
+            {/* Embedded player */}
+            <div className="bg-zinc-900 border border-green-500/20 rounded-3xl p-4 shadow-2xl">
+              <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-inner bg-black">
+                <iframe
+                  src={`https://www.youtube.com/embed/${activeVideoId}`}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  className="w-full h-full"
+                ></iframe>
+              </div>
+            </div>
 
-            {pdfUrl && (
-              <a
-                href={pdfUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-6 inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-black px-6 py-3 rounded-2xl font-bold transition-all"
-              >
-                Download PDF
-              </a>
+            {/* Generated Notes */}
+            {summary && (
+              <div className="bg-zinc-900 p-6 sm:p-8 rounded-3xl border border-white/5 shadow-2xl animate-fade-in">
+                <h2 className="text-green-400 text-2xl font-bold mb-4 flex items-center gap-2 border-b border-white/10 pb-3">
+                  📝 Generated Lecture Notes
+                </h2>
+                <pre className="text-gray-300 whitespace-pre-wrap font-sans text-sm sm:text-base leading-relaxed">
+                  {summary}
+                </pre>
+
+                {pdfUrl && (
+                  <a
+                    href={pdfUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-6 inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-black px-6 py-3 rounded-2xl font-bold transition-all"
+                  >
+                    Download PDF
+                  </a>
+                )}
+              </div>
             )}
           </div>
         )}

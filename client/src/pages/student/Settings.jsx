@@ -116,26 +116,32 @@ const Settings = () => {
     }
   };
 
+  const isLight = !settings.darkMode;
+
   const SettingToggle = ({ icon: Icon, label, value, onChange, description }) => (
-    <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-white/5 to-white/0 border border-white/10 hover:border-white/20 transition-all">
+    <div className={`flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 ${
+      isLight 
+        ? 'bg-slate-50 border-slate-200/60 hover:border-slate-300/80 shadow-sm' 
+        : 'bg-gradient-to-r from-white/5 to-white/0 border-white/10 hover:border-white/20'
+    }`}>
       <div className="flex items-center gap-4">
-        <div className="rounded-lg bg-emerald-500/20 p-2">
-          <Icon className="text-emerald-400" size={20} />
+        <div className={`rounded-lg p-2 transition-all duration-300 ${isLight ? 'bg-emerald-100' : 'bg-emerald-500/20'}`}>
+          <Icon className={isLight ? 'text-emerald-600' : 'text-emerald-400'} size={20} />
         </div>
         <div>
-          <p className="text-white font-semibold">{label}</p>
-          {description && <p className="text-xs text-gray-400 mt-1">{description}</p>}
+          <p className={`font-semibold transition-all duration-300 ${isLight ? 'text-slate-900' : 'text-white'}`}>{label}</p>
+          {description && <p className={`text-xs mt-1 transition-all duration-300 ${isLight ? 'text-slate-500' : 'text-gray-400'}`}>{description}</p>}
         </div>
       </div>
       <button
         onClick={() => onChange(!value)}
         type="button"
-        className={`relative w-12 h-7 rounded-full transition-all ${
+        className={`relative w-12 h-7 rounded-full transition-all duration-300 ${
           value ? 'bg-emerald-500' : 'bg-gray-600'
         }`}
       >
         <div
-          className={`w-5 h-5 bg-white rounded-full absolute top-1 transition-all ${
+          className={`w-5 h-5 bg-white rounded-full absolute top-1 transition-all duration-300 ${
             value ? 'right-1' : 'left-1'
           }`}
         />
@@ -145,180 +151,224 @@ const Settings = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8 p-4 sm:p-6 max-w-6xl mx-auto">
-        {/* Header */}
-        <section className="rounded-4xl bg-gradient-to-br from-emerald-900/20 via-zinc-950/80 to-cyan-900/20 border border-emerald-500/40 p-6 sm:p-8 shadow-2xl shadow-emerald-900/20 backdrop-blur-xl">
-          <h1 className="text-3xl sm:text-4xl font-bold text-white">Settings</h1>
-          <p className="text-gray-400 mt-2 text-sm sm:text-base">Customize your learning experience and profile preferences</p>
-        </section>
+      <div className={`min-h-screen py-8 px-4 sm:px-6 transition-all duration-300 ${isLight ? 'bg-slate-50 text-slate-900' : 'bg-zinc-950 text-white'}`}>
+        <div className="space-y-8 max-w-6xl mx-auto">
+          {/* Header */}
+          <section className={`rounded-4xl border p-6 sm:p-8 shadow-2xl backdrop-blur-xl transition-all duration-300 ${
+            isLight 
+              ? 'bg-gradient-to-br from-emerald-500/10 via-white to-cyan-500/10 border-slate-200/80 shadow-slate-200/50' 
+              : 'bg-gradient-to-br from-emerald-900/20 via-zinc-950/80 to-cyan-900/20 border-emerald-500/40 shadow-emerald-900/20'
+          }`}>
+            <h1 className={`text-3xl sm:text-4xl font-bold transition-all duration-300 ${isLight ? 'text-slate-900' : 'text-white'}`}>Settings</h1>
+            <p className={`mt-2 text-sm sm:text-base transition-all duration-300 ${isLight ? 'text-slate-600' : 'text-gray-400'}`}>Customize your learning experience and profile preferences</p>
+          </section>
 
-        <form onSubmit={handleSave} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          
-          {/* PROFILE CARD */}
-          <div className="space-y-6">
-            <section className="rounded-4xl bg-zinc-950/80 border border-white/10 p-6 shadow-2xl space-y-6">
-              <div className="flex items-center gap-3 border-b border-white/10 pb-4">
-                <User className="text-emerald-400" size={28} />
-                <h2 className="text-xl sm:text-2xl font-bold text-white">Profile Information</h2>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-400 mb-2">Display Name</label>
-                  <input
-                    type="text"
-                    value={profile.name}
-                    onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                    required
-                    className="w-full p-4 rounded-2xl bg-zinc-900 text-white border border-white/5 focus:border-emerald-500/50 outline-none transition-all"
-                  />
+          <form onSubmit={handleSave} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            {/* PROFILE CARD */}
+            <div className="space-y-6">
+              {/* Account Profile Details */}
+              <section className={`rounded-4xl border p-6 shadow-md space-y-6 transition-all duration-300 ${
+                isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-white/5 shadow-2xl'
+              }`}>
+                <div className="flex items-center gap-3 border-b border-white/10 pb-4">
+                  <User className="text-emerald-400" size={28} />
+                  <h2 className={`text-xl sm:text-2xl font-bold transition-all duration-300 ${isLight ? 'text-slate-900' : 'text-white'}`}>Profile Information</h2>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-400 mb-2">Email Address</label>
-                  <input
-                    type="email"
-                    value={profile.email}
-                    onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                    required
-                    className="w-full p-4 rounded-2xl bg-zinc-900 text-white border border-white/5 focus:border-emerald-500/50 outline-none transition-all"
-                  />
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex-1">
+                    <label className={`block text-sm font-semibold mb-2 transition-all duration-300 ${isLight ? 'text-slate-700' : 'text-gray-400'}`}>Display Name</label>
+                    <input
+                      type="text"
+                      value={profile.name}
+                      onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                      required
+                      className={`w-full p-4 rounded-2xl outline-none transition-all duration-300 ${
+                        isLight 
+                          ? 'bg-slate-100 text-slate-900 border border-slate-200 focus:border-slate-450 focus:bg-white focus:ring-1 focus:ring-slate-350' 
+                          : 'bg-zinc-855 text-white border border-white/5 focus:border-emerald-500/50'
+                      }`}
+                    />
+                  </div>
+
+                  <div className="flex-1">
+                    <label className={`block text-sm font-semibold mb-2 transition-all duration-300 ${isLight ? 'text-slate-700' : 'text-gray-400'}`}>Email Address</label>
+                    <input
+                      type="email"
+                      value={profile.email}
+                      onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                      required
+                      className={`w-full p-4 rounded-2xl outline-none transition-all duration-300 ${
+                        isLight 
+                          ? 'bg-slate-100 text-slate-900 border border-slate-200 focus:border-slate-450 focus:bg-white focus:ring-1 focus:ring-slate-350' 
+                          : 'bg-zinc-855 text-white border border-white/5 focus:border-emerald-500/50'
+                      }`}
+                    />
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
 
-            <section className="rounded-4xl bg-zinc-950/80 border border-white/10 p-6 shadow-2xl space-y-6">
-              <div className="flex items-center gap-3 border-b border-white/10 pb-4">
-                <Lock className="text-emerald-400" size={28} />
-                <h2 className="text-xl sm:text-2xl font-bold text-white">Security Credentials</h2>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-400 mb-2">New Password (optional)</label>
-                  <input
-                    type="password"
-                    placeholder="Enter new password to change..."
-                    value={profile.password}
-                    onChange={(e) => setProfile({ ...profile, password: e.target.value })}
-                    className="w-full p-4 rounded-2xl bg-zinc-900 text-white border border-white/5 focus:border-emerald-500/50 outline-none transition-all"
-                  />
+              {/* Password credentials change form */}
+              <section className={`rounded-4xl border p-6 shadow-md space-y-6 transition-all duration-300 ${
+                isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-white/5 shadow-2xl'
+              }`}>
+                <div className="flex items-center gap-3 border-b border-white/10 pb-4">
+                  <Lock className="text-emerald-400" size={28} />
+                  <h2 className={`text-xl sm:text-2xl font-bold transition-all duration-300 ${isLight ? 'text-slate-900' : 'text-white'}`}>Security Credentials</h2>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-400 mb-2">Confirm New Password</label>
-                  <input
-                    type="password"
-                    placeholder="Verify new password..."
-                    value={profile.confirmPassword}
-                    onChange={(e) => setProfile({ ...profile, confirmPassword: e.target.value })}
-                    className="w-full p-4 rounded-2xl bg-zinc-900 text-white border border-white/5 focus:border-emerald-500/50 outline-none transition-all"
-                  />
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex-1">
+                    <label className={`block text-sm font-semibold mb-2 transition-all duration-300 ${isLight ? 'text-slate-700' : 'text-gray-400'}`}>New Password (optional)</label>
+                    <input
+                      type="password"
+                      placeholder="Enter new password to change..."
+                      value={profile.password}
+                      onChange={(e) => setProfile({ ...profile, password: e.target.value })}
+                      className={`w-full p-4 rounded-2xl outline-none transition-all duration-300 ${
+                        isLight 
+                          ? 'bg-slate-100 text-slate-900 border border-slate-200 focus:border-slate-450 focus:bg-white focus:ring-1 focus:ring-slate-350' 
+                          : 'bg-zinc-855 text-white border border-white/5 focus:border-emerald-500/50'
+                      }`}
+                    />
+                  </div>
+
+                  <div className="flex-1">
+                    <label className={`block text-sm font-semibold mb-2 transition-all duration-300 ${isLight ? 'text-slate-700' : 'text-gray-400'}`}>Confirm New Password</label>
+                    <input
+                      type="password"
+                      placeholder="Verify new password..."
+                      value={profile.confirmPassword}
+                      onChange={(e) => setProfile({ ...profile, confirmPassword: e.target.value })}
+                      className={`w-full p-4 rounded-2xl outline-none transition-all duration-300 ${
+                        isLight 
+                          ? 'bg-slate-100 text-slate-900 border border-slate-200 focus:border-slate-450 focus:bg-white focus:ring-1 focus:ring-slate-350' 
+                          : 'bg-zinc-855 text-white border border-white/5 focus:border-emerald-500/50'
+                      }`}
+                    />
+                  </div>
                 </div>
-              </div>
-            </section>
-          </div>
-
-          {/* TOGGLES / PREFERENCES */}
-          <div className="space-y-6">
-            {/* Notifications Settings */}
-            <section className="rounded-4xl bg-zinc-950/80 border border-white/10 p-6 shadow-2xl">
-              <div className="flex items-center gap-3 mb-6">
-                <Bell className="text-blue-400" size={28} />
-                <h2 className="text-xl sm:text-2xl font-bold text-white">Notifications</h2>
-              </div>
-              <div className="space-y-4">
-                <SettingToggle
-                  icon={Bell}
-                  label="Push Notifications"
-                  value={settings.notifications}
-                  onChange={() => handleToggle('notifications')}
-                  description="Receive notifications on your device"
-                />
-                <SettingToggle
-                  icon={Mail}
-                  label="Email Notifications"
-                  value={settings.emailNotifications}
-                  onChange={() => handleToggle('emailNotifications')}
-                  description="Receive system updates via email alerts"
-                />
-                <SettingToggle
-                  icon={Clock}
-                  label="Quiz Reminders"
-                  value={settings.quizReminders}
-                  onChange={() => handleToggle('quizReminders')}
-                  description="Get reminded about active learning milestones"
-                />
-                <SettingToggle
-                  icon={Smartphone}
-                  label="Course Updates"
-                  value={settings.courseUpdateNotifications}
-                  onChange={() => handleToggle('courseUpdateNotifications')}
-                  description="Get notified when new courses are added"
-                />
-              </div>
-            </section>
-
-            {/* Display & Theme */}
-            <section className="rounded-4xl bg-zinc-950/80 border border-white/10 p-6 shadow-2xl">
-              <div className="flex items-center gap-3 mb-6">
-                <Palette className="text-purple-400" size={28} />
-                <h2 className="text-xl sm:text-2xl font-bold text-white">Display & Theme</h2>
-              </div>
-              <div className="space-y-4">
-                <SettingToggle
-                  icon={Eye}
-                  label="Dark Mode"
-                  value={settings.darkMode}
-                  onChange={() => handleToggle('darkMode')}
-                  description="Use dark theme for reduced eye strain"
-                />
-                <SettingToggle
-                  icon={Volume2}
-                  label="Sound Effects"
-                  value={settings.soundEnabled}
-                  onChange={() => handleToggle('soundEnabled')}
-                  description="Play sounds on achievements and completions"
-                />
-              </div>
-            </section>
-          </div>
-
-          {/* DANGER ZONE & SAVE BUTTON */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Danger Zone */}
-            <section className="rounded-4xl bg-gradient-to-br from-red-900/20 to-pink-900/20 border border-red-500/30 p-6 shadow-2xl">
-              <h2 className="text-2xl font-bold text-red-300 mb-4">Danger Zone</h2>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button type="button" className="flex-1 px-6 py-3.5 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-300 font-semibold hover:bg-red-500/20 hover:border-red-500/50 transition-all">
-                  Reset Progress Data
-                </button>
-                <button type="button" className="flex-1 px-6 py-3.5 rounded-2xl bg-red-600/10 border border-red-600/30 text-red-300 font-semibold hover:bg-red-600/20 hover:border-red-600/50 transition-all">
-                  Delete Account
-                </button>
-              </div>
-              <p className="text-xs text-red-300/70 mt-3">These actions cannot be undone. Please proceed with caution.</p>
-            </section>
-
-            {/* Save Button */}
-            <div className="flex items-center justify-between pt-4">
-              <div className="h-1 flex-1 bg-gradient-to-r from-emerald-500/20 to-transparent rounded-full hidden sm:block"></div>
-              <div className="flex items-center gap-4 w-full sm:w-auto">
-                {saveStatus && (
-                  <p className="text-emerald-400 font-semibold animate-pulse text-sm">{saveStatus}</p>
-                )}
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold hover:shadow-lg hover:shadow-emerald-500/50 transition-all hover:scale-105 disabled:bg-zinc-700 disabled:shadow-none"
-                >
-                  {loading ? 'Saving Settings...' : '💾 Save Changes'}
-                </button>
-              </div>
-              <div className="h-1 flex-1 bg-gradient-to-l from-emerald-500/20 to-transparent rounded-full hidden sm:block"></div>
+              </section>
             </div>
-          </div>
-        </form>
+
+            {/* TOGGLES / PREFERENCES */}
+            <div className="space-y-6">
+              {/* Notifications Settings */}
+              <section className={`rounded-4xl border p-6 shadow-md transition-all duration-300 ${
+                isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-white/5 shadow-2xl'
+              }`}>
+                <div className="flex items-center gap-3 mb-6">
+                  <Bell className="text-blue-400" size={28} />
+                  <h2 className={`text-xl sm:text-2xl font-bold transition-all duration-300 ${isLight ? 'text-slate-900' : 'text-white'}`}>Notifications</h2>
+                </div>
+                <div className="space-y-4">
+                  <SettingToggle
+                    icon={Bell}
+                    label="Push Notifications"
+                    value={settings.notifications}
+                    onChange={() => handleToggle('notifications')}
+                    description="Receive notifications on your device"
+                  />
+                  <SettingToggle
+                    icon={Mail}
+                    label="Email Notifications"
+                    value={settings.emailNotifications}
+                    onChange={() => handleToggle('emailNotifications')}
+                    description="Receive system updates via email alerts"
+                  />
+                  <SettingToggle
+                    icon={Clock}
+                    label="Quiz Reminders"
+                    value={settings.quizReminders}
+                    onChange={() => handleToggle('quizReminders')}
+                    description="Get reminded about active learning milestones"
+                  />
+                  <SettingToggle
+                    icon={Smartphone}
+                    label="Course Updates"
+                    value={settings.courseUpdateNotifications}
+                    onChange={() => handleToggle('courseUpdateNotifications')}
+                    description="Get notified when new courses are added"
+                  />
+                </div>
+              </section>
+
+              {/* Display & Theme */}
+              <section className={`rounded-4xl border p-6 shadow-md transition-all duration-300 ${
+                isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-white/5 shadow-2xl'
+              }`}>
+                <div className="flex items-center gap-3 mb-6">
+                  <Palette className="text-purple-400" size={28} />
+                  <h2 className={`text-xl sm:text-2xl font-bold transition-all duration-300 ${isLight ? 'text-slate-900' : 'text-white'}`}>Display & Theme</h2>
+                </div>
+                <div className="space-y-4">
+                  <SettingToggle
+                    icon={Eye}
+                    label="Dark Mode"
+                    value={settings.darkMode}
+                    onChange={() => handleToggle('darkMode')}
+                    description="Use dark theme for reduced eye strain"
+                  />
+                  <SettingToggle
+                    icon={Volume2}
+                    label="Sound Effects"
+                    value={settings.soundEnabled}
+                    onChange={() => handleToggle('soundEnabled')}
+                    description="Play sounds on achievements and completions"
+                  />
+                </div>
+              </section>
+            </div>
+
+            {/* DANGER ZONE & SAVE BUTTON */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Danger Zone */}
+              <section className={`rounded-4xl border p-6 shadow-2xl transition-all duration-300 ${
+                isLight 
+                  ? 'bg-red-50/50 border-red-200 shadow-md shadow-red-100/50' 
+                  : 'bg-gradient-to-br from-red-900/20 to-pink-900/20 border-red-500/30'
+              }`}>
+                <h2 className={`text-2xl font-bold mb-4 transition-all duration-300 ${isLight ? 'text-red-700' : 'text-red-300'}`}>Danger Zone</h2>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button type="button" className={`flex-1 px-6 py-3.5 rounded-2xl font-semibold transition-all hover:scale-[1.01] ${
+                    isLight 
+                      ? 'bg-red-100/80 border border-red-200 text-red-700 hover:bg-red-200/80 shadow-sm' 
+                      : 'bg-red-500/10 border border-red-500/30 text-red-300 hover:bg-red-500/20'
+                  }`}>
+                    Reset Progress Data
+                  </button>
+                  <button type="button" className={`flex-1 px-6 py-3.5 rounded-2xl font-semibold transition-all hover:scale-[1.01] ${
+                    isLight 
+                      ? 'bg-red-600/10 border border-red-200 text-red-650 hover:bg-red-600/20 shadow-sm' 
+                      : 'bg-red-600/10 border border-red-600/30 text-red-300 hover:bg-red-600/20'
+                  }`}>
+                    Delete Account
+                  </button>
+                </div>
+                <p className={`text-xs mt-3 transition-all duration-300 ${isLight ? 'text-red-700/70' : 'text-red-300/70'}`}>These actions cannot be undone. Please proceed with caution.</p>
+              </section>
+
+              {/* Save Button */}
+              <div className="flex items-center justify-between pt-4">
+                <div className={`h-1 flex-1 rounded-full hidden sm:block ${isLight ? 'bg-slate-200' : 'bg-gradient-to-r from-emerald-500/20 to-transparent'}`}></div>
+                <div className="flex items-center gap-4 w-full sm:w-auto">
+                  {saveStatus && (
+                    <p className="text-emerald-500 font-semibold animate-pulse text-sm">{saveStatus}</p>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold hover:shadow-lg hover:shadow-emerald-500/50 transition-all hover:scale-105 disabled:bg-zinc-700 disabled:shadow-none"
+                  >
+                    {loading ? 'Saving Settings...' : '💾 Save Changes'}
+                  </button>
+                </div>
+                <div className={`h-1 flex-1 rounded-full hidden sm:block ${isLight ? 'bg-slate-200' : 'bg-gradient-to-l from-emerald-500/20 to-transparent'}`}></div>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </DashboardLayout>
   );

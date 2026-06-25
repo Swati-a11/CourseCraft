@@ -1,11 +1,34 @@
 import User from '../models/User.js';
-import { sendSystemNotification } from '../services/emailService.js';
+import { sendSystemNotification, sendContinuityReminder } from '../services/emailService.js';
 
 export const getGamification = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if the user is in danger of losing their streak (last check-in between 20 and 24 hours ago)
+    if (user.lastActivityDate && user.streak > 0) {
+      const now = new Date();
+      const lastActive = new Date(user.lastActivityDate);
+      const diffTime = now - lastActive;
+      const diffHours = diffTime / (1000 * 60 * 60);
+
+      // Check if they are in the danger zone (between 20 and 24 hours)
+      // and a reminder has not been sent recently (within last 20 hours)
+      const lastReminder = user.lastStreakReminderSent ? new Date(user.lastStreakReminderSent) : null;
+      const hoursSinceReminder = lastReminder ? (now - lastReminder) / (1000 * 60 * 60) : Infinity;
+
+      if (diffHours >= 20 && diffHours < 24 && hoursSinceReminder >= 20) {
+        console.log(`🔥 Sending streak continuity reminder to ${user.email} (streak: ${user.streak})`);
+        sendContinuityReminder(user.email, user.name, user.streak).catch(err => {
+          console.error("Background Continuity Reminder Error:", err);
+        });
+
+        user.lastStreakReminderSent = now;
+        await user.save();
+      }
     }
 
     const badges = ['🏅 First Step'];
