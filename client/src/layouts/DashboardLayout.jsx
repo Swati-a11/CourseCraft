@@ -40,7 +40,7 @@ const DashboardLayout = ({ children }) => {
 
       {/* Main Workspace Column - padded on bottom on mobile to prevent navbar overlapping */}
       <div className={`flex-1 flex flex-col transition-all duration-300 min-w-0 pb-16 md:pb-0 pl-0 ${
-        isOpen ? 'md:pl-64' : 'md:pl-20'
+        isOpen ? 'md:pl-72' : 'md:pl-20'
       }`}>
         <Navbar />
 

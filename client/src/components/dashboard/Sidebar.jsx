@@ -87,7 +87,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       {/* 1. DESKTOP VIEW SIDEBAR (Hidden on mobile, permanent layout on desktop) */}
       <aside
         className={`hidden md:block md:flex md:flex-col transition-all duration-300 ease-in-out h-screen fixed left-0 top-0 border-r z-50 ${
-          isOpen ? 'w-64' : 'w-20'
+          isOpen ? 'w-72' : 'w-20'
         } ${
           isLight
             ? 'bg-white text-slate-900 border-slate-200'
