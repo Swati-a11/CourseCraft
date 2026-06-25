@@ -58,8 +58,8 @@ const TopicPage = () => {
         setError('');
 
         // VALIDATION
-        if (!courseId) {
-          setError('Course ID missing.');
+        if (!courseId || courseId === 'undefined') {
+          setError('Course ID missing or invalid.');
           return;
         }
 
@@ -203,6 +203,7 @@ const TopicPage = () => {
     if (
       loading ||
       !courseId ||
+      courseId === 'undefined' ||
       !topicDetails
     ) {
       return;

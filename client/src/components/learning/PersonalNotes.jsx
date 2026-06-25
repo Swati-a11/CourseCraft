@@ -24,6 +24,7 @@ const PersonalNotes = ({ courseId, initialNotes = '' }) => {
 
   const saveNotes = async () => {
     if (notes === initialNotes) return;
+    if (!courseId || courseId === 'undefined') return;
     
     setIsSaving(true);
     setSaveStatus('saving');

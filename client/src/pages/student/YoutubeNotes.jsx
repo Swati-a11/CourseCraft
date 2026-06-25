@@ -182,7 +182,7 @@ const YoutubeNotes = () => {
       const formData = new FormData();
       formData.append('pdf', pdfFile);
 
-      const res = await api.post('/pdf/generate-notes', formData, {
+      const res = await api.post('/pdf/summarize', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

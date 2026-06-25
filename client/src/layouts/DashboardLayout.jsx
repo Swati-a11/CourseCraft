@@ -1,11 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Navbar from '../components/dashboard/Navbar';
 import { useTheme } from '../context/ThemeContext';
+import api from '../services/api';
 
 const DashboardLayout = ({ children }) => {
   const { isLight } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchActiveUserData = async () => {
+      const token = localStorage.getItem('token');
+      // Guard Clause: Prevent request from firing until token is valid & context loaded
+      if (!token || token === 'undefined') {
+        return;
+      }
+      try {
+        // Fetch active user/dashboard metrics
+        await api.get('/dashboard/stats');
+      } catch (error) {
+        // Graceful Catch & Render Fallback: Log exact requested path but do NOT freeze UI
+        if (error.response && (error.response.status === 404 || error.response.status === 401)) {
+          console.error(`Layout API Fetch Error. Config URL: ${error.config?.url || 'unknown'}`);
+        } else {
+          console.error(`Layout API Fetch Error: ${error.message}`);
+        }
+      }
+    };
+
+    fetchActiveUserData();
+  }, []);
 
   return (
     <div className={`min-h-screen flex transition-colors duration-300 ${

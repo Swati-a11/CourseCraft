@@ -28,6 +28,10 @@ const CourseLearningPage = () => {
   }, [courseId]);
 
   const fetchCourseData = async () => {
+    if (!courseId || courseId === 'undefined') {
+      setLoading(false);
+      return;
+    }
     try {
       const res = await api.get(`/learning/course/${courseId}`);
       setCourse(res.data.course);

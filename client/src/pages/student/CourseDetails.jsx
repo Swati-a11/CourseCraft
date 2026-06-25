@@ -17,6 +17,10 @@ const CourseDetails = () => {
   }, [courseId]);
 
   const fetchCourse = async () => {
+    if (!courseId || courseId === 'undefined') {
+      setError("Failed to load course. It may not exist.");
+      return;
+    }
     try {
       const res = await getCourseById(courseId);
       setCourse(res.data);
