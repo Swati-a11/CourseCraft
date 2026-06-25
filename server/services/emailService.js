@@ -1,11 +1,18 @@
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 465,                  // Secure port for SSL
+  secure: true,               // True for port 465
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_APP_PASSWORD
-  }
+  },
+  tls: {
+    rejectUnauthorized: false // Bypasses self-signed certificate blocks on cloud containers
+  },
+  connectionTimeout: 10000,    // 10 seconds timeout limit
+  greetingTimeout: 10000
 });
 
 export const sendSystemNotification = async (toEmail, subject, textBody) => {
