@@ -352,7 +352,7 @@ const YoutubeNotes = () => {
                       ) : (
                         response && response.isFallback && (
                           <div>
-                            <p className="text-sm text-gray-400">{response.data.message}</p>
+                            <p className="text-sm text-gray-400">{response.data.summary || response.data.message}</p>
                             <div className="flex flex-wrap gap-2 mt-3">
                               {response.data.topics.map(topic => (
                                 <span key={topic} className="px-3 py-1 rounded-full bg-green-500/10 
@@ -527,7 +527,7 @@ const YoutubeNotes = () => {
                 ) : (
                   response && response.isFallback && (
                     <div>
-                      <p className="text-sm text-gray-400">{response.data.message}</p>
+                      <p className="text-sm text-gray-400">{response.data.summary || response.data.message}</p>
                       <div className="flex flex-wrap gap-2 mt-3">
                         {response.data.topics.map(topic => (
                           <span key={topic} className="px-3 py-1 rounded-full bg-green-500/10 

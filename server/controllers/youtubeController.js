@@ -43,26 +43,17 @@ const generateWithModelFallback = async (ai, contents) => {
   throw new Error('All Gemini models failed due to exhaustion or errors');
 };
 
-// When Gemini fails, extract topics from title/description
-const extractTopics = (title, description) => {
+// Instead of throwing, return fallback with topics
+const extractTopics = (title = '', description = '') => {
   const text = `${title} ${description}`.toLowerCase();
-  const topics = [];
-
-  // Common tech topics
-  const topicKeywords = [
-    'javascript', 'python', 'react', 'node', 'express', 'mongodb',
-    'arrays', 'linked list', 'trees', 'graphs', 'sorting', 'searching',
-    'dynamic programming', 'recursion', 'binary search', 'stack', 'queue',
-    'css', 'html', 'tailwind', 'typescript', 'next.js', 'api', 'rest',
-    'machine learning', 'ai', 'deep learning', 'langchain', 'gemini',
-    'algorithms', 'data structures', 'complexity', 'big o'
+  const keywords = [
+    'javascript', 'python', 'react', 'node', 'mongodb', 'arrays',
+    'linked list', 'trees', 'graphs', 'sorting', 'dynamic programming',
+    'recursion', 'binary search', 'stack', 'queue', 'css', 'html',
+    'machine learning', 'ai', 'langchain', 'algorithms', 'data structures'
   ];
-
-  topicKeywords.forEach(keyword => {
-    if (text.includes(keyword)) topics.push(keyword);
-  });
-
-  return topics.length > 0 ? topics : ['General Programming'];
+  const found = keywords.filter(k => text.includes(k));
+  return found.length > 0 ? found : ['General Programming'];
 };
 
 export const generateYoutubeNotes = async (req, res) => {
@@ -168,13 +159,13 @@ export const generateYoutubeNotes = async (req, res) => {
     console.error('Full error in generateYoutubeNotes:', error);
     const videoTitle = titleVar || 'Optimized Video Lecture';
     const videoDescription = descriptionVar || '';
-    return res.json({
+    return res.status(200).json({
       success: true,
       isFallback: true,
       data: {
-        title: videoTitle,
+        title: videoTitle || 'Video',
+        summary: 'AI notes temporarily unavailable due to quota limits.',
         topics: extractTopics(videoTitle, videoDescription),
-        message: 'Full notes temporarily unavailable. Topics covered in this video:'
       }
     });
   }
