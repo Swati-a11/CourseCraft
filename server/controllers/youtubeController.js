@@ -15,6 +15,33 @@ const chunkTranscript = (text, maxChars = 3000) => {
 // Add delay between chunks to avoid RPM limit
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// Safe content generation helper with model fallback and resource exhaustion retry
+const generateWithModelFallback = async (ai, contents) => {
+  const models = ['gemini-1.5-flash', 'gemini-1.5-flash-8b', 'gemini-1.0-pro'];
+  for (const modelName of models) {
+    let attempts = 0;
+    while (attempts < 2) {
+      try {
+        const result = await ai.models.generateContent({
+          model: modelName,
+          contents: contents,
+        });
+        return result;
+      } catch (error) {
+        if (error.message?.includes('RESOURCE_EXHAUSTED')) {
+          attempts++;
+          if (attempts < 2) {
+            await delay(3000); // wait 3 seconds
+            continue; // retry once
+          }
+        }
+        break; // try the next model
+      }
+    }
+  }
+  throw new Error('All Gemini models failed due to exhaustion or errors');
+};
+
 export const generateYoutubeNotes = async (req, res) => {
   console.log('Backend: Request received');
   try {
@@ -79,13 +106,10 @@ export const generateYoutubeNotes = async (req, res) => {
     for (const chunk of chunks) {
       try {
         await delay(1000); // 1 second between each chunk
-        const result = await ai.models.generateContent({
-          model: 'gemini-2.0-flash',
-          contents: `
-            Summarize these key points simply:
-            ${chunk}
-          `
-        });
+        const result = await generateWithModelFallback(ai, `
+          Summarize these key points simply:
+          ${chunk}
+        `);
         const textVal = result.text || (typeof result.response?.text === 'function' ? await result.response.text() : result.response?.text) || '';
         summaries.push(textVal);
       } catch (err) {
@@ -97,19 +121,16 @@ export const generateYoutubeNotes = async (req, res) => {
     // Final summary from all chunks
     const combined = summaries.join('\n');
     console.log('Backend: Generating final combined notes...');
-    const final = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
-      contents: `
-        Create clean study notes from these summaries:
-        ${combined}
+    const final = await generateWithModelFallback(ai, `
+      Create clean study notes from these summaries:
+      ${combined}
 
-        Format:
-        📌 Topic: [topic]
-        📝 Key Points: [bullet points]
-        💡 Important Concepts: [concepts]
-        ❓ Possible Questions: [questions]
-      `
-    });
+      Format:
+      📌 Topic: [topic]
+      📝 Key Points: [bullet points]
+      💡 Important Concepts: [concepts]
+      ❓ Possible Questions: [questions]
+    `);
 
     const summary = final.text || (typeof final.response?.text === 'function' ? await final.response.text() : final.response?.text) || '';
 
