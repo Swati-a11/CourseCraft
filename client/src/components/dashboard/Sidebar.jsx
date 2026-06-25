@@ -95,7 +95,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         }`}
       >
         {/* Brand Header */}
-        <div className={`p-4 border-b ${isLight ? 'border-slate-100' : 'border-green-900/30'} h-20 flex items-center justify-center`}>
+        <div className={`flex items-center gap-3 p-4 border-b border-slate-100 dark:border-slate-800 transition-all duration-300 ${isOpen ? 'justify-start px-6' : 'justify-center'} h-20`}>
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="relative flex items-center justify-center p-3 rounded-full transition-all duration-300 ease-out hover:rounded-xl hover:bg-slate-100/60 dark:hover:bg-slate-800/40 hover:border-slate-200/50 cursor-pointer"
@@ -103,13 +103,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             <BookOpen size={24} className={isLight ? 'text-green-600' : 'text-green-400'} />
           </button>
           {isOpen && (
-            <div className="ml-3 transition-opacity duration-300 overflow-hidden">
-              <h1 className={`text-3xl font-condiment ${isLight ? 'text-green-600' : 'text-green-400'} whitespace-nowrap`}>
+            <div className="flex flex-col items-start transition-opacity duration-300 animate-fadeIn">
+              <span className={`text-3xl font-condiment ${isLight ? 'text-green-600' : 'text-green-400'} leading-none select-none`}>
                 CourseCraft
-              </h1>
-              <p className={`text-xs font-cabin font-extrabold mt-0.5 ${isLight ? 'text-slate-500' : 'text-gray-400'} whitespace-nowrap`}>
+              </span>
+              <span className="text-[10px] tracking-wide text-slate-400 font-medium whitespace-nowrap mt-1">
                 AI Learning Platform
-              </p>
+              </span>
             </div>
           )}
         </div>
