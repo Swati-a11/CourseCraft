@@ -16,6 +16,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendSystemNotification = async (toEmail, subject, textBody) => {
+  console.log(`📡 SMTP Target Request Log: Attempting to mail -> ${toEmail}`);
   try {
     const mailOptions = {
       from: `"CourseCraft" <${process.env.GMAIL_USER}>`,
@@ -24,10 +25,10 @@ export const sendSystemNotification = async (toEmail, subject, textBody) => {
       text: textBody
     };
     const info = await transporter.sendMail(mailOptions);
-    console.log("✅ SMTP EMAIL SUCCESS:", info.messageId);
+    console.log("🔥 NODEMAILER SYSTEM CRITICAL LOG: SUCCESS DISPATCHED -> ID:", info.messageId);
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    console.error("❌ NODEMAILER SMTP FAILURE:", error);
+    console.error("🚨 NODEMAILER SYSTEM CRITICAL LOG: ACTUAL SMTP FAILURE DETAILED:", error.message);
     throw error;
   }
 };

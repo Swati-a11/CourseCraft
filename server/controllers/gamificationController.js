@@ -134,23 +134,19 @@ export const subscribeNotification = async (req, res) => {
     user.email = email.toLowerCase().trim();
     await user.save();
 
-    try {
-      await sendContinuityReminder(email, user.name, user.streak);
-    } catch (emailErr) {
-      console.error('Failed to send subscription confirmation email:', emailErr);
-    }
+    // FORCE and AWAIT the actual live email trigger
+    await sendContinuityReminder(email, user.name || req.user?.username || 'Student', user.streak || 0);
 
     return res.status(200).json({
       success: true,
-      message: 'Subscribed to notifications successfully',
-      email: user.email,
+      message: "Successfully subscribed and welcome alert dispatched!",
+      email: user.email
     });
-  } catch (error) {
-    console.error('Subscribe Notification Error:', error);
+  } catch (controllerError) {
+    console.error("💥 SUBSCRIPTION CONTROLLER WRAPPER FAULT:", controllerError.message);
     return res.status(500).json({
       success: false,
-      message: 'Failed to subscribe to notifications',
-      error: error.message,
+      message: controllerError.message
     });
   }
 };
