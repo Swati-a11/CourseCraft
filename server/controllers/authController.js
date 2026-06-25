@@ -67,7 +67,7 @@ export const loginUser = async (req, res) => {
 
     try {
       const sanitizedSecret = process.env.JWT_SECRET.trim().replace(/\\r/g, '');
-      const token = jwt.sign({ id: user._id }, sanitizedSecret, { expiresIn: '24h' });
+      const token = jwt.sign({ id: user._id }, sanitizedSecret, { expiresIn: '30d' });
       return res.status(200).json({ token, user: { id: user._id, email: user.email } });
     } catch (jwtError) {
       console.error("❌ JWT SIGN EXCEPTION:", jwtError.message);
