@@ -27,7 +27,6 @@ const menuItems = [
 const Sidebar = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const { isLight } = useTheme();
 
   const handleLogout = () => {
@@ -51,7 +50,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } ${
           isLight
-            ? 'bg-white text-slate-800 border-r border-slate-100'
+            ? 'bg-white text-slate-900 border-r border-slate-200'
             : 'bg-zinc-950 border-r border-green-900/30 text-white'
         }`}
       >
@@ -80,61 +79,52 @@ const Sidebar = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {/* Navigation links with Resend-style morphing icon containers */}
-        <nav className="flex-1 p-4 space-y-3 overflow-y-auto">
+        {/* Navigation links */}
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
           {menuItems.map((item) => {
             const Icon = item.icon;
-            const isActive = location.pathname === item.path;
 
             return (
               <NavLink
                 key={item.name}
                 to={item.path}
                 onClick={onClose}
-                className="group flex items-center gap-4 py-2 transition-all duration-300"
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                    isActive
+                      ? `${isLight ? 'bg-green-100 text-green-800' : 'bg-green-600 text-black'} font-condiment text-3xl`
+                      : `${isLight ? 'text-slate-700 hover:bg-slate-100 hover:text-green-600' : 'text-gray-300 hover:bg-zinc-900 hover:text-green-400'}`
+                  }`
+                }
               >
-                {/* Resend-style morphing container */}
-                <div
-                  className={`p-2.5 transition-all duration-300 ease-out flex items-center justify-center ${
-                    isActive
-                      ? 'rounded-xl bg-green-100 text-green-600 dark:bg-green-900/50 dark:text-green-400 shadow-sm'
-                      : 'rounded-full bg-slate-100/50 dark:bg-slate-800 text-slate-500 dark:text-gray-400 group-hover:rounded-xl group-hover:bg-green-50 dark:group-hover:bg-green-950/40'
-                  }`}
-                >
-                  <Icon size={20} className="transition-transform duration-300 group-hover:scale-110" />
-                </div>
-                
-                {/* Label link text with micro-interactions */}
-                <span
-                  className={`text-sm font-semibold transition-colors duration-200 ${
-                    isActive
-                      ? 'text-green-600 dark:text-green-400'
-                      : 'text-slate-600 dark:text-gray-400 group-hover:text-green-600 dark:group-hover:text-green-400'
-                  }`}
-                >
-                  {item.name}
-                </span>
+                {({ isActive }) => (
+                  <>
+                    {/* Resend-style squircle icon morphing wrapper */}
+                    <div
+                      className={`p-2 bg-transparent transition-all duration-300 ease-out hover:rounded-xl hover:bg-slate-100/50 dark:hover:bg-slate-800/50 ${
+                        isActive ? 'rounded-xl' : 'rounded-full'
+                      }`}
+                    >
+                      <Icon size={20} />
+                    </div>
+                    <span>{item.name}</span>
+                  </>
+                )}
               </NavLink>
             );
           })}
         </nav>
 
-        {/* Logout Trigger button */}
+        {/* Sidebar Footer / Logout */}
         <div className={`p-4 border-t ${isLight ? 'border-slate-100' : 'border-green-900/30'}`}>
           <button
             onClick={handleLogout}
-            className="group flex items-center gap-4 py-2 w-full transition-all duration-300"
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition ${
+              isLight ? 'text-red-600 hover:bg-red-50' : 'text-red-400 hover:bg-red-500/10'
+            }`}
           >
-            <div
-              className="p-2.5 rounded-full bg-slate-100/50 dark:bg-slate-800 text-red-500 dark:text-red-400 transition-all duration-300 ease-out group-hover:rounded-xl group-hover:bg-red-50 dark:group-hover:bg-red-950/20"
-            >
-              <LogOut size={20} className="transition-transform duration-300 group-hover:scale-110" />
-            </div>
-            <span
-              className="text-sm font-semibold transition-colors duration-200 text-slate-600 dark:text-gray-400 group-hover:text-red-600 dark:group-hover:text-red-400"
-            >
-              Logout
-            </span>
+            <LogOut size={20} />
+            Logout
           </button>
         </div>
       </aside>
