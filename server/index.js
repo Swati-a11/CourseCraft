@@ -23,6 +23,7 @@ import enrollmentRoutes from './routes/enrollmentRoutes.js';
 import youtubeRoutes from './routes/youtubeRoutes.js';
 import pdfRoutes from './routes/pdfRoutes.js';
 import learningRoutes from './routes/learningRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
 import Progress from './models/Progress.js';
 
 const app = express();
@@ -91,6 +92,7 @@ app.use('/api/enrollments', enrollmentRoutes);
 app.use('/api/youtube', youtubeRoutes);
 app.use('/api/pdf', pdfRoutes);
 app.use('/api/learning', learningRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // static files
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));

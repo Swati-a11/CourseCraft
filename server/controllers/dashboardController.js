@@ -214,6 +214,8 @@ export const getDashboardStats = async (req, res) => {
       `Complete ${Math.max(0, 6 - topicsCompleted)} topics to level up`
     );
 
+    const user = await User.findById(userId);
+
     return res.status(200).json({
       coursesEnrolled,
       coursesCompleted,
@@ -225,6 +227,8 @@ export const getDashboardStats = async (req, res) => {
         level,
         streak,
         badges,
+        lastStreakReminderSent: user?.lastStreakReminderSent || null,
+        lastActivityDate: user?.lastActivityDate || null,
       },
       recommendations,
       quizTrend,

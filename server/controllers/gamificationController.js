@@ -112,3 +112,76 @@ export const checkInUser = async (req, res) => {
     });
   }
 };
+
+export const subscribeNotification = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email parameter is required',
+      });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    user.email = email.toLowerCase().trim();
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Subscribed to notifications successfully',
+      email: user.email,
+    });
+  } catch (error) {
+    console.error('Subscribe Notification Error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to subscribe to notifications',
+      error: error.message,
+    });
+  }
+};
+
+export const runNotificationSweep = async (req, res) => {
+  try {
+    const users = await User.find({ streak: { $gt: 0 }, lastActivityDate: { $ne: null } });
+    const now = new Date();
+    let sentCount = 0;
+
+    for (const user of users) {
+      const lastActive = new Date(user.lastActivityDate);
+      const diffTime = now - lastActive;
+      const diffHours = diffTime / (1000 * 60 * 60);
+
+      const lastReminder = user.lastStreakReminderSent ? new Date(user.lastStreakReminderSent) : null;
+      const hoursSinceReminder = lastReminder ? (now - lastReminder) / (1000 * 60 * 60) : Infinity;
+
+      if (diffHours >= 20 && diffHours < 24 && hoursSinceReminder >= 20) {
+        console.log(`🔥 [Sweep] Sending streak continuity reminder to user: ${user.email}`);
+        await sendContinuityReminder(user.email, user.name, user.streak);
+        user.lastStreakReminderSent = now;
+        await user.save();
+        sentCount++;
+      }
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: `Notification sweep completed. Sent ${sentCount} reminders.`,
+    });
+  } catch (error) {
+    console.error('Sweep Error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Sweep failed',
+      error: error.message,
+    });
+  }
+};

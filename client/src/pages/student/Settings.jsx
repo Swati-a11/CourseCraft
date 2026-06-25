@@ -4,6 +4,8 @@ import api from '../../services/api';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { toast } from 'react-toastify';
 
+import { useTheme } from '../../context/ThemeContext';
+
 const Settings = () => {
   // ===============================
   // USER PROFILE STATES
@@ -64,6 +66,9 @@ const Settings = () => {
   }, []);
 
   const handleToggle = (key) => {
+    if (key === 'darkMode') {
+      toggleTheme();
+    }
     setSettings((prev) => ({
       ...prev,
       [key]: !prev[key],
@@ -116,7 +121,7 @@ const Settings = () => {
     }
   };
 
-  const isLight = !settings.darkMode;
+  const { isLight, toggleTheme } = useTheme();
 
   const SettingToggle = ({ icon: Icon, label, value, onChange, description }) => (
     <div className={`flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 ${
