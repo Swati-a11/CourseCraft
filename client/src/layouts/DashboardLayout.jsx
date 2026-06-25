@@ -11,12 +11,12 @@ const DashboardLayout = ({ children }) => {
     <div className={`min-h-screen flex transition-colors duration-300 ${
       isLight ? 'bg-slate-50 text-slate-900' : 'bg-black text-white'
     }`}>
-      {/* Permanent Fixed Left Sidebar */}
+      {/* Permanent Sidebar (manages both desktop sidebar and mobile horizontal bottom-bar layout details) */}
       <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
 
-      {/* Main Workspace Column */}
-      <div className={`flex-1 flex flex-col transition-all duration-300 min-w-0 ${
-        isOpen ? 'pl-64' : 'pl-20'
+      {/* Main Workspace Column - padded on bottom on mobile to prevent navbar overlapping */}
+      <div className={`flex-1 flex flex-col transition-all duration-300 min-w-0 pb-16 md:pb-0 pl-0 ${
+        isOpen ? 'md:pl-64' : 'md:pl-20'
       }`}>
         <Navbar />
 
