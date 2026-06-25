@@ -1,44 +1,34 @@
-import nodemailer from 'nodemailer';
-
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,                 // Switch to standard alternative TLS port
-  secure: false,             // Must be false for port 587 (upgrades via STARTTLS)
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASSWORD
-  },
-  tls: {
-    ciphers: 'SSLv3',        // Enforce basic cryptographic compatibility
-    rejectUnauthorized: false
-  },
-  dnsOptions: {
-    family: 4                // Strict IPv4 lookup enforcement
-  },
-  connectionTimeout: 15000,   // Increase timeout limits slightly for cloud handshake
-  greetingTimeout: 15000
-});
+import axios from 'axios';
 
 export const sendSystemNotification = async (toEmail, subject, textBody) => {
-  console.log(`📡 SMTP Target Request Log: Attempting to mail -> ${toEmail}`);
+  console.log(`📡 REST API Request Log: Forwarding HTTP payload to -> ${toEmail}`);
   try {
-    const mailOptions = {
-      from: `"CourseCraft" <${process.env.GMAIL_USER}>`,
-      to: toEmail,
-      subject: subject,
-      text: textBody
-    };
-    const info = await transporter.sendMail(mailOptions);
-    console.log("🔥 NODEMAILER SYSTEM CRITICAL LOG: SUCCESS DISPATCHED -> ID:", info.messageId);
-    return { success: true, messageId: info.messageId };
+    const response = await axios.post(
+      'https://api.resend.com/emails',
+      {
+        from: 'CourseCraft <onboarding@resend.dev>',
+        to: [toEmail],
+        subject: subject,
+        text: textBody,
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    console.log("🔥 HTTP REST SUCCESS LOG: Response from gateway ->", response.data);
+    return { success: true, messageId: response.data.id };
   } catch (error) {
-    console.error("🚨 NODEMAILER SYSTEM CRITICAL LOG: ACTUAL SMTP FAILURE DETAILED:", error.message);
-    throw error;
+    const errorDetails = error.response ? JSON.stringify(error.response.data) : error.message;
+    console.error("🚨 HTTP REST CRITICAL FAILURE LOG:", errorDetails);
+    throw new Error(`REST API Mail Transport Error: ${errorDetails}`);
   }
 };
 
 export const sendContinuityReminder = async (toEmail, username, currentStreak) => {
   const subject = "CourseCraft Continuity Subscription Active 🚀";
-  const body = `Hello ${username || 'Student'}!\n\nYou have successfully registered this email address for CourseCraft learning continuity alerts.\n\nYour current streak is ${currentStreak || 0} days. We will keep you updated on your streak milestones and active course progress metrics to maintain your momentum!\n\nKeep Learning!\nTeam CourseCraft`;
+  const body = `Hello ${username || 'Student'}!\n\nYou have successfully registered this email address for CourseCraft learning continuity alerts.\n\nYour current streak is ${currentStreak || 0} days. We will keep you updated on your streak milestones to maintain your learning momentum!\n\nKeep Learning!\nTeam CourseCraft`;
   return sendSystemNotification(toEmail, subject, body);
 };
