@@ -43,6 +43,28 @@ const generateWithModelFallback = async (ai, contents) => {
   throw new Error('All Gemini models failed due to exhaustion or errors');
 };
 
+// When Gemini fails, extract topics from title/description
+const extractTopics = (title, description) => {
+  const text = `${title} ${description}`.toLowerCase();
+  const topics = [];
+
+  // Common tech topics
+  const topicKeywords = [
+    'javascript', 'python', 'react', 'node', 'express', 'mongodb',
+    'arrays', 'linked list', 'trees', 'graphs', 'sorting', 'searching',
+    'dynamic programming', 'recursion', 'binary search', 'stack', 'queue',
+    'css', 'html', 'tailwind', 'typescript', 'next.js', 'api', 'rest',
+    'machine learning', 'ai', 'deep learning', 'langchain', 'gemini',
+    'algorithms', 'data structures', 'complexity', 'big o'
+  ];
+
+  topicKeywords.forEach(keyword => {
+    if (text.includes(keyword)) topics.push(keyword);
+  });
+
+  return topics.length > 0 ? topics : ['General Programming'];
+};
+
 export const generateYoutubeNotes = async (req, res) => {
   console.log('Backend: Request received');
   try {
@@ -125,7 +147,7 @@ export const generateYoutubeNotes = async (req, res) => {
     const final = await generateWithModelFallback(ai, `
       Create clean study notes from these summaries:
       ${combined}
-
+      
       Format:
       📌 Topic: [topic]
       📝 Key Points: [bullet points]
@@ -144,28 +166,16 @@ export const generateYoutubeNotes = async (req, res) => {
     });
   } catch (error) {
     console.error('Full error in generateYoutubeNotes:', error);
-    if (
-      error.message?.includes('RESOURCE_EXHAUSTED') ||
-      error.message?.includes('exhaustion') ||
-      error.message?.includes('quota')
-    ) {
-      return res.status(200).json({
-        success: true,
-        isFallback: true,
-        data: {
-          title: "Optimized Video Lecture Notes",
-          summary: "The video lecture notes service is currently experiencing high load. Here are the metadata-based fallback notes.",
-          keyPoints: [
-            "The active Gemini API quota has been reached.",
-            "Please check back again in a few minutes.",
-            "Video ID and reference details remain accessible."
-          ]
-        }
-      });
-    }
-    return res.status(500).json({
-      success: false,
-      message: error.message || 'Internal Server Error during notes generation',
+    const videoTitle = titleVar || 'Optimized Video Lecture';
+    const videoDescription = descriptionVar || '';
+    return res.json({
+      success: true,
+      isFallback: true,
+      data: {
+        title: videoTitle,
+        topics: extractTopics(videoTitle, videoDescription),
+        message: 'Full notes temporarily unavailable. Topics covered in this video:'
+      }
     });
   }
 };

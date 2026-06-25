@@ -21,6 +21,7 @@ const YoutubeNotes = () => {
   const [statusText, setStatusText] = useState('');
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [activeVideoId, setActiveVideoId] = useState(null);
+  const [response, setResponse] = useState(null);
 
   // ===============================
   // PDF STATES
@@ -42,6 +43,7 @@ const YoutubeNotes = () => {
     try {
       setLoading(true);
       setSummary('');
+      setResponse(null);
       setSelectedVideo(null);
       setStatusText('Fetching transcript...');
 
@@ -55,10 +57,9 @@ const YoutubeNotes = () => {
 
       clearTimeout(statusTimer);
       setStatusText('Notes generated');
+      setResponse(res.data);
       if (res.data.isFallback) {
-        const { title, summary: fallbackSummary, keyPoints } = res.data.data || {};
-        const formattedNotes = `${title}\n\n${fallbackSummary}\n\nKey Takeaways:\n${(keyPoints || []).map(point => `• ${point}`).join('\n')}`;
-        setSummary(formattedNotes);
+        setSummary('');
       } else {
         setSummary(res.data.summary);
       }
@@ -97,6 +98,7 @@ const YoutubeNotes = () => {
       setPlaylistLoading(true);
       setPlaylistVideos([]);
       setSummary('');
+      setResponse(null);
       setSelectedVideo(null);
       setActiveVideoId(null);
       setStatusText('Loading playlist...');
@@ -125,6 +127,7 @@ const YoutubeNotes = () => {
     try {
       setLoading(true);
       setSummary('');
+      setResponse(null);
       setSelectedVideo(video.videoId);
       setStatusText(`Fetching transcript for "${video.title.slice(0, 30)}..."`);
 
@@ -140,10 +143,9 @@ const YoutubeNotes = () => {
 
       clearTimeout(statusTimer);
       setStatusText('Notes generated');
+      setResponse(res.data);
       if (res.data.isFallback) {
-        const { title, summary: fallbackSummary, keyPoints } = res.data.data || {};
-        const formattedNotes = `${title}\n\n${fallbackSummary}\n\nKey Takeaways:\n${(keyPoints || []).map(point => `• ${point}`).join('\n')}`;
-        setSummary(formattedNotes);
+        setSummary('');
       } else {
         setSummary(res.data.summary);
       }
@@ -332,7 +334,7 @@ const YoutubeNotes = () => {
                   </div>
 
                   {/* AI Generated Notes for Active Video */}
-                  {summary && (
+                  {(summary || (response && response.isFallback)) && (
                     <div className={`p-6 sm:p-8 rounded-3xl border shadow-2xl animate-fade-in transition-colors ${
                       isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-white/5'
                     }`}>
@@ -341,11 +343,27 @@ const YoutubeNotes = () => {
                       }`}>
                         📝 Generated Lecture Notes
                       </h2>
-                      <pre className={`whitespace-pre-wrap font-sans text-sm sm:text-base leading-relaxed transition-colors ${
-                        isLight ? 'text-slate-700' : 'text-gray-300'
-                      }`}>
-                        {summary}
-                      </pre>
+                      {summary ? (
+                        <pre className={`whitespace-pre-wrap font-sans text-sm sm:text-base leading-relaxed transition-colors ${
+                          isLight ? 'text-slate-700' : 'text-gray-300'
+                        }`}>
+                          {summary}
+                        </pre>
+                      ) : (
+                        response && response.isFallback && (
+                          <div>
+                            <p className="text-sm text-gray-400">{response.data.message}</p>
+                            <div className="flex flex-wrap gap-2 mt-3">
+                              {response.data.topics.map(topic => (
+                                <span key={topic} className="px-3 py-1 rounded-full bg-green-500/10 
+                                  text-green-400 border border-green-500/20 text-sm capitalize">
+                                  {topic}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )
+                      )}
                       {pdfUrl && (
                         <a
                           href={pdfUrl}
@@ -491,7 +509,7 @@ const YoutubeNotes = () => {
             </div>
 
             {/* Generated Notes */}
-            {summary && (
+            {(summary || (response && response.isFallback)) && (
               <div className={`p-6 sm:p-8 rounded-3xl border shadow-2xl animate-fade-in transition-colors ${
                 isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-white/5'
               }`}>
@@ -500,11 +518,27 @@ const YoutubeNotes = () => {
                 }`}>
                   📝 Generated Lecture Notes
                 </h2>
-                <pre className={`whitespace-pre-wrap font-sans text-sm sm:text-base leading-relaxed transition-colors ${
-                  isLight ? 'text-slate-700' : 'text-gray-300'
-                }`}>
-                  {summary}
-                </pre>
+                {summary ? (
+                  <pre className={`whitespace-pre-wrap font-sans text-sm sm:text-base leading-relaxed transition-colors ${
+                    isLight ? 'text-slate-700' : 'text-gray-300'
+                  }`}>
+                    {summary}
+                  </pre>
+                ) : (
+                  response && response.isFallback && (
+                    <div>
+                      <p className="text-sm text-gray-400">{response.data.message}</p>
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {response.data.topics.map(topic => (
+                          <span key={topic} className="px-3 py-1 rounded-full bg-green-500/10 
+                            text-green-400 border border-green-500/20 text-sm capitalize">
+                            {topic}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                )}
 
                 {pdfUrl && (
                   <a
