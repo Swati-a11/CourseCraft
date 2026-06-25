@@ -2,20 +2,21 @@ import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
-  port: 465,                  // Secure port for SSL
-  secure: true,               // True for port 465
+  port: 587,                 // Switch to standard alternative TLS port
+  secure: false,             // Must be false for port 587 (upgrades via STARTTLS)
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_APP_PASSWORD
   },
   tls: {
-    rejectUnauthorized: false // Bypasses self-signed certificate blocks on cloud containers
+    ciphers: 'SSLv3',        // Enforce basic cryptographic compatibility
+    rejectUnauthorized: false
   },
   dnsOptions: {
-    family: 4 // FORCES NODEMAILER TO USE IPV4 ONLY (Bypasses ENETUNREACH IPv6 block)
+    family: 4                // Strict IPv4 lookup enforcement
   },
-  connectionTimeout: 10000,    // 10 seconds timeout limit
-  greetingTimeout: 10000
+  connectionTimeout: 15000,   // Increase timeout limits slightly for cloud handshake
+  greetingTimeout: 15000
 });
 
 export const sendSystemNotification = async (toEmail, subject, textBody) => {
