@@ -366,7 +366,7 @@ const Settings = () => {
                     disabled={loading}
                     className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold hover:shadow-lg hover:shadow-emerald-500/50 transition-all hover:scale-105 disabled:bg-zinc-700 disabled:shadow-none"
                   >
-                    {loading ? 'Saving Settings...' : '💾 Save Changes'}
+                    {loading ? 'Saving Settings...' : ' Save Changes'}
                   </button>
                 </div>
                 <div className={`h-1 flex-1 rounded-full hidden sm:block ${isLight ? 'bg-slate-200' : 'bg-gradient-to-l from-emerald-500/20 to-transparent'}`}></div>
