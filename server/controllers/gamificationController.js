@@ -134,11 +134,8 @@ export const subscribeNotification = async (req, res) => {
     user.email = email.toLowerCase().trim();
     await user.save();
 
-    const subject = "CourseCraft Continuity Subscription Active 🚀";
-    const body = "Hello! You have successfully registered this email address for CourseCraft learning continuity alerts. We will keep you updated on your streak milestones and active course progress metrics!";
-    
     try {
-      await sendSystemNotification(user.email, subject, body);
+      await sendContinuityReminder(email, user.name, user.streak);
     } catch (emailErr) {
       console.error('Failed to send subscription confirmation email:', emailErr);
     }
