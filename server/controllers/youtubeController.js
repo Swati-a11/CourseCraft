@@ -1,6 +1,20 @@
 import { YoutubeTranscript } from 'youtube-transcript';
 import { GoogleGenAI } from '@google/genai';
 
+// Chunk the transcript
+const chunkTranscript = (text, maxChars = 3000) => {
+  const chunks = [];
+  let i = 0;
+  while (i < text.length) {
+    chunks.push(text.slice(i, i + maxChars));
+    i += maxChars;
+  }
+  return chunks;
+};
+
+// Add delay between chunks to avoid RPM limit
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 export const generateYoutubeNotes = async (req, res) => {
   console.log('Backend: Request received');
   try {
@@ -49,67 +63,55 @@ export const generateYoutubeNotes = async (req, res) => {
       : '';
 
     let rawText = transcriptionVar || descriptionVar || titleVar || "No video metadata captured";
-    const cleanSnippet = typeof rawText === 'string' ? rawText.split(' ').slice(0, 1000).join(' ') : "Sample video text";
 
-    console.log('Transcript snippet (sliced):', cleanSnippet ? cleanSnippet.slice(0, 100) : 'EMPTY');
+    console.log('Transcript length:', rawText.length);
 
     // =========================
-    // GEMINI AI Notes Generation
+    // GEMINI AI Notes Generation (Chunked & Summarized)
     // =========================
     const ai = new GoogleGenAI({
       apiKey: process.env.GEMINI_API_KEY,
     });
 
-    const prompt = `
-You are an AI YouTube video summarizer.
+    const chunks = chunkTranscript(rawText, 3000);
+    const summaries = [];
 
-Analyze the following lecture transcript snippet and generate crisp, high-fidelity educational notes. Keep the response concise, focusing only on the absolute core concepts and key takeaways. The entire output must strictly be between 10 to 20 lines maximum.
-
-Transcript Content:
-${cleanSnippet}
-`;
-
-    console.log('Backend: Gemini request started');
-    let response;
-    try {
-      response = await Promise.race([
-        ai.models.generateContent({
+    for (const chunk of chunks) {
+      try {
+        await delay(1000); // 1 second between each chunk
+        const result = await ai.models.generateContent({
           model: 'gemini-2.0-flash',
-          contents: prompt,
-        }),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Gemini API request timeout')), 15000))
-      ]);
-    } catch (geminiError) {
-      if (
-        geminiError.message?.includes('RESOURCE_EXHAUSTED') || 
-        geminiError.status === 'RESOURCE_EXHAUSTED' || 
-        geminiError.status === 429 ||
-        geminiError.code === 429
-      ) {
-        console.warn("⚠️ SYSTEM NOTICE: Gemini API current tier exhausted. Engaging localized text structural fallback extraction.");
-        
-        const dynamicTitle = titleVar || "Video Lecture Analysis";
-        
-        return res.status(200).json({
-          success: true,
-          isFallback: true,
-          message: "Content compiled via fallback processing structure due to cloud server queue limits.",
-          data: {
-            title: dynamicTitle,
-            summary: "The video lecture context was processed using high-performance localized syntax summary routines. The underlying framework has saved this context structure.",
-            keyPoints: [
-              "Core concept initialization mapping from video data stream",
-              "Structural evaluation layout patterns and rule paradigms",
-              "Resource optimization tier management methods"
-            ]
-          }
+          contents: `
+            Summarize these key points simply:
+            ${chunk}
+          `
         });
+        const textVal = result.text || (typeof result.response?.text === 'function' ? await result.response.text() : result.response?.text) || '';
+        summaries.push(textVal);
+      } catch (err) {
+        console.error('Chunk error:', err.message);
+        continue; // skip failed chunk, continue with rest
       }
-      return res.status(500).json({ error: "System runtime interruption.", details: geminiError.message });
     }
-    console.log('Backend: Gemini request completed');
 
-    const summary = response.text || '';
+    // Final summary from all chunks
+    const combined = summaries.join('\n');
+    console.log('Backend: Generating final combined notes...');
+    const final = await ai.models.generateContent({
+      model: 'gemini-2.0-flash',
+      contents: `
+        Create clean study notes from these summaries:
+        ${combined}
+
+        Format:
+        📌 Topic: [topic]
+        📝 Key Points: [bullet points]
+        💡 Important Concepts: [concepts]
+        ❓ Possible Questions: [questions]
+      `
+    });
+
+    const summary = final.text || (typeof final.response?.text === 'function' ? await final.response.text() : final.response?.text) || '';
 
     console.log('Gemini response:', summary.slice(0, 100));
 
