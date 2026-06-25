@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 export const sendSystemNotification = async (toEmail, subject, textBody) => {
+  // Trim any accidental spaces from the environment variable
+  const apiKey = (process.env.RESEND_API_KEY || 're_MyGBZWuC_6kXfhDVHgU7pyi74yVQFqz56').trim();
+  
   console.log(`📡 REST API Request Log: Forwarding HTTP payload to -> ${toEmail}`);
+  
   try {
     const response = await axios.post(
       'https://api.resend.com/emails',
@@ -13,7 +17,7 @@ export const sendSystemNotification = async (toEmail, subject, textBody) => {
       },
       {
         headers: {
-          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
       }
