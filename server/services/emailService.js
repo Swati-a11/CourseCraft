@@ -11,6 +11,9 @@ const transporter = nodemailer.createTransport({
   tls: {
     rejectUnauthorized: false // Bypasses self-signed certificate blocks on cloud containers
   },
+  dnsOptions: {
+    family: 4 // FORCES NODEMAILER TO USE IPV4 ONLY (Bypasses ENETUNREACH IPv6 block)
+  },
   connectionTimeout: 10000,    // 10 seconds timeout limit
   greetingTimeout: 10000
 });
