@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   LayoutDashboard,
   BookOpen,
@@ -9,10 +9,11 @@ import {
   LogOut,
   Wand2,
 } from 'lucide-react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../features/auth/authSlice';
 import { useTheme } from '../../context/ThemeContext';
+import API from '../../services/api';
 
 const menuItems = [
   { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
@@ -33,17 +34,65 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     window.location.href = '/';
   };
 
+  useEffect(() => {
+    // 1. Initial token check (parsing JWT expiration)
+    const checkToken = () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          if (payload.exp && payload.exp * 1000 < Date.now()) {
+            console.log("Token expired. Clearing credentials.");
+            localStorage.clear();
+            dispatch(logout());
+            window.location.href = '/login';
+          }
+        } catch (e) {
+          console.error("Invalid token format, clearing credentials.", e);
+          localStorage.clear();
+          dispatch(logout());
+          window.location.href = '/login';
+        }
+      }
+    };
+
+    checkToken();
+
+    // 2. Axios interceptor link for dynamic 401 errors
+    const interceptor = API.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          console.log("Axios 401 error intercepted. Clearing credentials.");
+          localStorage.clear();
+          dispatch(logout());
+          window.location.href = '/login';
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      API.interceptors.response.eject(interceptor);
+    };
+  }, [dispatch]);
+
+  // Filter out Achievements for mobile view to prevent layout overflow
+  const mobileMenuItems = menuItems.filter(
+    (item) => item.name !== 'Achievements'
+  );
+
   return (
     <>
       {/* 1. DESKTOP VIEW SIDEBAR (Hidden on mobile, permanent layout on desktop) */}
       <aside
-        className={`hidden md:flex transition-all duration-300 ease-in-out h-screen fixed left-0 top-0 border-r z-50 ${
+        className={`hidden md:block md:flex md:flex-col transition-all duration-300 ease-in-out h-screen fixed left-0 top-0 border-r z-50 ${
           isOpen ? 'w-64' : 'w-20'
         } ${
           isLight
             ? 'bg-white text-slate-900 border-slate-200'
             : 'bg-zinc-950 border-green-900/30 text-white'
-        } flex-col`}
+        }`}
       >
         {/* Brand Header */}
         <div className={`p-4 border-b ${isLight ? 'border-slate-100' : 'border-green-900/30'} h-20 flex items-center justify-center`}>
@@ -119,46 +168,34 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         )}
       </aside>
 
-      {/* 2. MOBILE VIEW NAVIGATION (Horizontal bottom bar, hidden on desktop screens) */}
+      {/* 2. MOBILE VIEW NAVIGATION (Horizontal bottom bar dock, hidden on desktop screens) */}
       <div
-        className={`fixed bottom-0 left-0 right-0 h-16 border-t flex justify-around items-center z-50 px-2 md:hidden transition-colors ${
-          isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-green-900/30 text-white'
-        }`}
+        className="fixed bottom-0 left-0 right-0 h-16 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex justify-around items-center z-50 px-4 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] md:hidden"
       >
-        {menuItems.map((item) => {
+        {mobileMenuItems.map((item) => {
           const Icon = item.icon;
           return (
             <NavLink
               key={item.name}
               to={item.path}
               className={({ isActive }) =>
-                `p-1 transition-all duration-300 ${
+                `rounded-full p-2 transition-all duration-300 hover:rounded-xl hover:bg-slate-100 ${
                   isActive
-                    ? (isLight ? 'text-green-600' : 'text-green-400')
-                    : (isLight ? 'text-slate-500 hover:text-slate-800' : 'text-gray-400 hover:text-white')
+                    ? 'text-green-600 dark:text-green-400 bg-slate-100 dark:bg-slate-800'
+                    : 'text-slate-500 dark:text-gray-400'
                 }`
               }
             >
-              {({ isActive }) => (
-                <div
-                  className={`p-2 transition-all duration-300 ease-out hover:rounded-xl hover:bg-slate-100/50 dark:hover:bg-slate-800/50 ${
-                    isActive ? 'rounded-xl bg-slate-100/50 dark:bg-slate-800/50' : 'rounded-full'
-                  }`}
-                >
-                  <Icon size={20} />
-                </div>
-              )}
+              <Icon size={20} />
             </NavLink>
           );
         })}
-        {/* Dedicated exposed Logout button option for Mobile Bottom Bar */}
+        {/* Dedicated Mobile Logout button */}
         <button
           onClick={handleLogout}
-          className="p-1 transition-all duration-300 text-red-500 hover:text-red-600"
+          className="text-red-500 p-2 rounded-full hover:bg-red-50 transition-all duration-300"
         >
-          <div className="p-2 transition-all duration-300 ease-out hover:rounded-xl hover:bg-red-50 dark:hover:bg-red-950/20 rounded-full">
-            <LogOut size={20} />
-          </div>
+          <LogOut size={20} />
         </button>
       </div>
     </>

@@ -16,4 +16,15 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      localStorage.clear();
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default API;   // ✅ IMPORTANT
