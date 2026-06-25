@@ -2,16 +2,21 @@ import { useState } from 'react';
 import api from '../../services/api';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { toast } from 'react-toastify';
+import { Play, ListVideo, Video, BookOpen, AlertCircle } from 'lucide-react';
 
 const YoutubeNotes = () => {
   // ===============================
-  // YOUTUBE STATES
+  // YOUTUBE & PLAYLIST STATES
   // ===============================
   const [url, setUrl] = useState('');
+  const [mode, setMode] = useState('single'); // 'single' | 'playlist'
   const [loading, setLoading] = useState(false);
+  const [playlistLoading, setPlaylistLoading] = useState(false);
+  const [playlistVideos, setPlaylistVideos] = useState([]);
   const [summary, setSummary] = useState('');
   const [pdfUrl, setPdfUrl] = useState('');
   const [statusText, setStatusText] = useState('');
+  const [selectedVideo, setSelectedVideo] = useState(null);
 
   // ===============================
   // PDF STATES
@@ -21,7 +26,7 @@ const YoutubeNotes = () => {
   const [pdfSummary, setPdfSummary] = useState('');
 
   // ===============================
-  // GENERATE YOUTUBE NOTES
+  // GENERATE NOTES (SINGLE VIDEO)
   // ===============================
   const handleGenerate = async () => {
     if (!url) {
@@ -31,10 +36,10 @@ const YoutubeNotes = () => {
 
     let statusTimer;
     try {
-      console.log("Frontend: Generate Notes clicked");
       setLoading(true);
+      setSummary('');
+      setSelectedVideo(null);
       setStatusText('Fetching transcript...');
-      console.log('Frontend: Request started');
 
       statusTimer = setTimeout(() => {
         setStatusText('Generating notes...');
@@ -45,7 +50,6 @@ const YoutubeNotes = () => {
       });
 
       clearTimeout(statusTimer);
-      console.log('Frontend: Response received', res.data);
       setStatusText('Notes generated');
       if (res.data.isFallback) {
         const { title, summary: fallbackSummary, keyPoints } = res.data.data || {};
@@ -58,7 +62,81 @@ const YoutubeNotes = () => {
       toast.success("Notes generated successfully!");
     } catch (error) {
       if (statusTimer) clearTimeout(statusTimer);
-      console.error('Frontend: Error received', error);
+      console.error(error);
+      setStatusText('Generation failed');
+      toast.error(error.response?.data?.message || 'Failed to generate notes');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ===============================
+  // FETCH PLAYLIST VIDEOS
+  // ===============================
+  const handleFetchPlaylist = async () => {
+    if (!url) {
+      alert('Please enter a YouTube Playlist URL or ID');
+      return;
+    }
+
+    try {
+      setPlaylistLoading(true);
+      setPlaylistVideos([]);
+      setSummary('');
+      setSelectedVideo(null);
+      setStatusText('Loading playlist...');
+
+      const res = await api.post('/youtube/playlist', {
+        playlistUrl: url,
+      });
+
+      setPlaylistVideos(res.data.videos || []);
+      setStatusText(`Loaded ${res.data.videos?.length || 0} videos`);
+      toast.success("Playlist loaded successfully!");
+    } catch (error) {
+      console.error(error);
+      setStatusText('Failed to load playlist');
+      toast.error(error.response?.data?.message || 'Failed to load playlist');
+    } finally {
+      setPlaylistLoading(false);
+    }
+  };
+
+  // ===============================
+  // GENERATE FOR PLAYLIST VIDEO
+  // ===============================
+  const handleGenerateForVideo = async (video) => {
+    let statusTimer;
+    try {
+      setLoading(true);
+      setSummary('');
+      setSelectedVideo(video.videoId);
+      setStatusText(`Fetching transcript for "${video.title.slice(0, 30)}..."`);
+
+      statusTimer = setTimeout(() => {
+        setStatusText('Generating notes...');
+      }, 3000);
+
+      const res = await api.post('/youtube/generate-notes', {
+        videoUrl: `https://www.youtube.com/watch?v=${video.videoId}`,
+        title: video.title,
+        description: video.description
+      });
+
+      clearTimeout(statusTimer);
+      setStatusText('Notes generated');
+      if (res.data.isFallback) {
+        const { title, summary: fallbackSummary, keyPoints } = res.data.data || {};
+        const formattedNotes = `${title}\n\n${fallbackSummary}\n\nKey Takeaways:\n${(keyPoints || []).map(point => `• ${point}`).join('\n')}`;
+        setSummary(formattedNotes);
+      } else {
+        setSummary(res.data.summary);
+      }
+      setPdfUrl(res.data.pdfUrl);
+      toast.success("Notes generated successfully!");
+    } catch (error) {
+      if (statusTimer) clearTimeout(statusTimer);
+      console.error(error);
       setStatusText('Generation failed');
       toast.error(error.response?.data?.message || 'Failed to generate notes');
     } finally {
@@ -97,58 +175,150 @@ const YoutubeNotes = () => {
     }
   };
 
-  // ===============================
-  // UI RENDER
-  // ===============================
   return (
     <DashboardLayout>
-      <div className="max-w-5xl mx-auto py-6">
-
-        <h1 className="text-4xl font-bold text-white mb-8">
+      <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6">
+        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-6 sm:mb-8 flex items-center gap-3">
+          <BookOpen className="text-green-400" size={36} />
           AI Learning Tools
         </h1>
 
-        {/* YOUTUBE */}
-        <div className="bg-zinc-900 border border-green-500/20 rounded-3xl p-6">
-          <h2 className="text-2xl font-bold text-green-400 mb-5">
-            YouTube Video Notes
+        {/* MODE SELECTOR */}
+        <div className="flex bg-zinc-950 p-1.5 rounded-2xl border border-white/10 mb-6 max-w-sm">
+          <button
+            onClick={() => {
+              setMode('single');
+              setUrl('');
+              setPlaylistVideos([]);
+              setSummary('');
+            }}
+            className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
+              mode === 'single' ? 'bg-green-500 text-black' : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            <Video size={16} />
+            Single Video
+          </button>
+          <button
+            onClick={() => {
+              setMode('playlist');
+              setUrl('');
+              setPlaylistVideos([]);
+              setSummary('');
+            }}
+            className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
+              mode === 'playlist' ? 'bg-green-500 text-black' : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            <ListVideo size={16} />
+            Playlist Mode
+          </button>
+        </div>
+
+        {/* INPUT PANEL */}
+        <div className="bg-zinc-900 border border-green-500/20 rounded-3xl p-6 shadow-2xl">
+          <h2 className="text-xl sm:text-2xl font-bold text-green-400 mb-4 flex items-center gap-2">
+            {mode === 'single' ? 'YouTube Video Notes' : 'YouTube Playlist Explorer'}
           </h2>
 
           <input
             type="text"
-            placeholder="Paste YouTube link..."
+            placeholder={mode === 'single' ? 'Paste YouTube link (e.g. https://www.youtube.com/watch?v=...)' : 'Paste YouTube playlist link or ID...'}
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            className="w-full p-4 rounded-2xl bg-zinc-800 text-white"
+            className="w-full p-4 rounded-2xl bg-zinc-800 text-white border border-white/5 focus:border-green-500/50 outline-none transition-all"
           />
 
-          <div className="flex items-center gap-4 mt-5">
-            <button
-              onClick={handleGenerate}
-              disabled={loading}
-              className="px-6 py-3 bg-green-500 rounded-2xl font-bold text-black disabled:bg-zinc-700 disabled:text-gray-400"
-            >
-              {loading ? 'Generating...' : 'Generate Notes'}
-            </button>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-5">
+            {mode === 'single' ? (
+              <button
+                onClick={handleGenerate}
+                disabled={loading}
+                className="w-full sm:w-auto px-6 py-3.5 bg-green-500 hover:bg-green-400 text-black rounded-2xl font-bold transition-all disabled:bg-zinc-700 disabled:text-gray-400"
+              >
+                {loading ? 'Generating...' : 'Generate Notes'}
+              </button>
+            ) : (
+              <button
+                onClick={handleFetchPlaylist}
+                disabled={playlistLoading}
+                className="w-full sm:w-auto px-6 py-3.5 bg-green-500 hover:bg-green-400 text-black rounded-2xl font-bold transition-all disabled:bg-zinc-700 disabled:text-gray-400"
+              >
+                {playlistLoading ? 'Loading Playlist...' : 'Load Playlist'}
+              </button>
+            )}
+
             {statusText && (
-              <span className="text-sm font-semibold text-gray-400">
+              <span className="text-sm font-semibold text-gray-400 flex items-center gap-2 mt-1 sm:mt-0">
+                <span className="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></span>
                 Status: <span className="text-green-400">{statusText}</span>
               </span>
             )}
           </div>
         </div>
 
-        {/* OUTPUT */}
+        {/* PLAYLIST VIDEOS LIST */}
+        {mode === 'playlist' && playlistVideos.length > 0 && (
+          <div className="mt-8 bg-zinc-950/60 border border-white/10 rounded-3xl p-6">
+            <h3 className="text-xl font-bold text-white mb-5 flex items-center gap-2">
+              <ListVideo className="text-green-400" />
+              Playlist Videos ({playlistVideos.length})
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+              {playlistVideos.map((video, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => !loading && handleGenerateForVideo(video)}
+                  className={`group bg-zinc-900 border rounded-2xl overflow-hidden cursor-pointer transition-all hover:scale-[1.02] hover:border-green-500/40 hover:shadow-lg hover:shadow-green-500/5 ${
+                    selectedVideo === video.videoId ? 'border-green-500 shadow-lg shadow-green-500/10' : 'border-white/5'
+                  }`}
+                >
+                  <div className="aspect-video w-full bg-zinc-800 relative">
+                    {video.thumbnails?.medium ? (
+                      <img
+                        src={video.thumbnails.medium}
+                        alt={video.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-500">
+                        No Thumbnail
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
+                      <Play className="text-green-400 fill-green-400 scale-125" size={24} />
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h4 className="text-white font-semibold line-clamp-2 text-sm group-hover:text-green-400 transition-colors">
+                      {video.title}
+                    </h4>
+                    <p className="text-xs text-gray-400 mt-2 line-clamp-2">
+                      {video.description || 'No description available.'}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* AI GENERATED NOTES OUTPUT */}
         {summary && (
-          <div className="mt-8 bg-zinc-900 p-8 rounded-3xl">
-            <h2 className="text-green-400 text-2xl mb-4">Notes</h2>
-            <pre className="text-gray-300 whitespace-pre-wrap">{summary}</pre>
+          <div className="mt-8 bg-zinc-900 p-6 sm:p-8 rounded-3xl border border-white/5 shadow-2xl animate-fade-in">
+            <h2 className="text-green-400 text-2xl font-bold mb-4 flex items-center gap-2 border-b border-white/10 pb-3">
+              📝 Generated Lecture Notes
+            </h2>
+            <pre className="text-gray-300 whitespace-pre-wrap font-sans text-sm sm:text-base leading-relaxed">
+              {summary}
+            </pre>
 
             {pdfUrl && (
               <a
                 href={pdfUrl}
                 target="_blank"
-                className="mt-5 inline-block bg-green-500 px-5 py-3 rounded-xl"
+                rel="noreferrer"
+                className="mt-6 inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-black px-6 py-3 rounded-2xl font-bold transition-all"
               >
                 Download PDF
               </a>
@@ -156,23 +326,34 @@ const YoutubeNotes = () => {
           </div>
         )}
 
-        {/* PDF UPLOAD */}
-        <div className="mt-10 bg-zinc-900 p-6 rounded-3xl">
-          <h2 className="text-blue-400 text-2xl mb-5">
+        {/* PDF SECTION */}
+        <div className="mt-10 bg-zinc-900 border border-white/5 rounded-3xl p-6 shadow-2xl">
+          <h2 className="text-blue-400 text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2">
             AI PDF Summarizer
           </h2>
 
-          <input
-            type="file"
-            accept="application/pdf"
-            onChange={(e) => setPdfFile(e.target.files[0])}
-            className="w-full"
-          />
+          <div className="p-8 border-2 border-dashed border-zinc-700 hover:border-blue-500/50 rounded-2xl flex flex-col items-center justify-center bg-zinc-950/40 cursor-pointer transition-all">
+            <input
+              type="file"
+              accept="application/pdf"
+              id="pdf-upload"
+              onChange={(e) => setPdfFile(e.target.files[0])}
+              className="hidden"
+            />
+            <label htmlFor="pdf-upload" className="cursor-pointer text-center flex flex-col items-center gap-3">
+              <span className="px-4 py-2 bg-zinc-800 text-white rounded-xl font-medium border border-white/5 group-hover:bg-zinc-700">
+                Choose PDF File
+              </span>
+              <span className="text-sm text-gray-400">
+                {pdfFile ? `Selected: ${pdfFile.name}` : 'Support PDF formats up to 10MB'}
+              </span>
+            </label>
+          </div>
 
           <button
             onClick={handleGeneratePdf}
-            disabled={pdfLoading}
-            className="mt-5 px-6 py-3 bg-blue-500 rounded-2xl font-bold"
+            disabled={pdfLoading || !pdfFile}
+            className="mt-5 w-full sm:w-auto px-6 py-3.5 bg-blue-500 hover:bg-blue-400 text-white rounded-2xl font-bold transition-all disabled:bg-zinc-700 disabled:text-gray-400"
           >
             {pdfLoading ? 'Processing...' : 'Summarize PDF'}
           </button>
@@ -180,14 +361,15 @@ const YoutubeNotes = () => {
 
         {/* PDF OUTPUT */}
         {pdfSummary && (
-          <div className="mt-8 bg-zinc-900 p-8 rounded-3xl">
-            <h2 className="text-blue-400 text-2xl mb-4">
-              PDF Summary
+          <div className="mt-8 bg-zinc-900 p-6 sm:p-8 rounded-3xl border border-white/5 shadow-2xl">
+            <h2 className="text-blue-400 text-2xl font-bold mb-4 border-b border-white/10 pb-3">
+              PDF Summary Details
             </h2>
-            <pre className="text-gray-300 whitespace-pre-wrap">{pdfSummary}</pre>
+            <pre className="text-gray-300 whitespace-pre-wrap font-sans text-sm sm:text-base leading-relaxed">
+              {pdfSummary}
+            </pre>
           </div>
         )}
-
       </div>
     </DashboardLayout>
   );

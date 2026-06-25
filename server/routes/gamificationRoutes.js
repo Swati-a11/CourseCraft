@@ -1,8 +1,10 @@
 import express from 'express';
-import { getGamification } from '../controllers/gamificationController.js';
+import { getGamification, checkInUser } from '../controllers/gamificationController.js';
+import authMiddleware from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.get('/', getGamification);
+router.get('/', authMiddleware, getGamification);
+router.post('/check-in', authMiddleware, checkInUser);
 
 export default router;

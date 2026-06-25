@@ -1,5 +1,6 @@
 import { YoutubeTranscript } from 'youtube-transcript';
 import { GoogleGenAI } from '@google/genai';
+import { getPlaylistVideos } from '../services/youtubeServices.js';
 
 // Chunk the transcript
 const chunkTranscript = (text, maxChars = 3000) => {
@@ -143,9 +144,52 @@ export const generateYoutubeNotes = async (req, res) => {
     });
   } catch (error) {
     console.error('Full error in generateYoutubeNotes:', error);
+    if (
+      error.message?.includes('RESOURCE_EXHAUSTED') ||
+      error.message?.includes('exhaustion') ||
+      error.message?.includes('quota')
+    ) {
+      return res.status(200).json({
+        success: true,
+        isFallback: true,
+        data: {
+          title: "Optimized Video Lecture Notes",
+          summary: "The video lecture notes service is currently experiencing high load. Here are the metadata-based fallback notes.",
+          keyPoints: [
+            "The active Gemini API quota has been reached.",
+            "Please check back again in a few minutes.",
+            "Video ID and reference details remain accessible."
+          ]
+        }
+      });
+    }
     return res.status(500).json({
       success: false,
       message: error.message || 'Internal Server Error during notes generation',
+    });
+  }
+};
+
+export const getPlaylistVideosController = async (req, res) => {
+  try {
+    const { playlistUrl } = req.body;
+    if (!playlistUrl) {
+      return res.status(400).json({
+        success: false,
+        message: 'Playlist URL/ID is required',
+      });
+    }
+
+    const videos = await getPlaylistVideos(playlistUrl);
+    return res.status(200).json({
+      success: true,
+      videos,
+    });
+  } catch (error) {
+    console.error('Playlist Controller Error:', error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to retrieve playlist details',
     });
   }
 };

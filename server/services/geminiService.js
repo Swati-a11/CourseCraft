@@ -172,3 +172,67 @@ IMPORTANT:
     throw error;
   }
 };
+
+export const generateQuizFromText = async (textContext) => {
+  const prompt = `
+Generate exactly 5 multiple-choice questions based on the following text context.
+Return ONLY a valid JSON array, with no Markdown wrapping, no explanation.
+
+Format:
+[
+  {
+    "question": "string",
+    "options": ["option A", "option B", "option C", "option D"],
+    "correctAnswerIndex": 0
+  }
+]
+
+Context:
+${textContext}
+`;
+
+  const models = ['gemini-1.5-flash', 'gemini-1.5-flash-8b'];
+  for (const modelName of models) {
+    let attempts = 0;
+    while (attempts < 2) {
+      try {
+        const response = await ai.models.generateContent({
+          model: modelName,
+          contents: prompt,
+          config: {
+            responseMimeType: 'application/json',
+          },
+        });
+
+        let text = response.text?.trim() || '';
+        if (!text) {
+          throw new Error('Empty response from Gemini');
+        }
+
+        const cleaned = text
+          .replace(/```json/g, '')
+          .replace(/```/g, '')
+          .trim();
+
+        const parsed = JSON.parse(cleaned);
+        if (!Array.isArray(parsed)) {
+          throw new Error('Parsed response is not a JSON array');
+        }
+
+        return parsed;
+      } catch (error) {
+        if (error.message?.includes('RESOURCE_EXHAUSTED') || error.status === 429) {
+          attempts++;
+          if (attempts < 2) {
+            console.warn(`⚠️ RESOURCE_EXHAUSTED on ${modelName} during quiz generation, waiting 3 seconds to retry...`);
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+            continue;
+          }
+        }
+        console.warn(`⚠️ Quiz Gen failed for model ${modelName}:`, error.message);
+        break; // try the next model
+      }
+    }
+  }
+  throw new Error("All Gemini models failed to generate the quiz.");
+};

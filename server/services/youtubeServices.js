@@ -1,5 +1,3 @@
-import axios from "axios";
-
 const SAFE_VIDEOS = {
   javascript: "https://www.youtube.com/embed/W6NZfCO5SIk",
   react: "https://www.youtube.com/embed/Tn6-PIqc4UM",
@@ -36,20 +34,20 @@ export const searchYouTubeVideo = async (query) => {
     }
 
     // SECOND: YouTube API fallback
-    const response = await axios.get(
-      "https://www.googleapis.com/youtube/v3/search",
-      {
-        params: {
-          part: "snippet",
-          q: `${query} tutorial`,
-          maxResults: 5,
-          type: "video",
-          key: process.env.YOUTUBE_API_KEY,
-        },
-      }
-    );
+    const url = new URL("https://www.googleapis.com/youtube/v3/search");
+    url.searchParams.append("part", "snippet");
+    url.searchParams.append("q", `${query} tutorial`);
+    url.searchParams.append("maxResults", "5");
+    url.searchParams.append("type", "video");
+    url.searchParams.append("key", process.env.YOUTUBE_API_KEY || "");
 
-    const items = response.data.items;
+    const response = await fetch(url);
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(`YouTube API Search Error: ${errText}`);
+    }
+    const data = await response.json();
+    const items = data.items;
 
     if (!items || items.length === 0) {
       return DEFAULT_VIDEO;
@@ -65,11 +63,55 @@ export const searchYouTubeVideo = async (query) => {
 
     return `https://www.youtube.com/embed/${validItem.id.videoId}`;
   } catch (error) {
-    console.error(
-      "YouTube Error:",
-      error.response?.data || error.message
-    );
-
+    console.error("YouTube Error:", error.message);
     return DEFAULT_VIDEO;
+  }
+};
+
+export const getPlaylistVideos = async (playlistIdOrUrl) => {
+  try {
+    let playlistId = playlistIdOrUrl;
+    const match = playlistIdOrUrl.match(/[&?]list=([^&]+)/);
+    if (match && match[1]) {
+      playlistId = match[1];
+    }
+
+    const url = new URL("https://www.googleapis.com/youtube/v3/playlistItems");
+    url.searchParams.append("part", "snippet");
+    url.searchParams.append("playlistId", playlistId);
+    url.searchParams.append("maxResults", "50");
+    url.searchParams.append("key", process.env.YOUTUBE_API_KEY || "");
+
+    const response = await fetch(url);
+    if (!response.ok) {
+      const errText = await response.text();
+      let errMsg = "Failed to fetch playlist items";
+      try {
+        const errJson = JSON.parse(errText);
+        errMsg = errJson.error?.message || errMsg;
+      } catch (e) {}
+      throw new Error(errMsg);
+    }
+
+    const data = await response.json();
+    const items = data?.items || [];
+    return items.map((item) => {
+      const snippet = item.snippet || {};
+      const thumbnails = snippet.thumbnails || {};
+      const videoId = snippet.resourceId?.videoId || "";
+      return {
+        videoId,
+        title: snippet.title || "",
+        description: snippet.description || "",
+        thumbnails: {
+          default: thumbnails.default?.url || "",
+          medium: thumbnails.medium?.url || "",
+          high: thumbnails.high?.url || "",
+        },
+      };
+    });
+  } catch (error) {
+    console.error("YouTube Playlist Error:", error.message);
+    throw new Error(error.message || "Failed to fetch playlist items");
   }
 };
