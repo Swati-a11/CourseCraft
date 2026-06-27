@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ResponsiveContainer, AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, BarChart, Bar, Cell, Legend } from 'recharts';
 import { Award, BarChart3, BookOpen, Flame, ShieldCheck, Sparkles, TrendingUp, Clock, AlertCircle, ArrowRight } from 'lucide-react';
+import { motion } from 'motion/react';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import StatCard from '../../components/dashboard/StatCard';
 import WeakTopicsList from '../../components/dashboard/WeakTopicsList';
@@ -99,9 +100,112 @@ const ProgressPage = () => {
     },
   ];
 
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className={`min-h-[70vh] flex flex-col items-center justify-center transition-colors duration-300 ${isLight ? 'bg-white' : 'bg-transparent'}`}>
+          <div className="relative flex flex-col items-center">
+            {/* Stylized Robotic Digital Assistant Loader */}
+            <div className="relative w-32 h-32 mb-6">
+              {/* Robot Head */}
+              <motion.div 
+                className={`w-24 h-20 rounded-3xl border-3 flex flex-col items-center justify-center p-3 relative shadow-lg ${
+                  isLight 
+                    ? 'bg-white border-green-500 text-green-600 shadow-green-500/20' 
+                    : 'bg-zinc-900 border-green-400 text-green-400 shadow-green-500/10'
+                }`}
+                animate={{
+                  y: [0, -10, 0],
+                }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                {/* Robot Eyes */}
+                <div className="flex gap-4 mb-2">
+                  <motion.div 
+                    className={`w-3 h-3 rounded-full ${isLight ? 'bg-green-600' : 'bg-green-400'}`}
+                    animate={{
+                      scale: [1, 0.2, 1],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      repeatDelay: 2
+                    }}
+                  />
+                  <motion.div 
+                    className={`w-3 h-3 rounded-full ${isLight ? 'bg-green-600' : 'bg-green-400'}`}
+                    animate={{
+                      scale: [1, 0.2, 1],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      repeatDelay: 2
+                    }}
+                  />
+                </div>
+                {/* Robot Mouth / Waveform */}
+                <div className="flex items-center gap-1 h-3">
+                  <motion.div className={`w-1 rounded-full ${isLight ? 'bg-green-600' : 'bg-green-400'}`} animate={{ height: [4, 12, 4] }} transition={{ duration: 0.5, repeat: Infinity }} />
+                  <motion.div className={`w-1 rounded-full ${isLight ? 'bg-green-600' : 'bg-green-400'}`} animate={{ height: [8, 4, 8] }} transition={{ duration: 0.6, repeat: Infinity }} />
+                  <motion.div className={`w-1 rounded-full ${isLight ? 'bg-green-600' : 'bg-green-400'}`} animate={{ height: [4, 10, 4] }} transition={{ duration: 0.4, repeat: Infinity }} />
+                </div>
+                {/* Antenna */}
+                <div className={`absolute -top-4 left-1/2 -translate-x-1/2 w-1.5 h-4 ${isLight ? 'bg-green-500' : 'bg-green-400'}`} />
+                <motion.div 
+                  className={`absolute -top-6 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full ${isLight ? 'bg-green-500' : 'bg-green-400'}`}
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.8, 1, 0.8]
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity
+                  }}
+                />
+              </motion.div>
+              {/* Robot Neck */}
+              <div className={`w-4 h-2 mx-auto ${isLight ? 'bg-green-500' : 'bg-green-400'}`} />
+              {/* Robot Shoulders */}
+              <div className={`w-16 h-2 mx-auto rounded-full ${isLight ? 'bg-green-500' : 'bg-green-400'}`} />
+            </div>
+
+            {/* Fading text element */}
+            <motion.p
+              initial={{ opacity: 0.4 }}
+              animate={{ opacity: [0.4, 1, 0.4] }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className={`text-lg font-medium tracking-wide mt-2 ${isLight ? 'text-slate-950' : 'text-gray-300'}`}
+            >
+              Loading your progress data... Please wait.
+            </motion.p>
+            
+            {/* Spinner */}
+            <div className="mt-4 flex items-center justify-center">
+              <div className={`animate-spin rounded-full h-6 w-6 border-2 border-t-transparent ${isLight ? 'border-green-600' : 'border-green-400'}`}></div>
+            </div>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout>
-      <div className="space-y-8">
+      <motion.div 
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="space-y-8"
+      >
         {/* Header Block */}
         <section className={`rounded-4xl border p-8 transition-all duration-300 ${
           isLight 
@@ -519,7 +623,7 @@ const ProgressPage = () => {
             </div>
           </div>
         </section>
-      </div>
+      </motion.div>
     </DashboardLayout>
   );
 };

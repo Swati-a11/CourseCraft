@@ -230,13 +230,13 @@ const Navbar = () => {
           <UserCircle className={isLight ? 'text-green-600' : 'text-green-400'} size={30} />
           
           <div>
-            <p className={`text-sm transition-colors duration-300 ${
-              isLight ? 'text-black font-semibold' : 'text-white font-medium'
+            <p className={`transition-colors duration-300 ${
+              isLight ? 'text-slate-950 font-semibold text-sm' : 'text-sm font-medium text-white'
             }`}>
               {user?.name || "Student"}
             </p>
-            <p className={`text-xs transition-colors duration-300 ${
-              isLight ? 'text-green-600' : 'text-gray-400'
+            <p className={`transition-colors duration-300 ${
+              isLight ? 'text-green-600 text-xs font-medium' : 'text-xs text-gray-400'
             }`}>
               Student
             </p>
