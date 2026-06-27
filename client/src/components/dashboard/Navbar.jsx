@@ -224,16 +224,22 @@ const Navbar = () => {
         </div>
 
         {/* User */}
-        <div className={`flex items-center gap-3 px-3 py-2 rounded-xl border transition ${
-          isLight ? 'bg-slate-50 border-slate-200' : 'bg-zinc-900 border-white/5'
+        <div className={`flex items-center gap-3 px-3 py-2 rounded-xl border transition-colors duration-300 ${
+          isLight ? 'bg-white border-green-200' : 'bg-zinc-900 border-white/5'
         }`}>
           <UserCircle className={isLight ? 'text-green-600' : 'text-green-400'} size={30} />
           
           <div>
-            <p className={`text-sm font-medium transition ${isLight ? 'text-slate-900' : 'text-white'}`}>
+            <p className={`text-sm transition-colors duration-300 ${
+              isLight ? 'text-black font-semibold' : 'text-white font-medium'
+            }`}>
               {user?.name || "Student"}
             </p>
-            <p className={`text-xs transition ${isLight ? 'text-slate-500' : 'text-gray-400'}`}>Student</p>
+            <p className={`text-xs transition-colors duration-300 ${
+              isLight ? 'text-green-600' : 'text-gray-400'
+            }`}>
+              Student
+            </p>
           </div>
         </div>
 
