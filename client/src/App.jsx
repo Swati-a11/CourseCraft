@@ -36,7 +36,7 @@ function App() {
       <Routes>
 
         {/* ROOT */}
-        <Route path="/" element={<HeroPage />} />
+        <Route path="/" element={token ? <Navigate to="/dashboard" replace /> : <HeroPage />} />
 
         {/* AUTH */}
         <Route

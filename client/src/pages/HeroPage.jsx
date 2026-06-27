@@ -11,7 +11,9 @@ import {
   Sun,
   Moon,
   Layers,
-  FileText
+  FileText,
+  Search,
+  Award
 } from 'lucide-react';
 import {
   ContainerScroll,
@@ -44,21 +46,21 @@ const HeroPage = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   const coreFeatures = [
-    { icon: BookOpen, title: 'Playlist Tracker', desc: 'Track YouTube playlists and never lose your progress' },
-    { icon: Sparkles, title: 'AI Notes', desc: 'Generate smart notes from any YouTube video instantly' },
-    { icon: Flame, title: 'Streak System', desc: 'Build daily learning habits with streak tracking' },
-    { icon: PenTool, title: 'Practice Questions', desc: 'AI-generated questions to test your understanding' },
+    { icon: Search, title: 'Playlist Tracker', desc: 'Track YouTube playlists and never lose your progress' },
+    { icon: FileText, title: 'AI Notes', desc: 'Generate smart notes from any YouTube video instantly' },
+    { icon: Award, title: 'Streak System', desc: 'Build daily learning habits with streak tracking' },
+    { icon: BookOpen, title: 'Practice Questions', desc: 'AI-generated questions to test your understanding' },
   ];
 
   const extraFeatures = [
-    { icon: Youtube, title: 'AI Note Generator', desc: 'Input a YouTube video link to generate instant, detailed text notes.' },
-    { icon: Layers, title: 'Smart Playlist Fetcher', desc: 'Paste a YouTube playlist link to dynamically pull and track all video files/modules inside that playlist.' },
-    { icon: FileText, title: 'AI PDF Summarizer', desc: 'Upload heavy text PDFs or books to get compressed, actionable summaries.' },
+    { icon: Youtube, title: 'AI Note Generator', desc: 'Input a YouTube video link to generate instant, structured text notes.' },
+    { icon: Layers, title: 'Smart Playlist Fetcher', desc: 'Paste a YouTube playlist link to dynamically pull and track all items inside that playlist.' },
+    { icon: FileText, title: 'AI PDF Summarizer', desc: 'Upload text PDFs or documents to instantly extract concise summaries.' },
   ];
 
   const steps = [
     { num: '01', title: 'Sign Up', desc: 'Create your free account in seconds' },
-    { num: '02', title: 'Add Content', desc: 'Paste any YouTube video or playlist link' },
+    { num: '02', title: 'Add Content', desc: 'Browse course and start learning' },
     { num: '03', title: 'Start Learning', desc: 'Get AI notes, questions and track progress' },
   ];
 
@@ -70,7 +72,7 @@ const HeroPage = () => {
 
   const handleExploreClick = () => {
     if (token) {
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
     } else {
       setShowOnboarding(true);
     }
@@ -78,7 +80,7 @@ const HeroPage = () => {
 
   const handleCtaClick = () => {
     if (token) {
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
     } else {
       navigate('/register');
     }
@@ -86,7 +88,7 @@ const HeroPage = () => {
 
   const handleLoginClick = () => {
     if (token) {
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
     } else {
       navigate('/login');
     }
@@ -151,7 +153,7 @@ const HeroPage = () => {
             {/* Main Heading */}
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-tight">
               Enter the{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500 bg-clip-text text-transparent">
                 Grid
               </span>
             </h1>
@@ -212,7 +214,7 @@ const HeroPage = () => {
           >
             <h2 className="text-4xl font-bold mb-4">
               Everything you need to{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500 bg-clip-text text-transparent">
                 learn faster
               </span>
             </h2>
@@ -251,7 +253,7 @@ const HeroPage = () => {
           >
             <h2 className="text-4xl font-bold mb-4">
               How it{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500 bg-clip-text text-transparent">
                 works
               </span>
             </h2>
@@ -288,7 +290,7 @@ const HeroPage = () => {
           >
             <h2 className="text-4xl font-bold mb-4">
               Some More{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500 bg-clip-text text-transparent">
                 Features
               </span>
             </h2>
@@ -327,7 +329,7 @@ const HeroPage = () => {
           >
             <h2 className="text-4xl font-bold mb-4">
               Loved by{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500 bg-clip-text text-transparent">
                 learners
               </span>
             </h2>
@@ -369,7 +371,7 @@ const HeroPage = () => {
         >
           <h2 className="text-4xl font-bold">
             Ready to{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500 bg-clip-text text-transparent">
               start learning?
             </span>
           </h2>
