@@ -383,7 +383,7 @@ const Achievements = () => {
                   </p>
 
                   {/* Dynamic Name */}
-                  <h3 className={`text-5xl font-extrabold mb-10 ${isLight ? 'text-black' : 'text-yellow-400'}`}>
+                  <h3 className={isLight ? "text-black font-bold text-2xl mb-10" : "text-5xl font-extrabold text-yellow-400 mb-10"}>
                     {user?.name || 'Learner'}
                   </h3>
 
