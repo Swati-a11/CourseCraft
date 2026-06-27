@@ -18,7 +18,7 @@ const WeakTopicsList = ({ weakTopics }) => {
           <Target className="w-8 h-8" />
         </div>
         <h3 className={`text-xl font-bold mb-2 ${isLight ? 'text-slate-950' : 'text-white'}`}>You're doing great!</h3>
-        <p className={isLight ? 'text-slate-950 font-medium' : 'text-zinc-400'}>No weak topics identified yet. Keep up the good work!</p>
+        <p className={isLight ? 'text-slate-950 font-medium' : 'text-zinc-400'}>No weak topics identified yet! Take a quiz to analyze your performance.</p>
       </div>
     );
   }

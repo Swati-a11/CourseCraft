@@ -46,12 +46,12 @@ const ProgressPage = () => {
     ? quizScores.filter(q => (q.averageScore ?? 0) >= 70).length
     : (stats?.topicsCompleted ?? 0);
 
-  const displayAvgScore = stats?.averageQuizScore || 73;
+  const displayAvgScore = stats?.averageQuizScore ?? 0;
   const displayLastScore = stats?.lastQuizScore ?? 0;
-  const displayWeakTopics = (stats?.weakTopics || learningData?.weakTopics || []).length || 2;
-  const displayXP = stats?.gamification?.xp || 1270;
-  const displayLevel = stats?.gamification?.level || 3;
-  const displayStreak = stats?.gamification?.streak || 1;
+  const displayWeakTopics = (stats?.weakTopics || learningData?.weakTopics || []).length;
+  const displayXP = stats?.gamification?.xp ?? 0;
+  const displayLevel = stats?.gamification?.level ?? 1;
+  const displayStreak = stats?.gamification?.streak ?? 0;
 
   const metrics = [
     {
