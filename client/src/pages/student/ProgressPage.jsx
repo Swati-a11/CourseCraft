@@ -43,8 +43,8 @@ const ProgressPage = () => {
     loadStats();
   }, []);
 
-  const displayEnrolled = stats?.coursesEnrolled || 1;
-  const displayCompleted = stats?.coursesCompleted || 1;
+  const displayEnrolled = stats?.coursesEnrolled ?? 0;
+  const displayCompleted = stats?.coursesCompleted ?? 0;
   
   const quizScores = stats?.topicPerformance || [];
   const displayTopicsCompleted = quizScores.length > 0

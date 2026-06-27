@@ -65,8 +65,8 @@ const Dashboard = () => {
     loadStats();
   }, []);
 
-  const displayEnrolled = stats.coursesEnrolled || 1;
-  const displayCompleted = stats.coursesCompleted || 1;
+  const displayEnrolled = stats.coursesEnrolled ?? 0;
+  const displayCompleted = stats.coursesCompleted ?? 0;
   const displayStreak = stats.streak || 1;
   const displayXP = stats.xp || 1270;
 
