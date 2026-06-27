@@ -97,7 +97,7 @@ const Achievements = () => {
       doc.text('This certificate is proudly presented to', width / 2, 220, { align: 'center' });
 
       // Recipient Name
-      const nameText = user?.name || 'Learner';
+      const nameText = user?.name || 'Loading Profile...';
       doc.setTextColor(0, 0, 0); // text-black
       doc.setFontSize(30);
       doc.setFont(undefined, 'bold');
@@ -150,7 +150,7 @@ const Achievements = () => {
       doc.setFontSize(16);
       doc.text('This certificate is proudly presented to', width / 2, 220, { align: 'center' });
 
-      const nameText = user?.name || 'Learner';
+      const nameText = user?.name || 'Loading Profile...';
       doc.setTextColor(255, 215, 0);
       doc.setFontSize(30);
       doc.setFont(undefined, 'bold');
@@ -384,7 +384,7 @@ const Achievements = () => {
 
                   {/* Dynamic Name */}
                   <h3 className={isLight ? "text-black font-bold text-2xl mb-10" : "text-5xl font-extrabold text-yellow-400 mb-10"}>
-                    {user?.name || 'Learner'}
+                    {user?.name || 'Loading Profile...'}
                   </h3>
 
                   <p className={`text-lg mb-4 ${isLight ? 'text-slate-900/80 font-medium' : 'text-gray-300'}`}>

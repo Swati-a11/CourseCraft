@@ -233,7 +233,7 @@ const Navbar = () => {
             <p className={`transition-colors duration-300 ${
               isLight ? 'text-slate-950 font-bold text-sm tracking-wide' : 'text-sm font-medium text-white'
             }`}>
-              {user && user.name ? user.name : "Sakshi Singh"}
+              {user?.name || "Loading Profile..."}
             </p>
             <p className={`transition-colors duration-300 ${
               isLight ? 'text-green-600 text-xs font-semibold' : 'text-xs text-gray-400'
