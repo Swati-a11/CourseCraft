@@ -68,7 +68,7 @@ export const loginUser = async (req, res) => {
     try {
       const sanitizedSecret = process.env.JWT_SECRET.trim().replace(/\\r/g, '');
       const token = jwt.sign({ id: user._id }, sanitizedSecret, { expiresIn: '30d' });
-      return res.status(200).json({ token, user: { id: user._id, email: user.email } });
+      return res.status(200).json({ token, user: { id: user._id, email: user.email, name: user.name } });
     } catch (jwtError) {
       console.error("❌ JWT SIGN EXCEPTION:", jwtError.message);
       return res.status(500).json({ error: "Internal token compilation fault.", details: jwtError.message });

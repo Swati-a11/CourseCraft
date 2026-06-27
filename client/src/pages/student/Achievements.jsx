@@ -104,7 +104,7 @@ const Achievements = () => {
       doc.text('This certificate is proudly presented to', width / 2, 220, { align: 'center' });
 
       // Recipient Name
-      const nameText = user?.name || user?.displayName || user?.fullName || "Authenticated User";
+      const nameText = user?.name || user?.displayName || user?.fullName || (user?.email ? user.email.split('@')[0].split(/[._-]/).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ') : "Student");
       doc.setTextColor(0, 0, 0); // text-black
       doc.setFontSize(30);
       doc.setFont(undefined, 'bold');
@@ -157,7 +157,7 @@ const Achievements = () => {
       doc.setFontSize(16);
       doc.text('This certificate is proudly presented to', width / 2, 220, { align: 'center' });
 
-      const nameText = user?.name || user?.displayName || user?.fullName || "Authenticated User";
+      const nameText = user?.name || user?.displayName || user?.fullName || (user?.email ? user.email.split('@')[0].split(/[._-]/).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ') : "Student");
       doc.setTextColor(255, 215, 0);
       doc.setFontSize(30);
       doc.setFont(undefined, 'bold');
@@ -391,7 +391,7 @@ const Achievements = () => {
 
                   {/* Dynamic Name */}
                   <h3 className={isLight ? "text-black font-bold text-2xl mb-10" : "text-5xl font-extrabold text-yellow-400 mb-10"}>
-                    {user?.name || user?.displayName || user?.fullName || "Authenticated User"}
+                    {user?.name || user?.displayName || user?.fullName || (user?.email ? user.email.split('@')[0].split(/[._-]/).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ') : "Student")}
                   </h3>
 
                   <p className={`text-lg mb-4 ${isLight ? 'text-slate-900/80 font-medium' : 'text-gray-300'}`}>

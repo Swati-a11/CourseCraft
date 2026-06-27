@@ -240,7 +240,7 @@ const Navbar = () => {
             <p className={`transition-colors duration-300 ${
               isLight ? 'text-slate-950 font-bold text-sm tracking-wide' : 'text-sm font-medium text-white'
             }`}>
-              {user?.name || user?.displayName || user?.fullName || "Authenticated User"}
+              {user?.name || user?.displayName || user?.fullName || (user?.email ? user.email.split('@')[0].split(/[._-]/).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ') : "Student")}
             </p>
             <p className={`transition-colors duration-300 ${
               isLight ? 'text-green-600 text-xs font-semibold' : 'text-xs text-gray-400'
