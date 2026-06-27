@@ -231,7 +231,7 @@ const Navbar = () => {
           
           <div>
             <p className={`transition-colors duration-300 ${
-              isLight ? 'text-slate-950 font-semibold text-sm' : 'text-sm font-medium text-white'
+              isLight ? 'text-slate-950 font-bold text-sm' : 'text-sm font-medium text-white'
             }`}>
               {user?.name || "Student"}
             </p>
