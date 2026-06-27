@@ -136,14 +136,43 @@ const HeroPage = () => {
       <ContainerScroll className="h-[350vh]">
         <ContainerSticky
           style={stickyBgStyle}
-          className="px-6 py-10 flex flex-col items-center justify-center transition-colors duration-300"
+          className="px-6 py-10 flex flex-col items-center justify-center transition-colors duration-300 relative overflow-hidden"
         >
-          {/* Hero Text */}
-          <ContainerAnimated className="space-y-6 text-center max-w-3xl mx-auto pt-20">
+          {/* Floating glowing background blob animations */}
+          <motion.div
+            className={`absolute top-[15%] left-[10%] w-72 h-72 rounded-full blur-[85px] pointer-events-none transition-colors duration-300 ${isLight ? 'bg-green-300/25' : 'bg-emerald-500/10'}`}
+            animate={{
+              y: [0, -35, 0],
+              x: [0, 25, 0],
+              scale: [1, 1.15, 1],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div
+            className={`absolute bottom-[20%] right-[10%] w-96 h-96 rounded-full blur-[100px] pointer-events-none transition-colors duration-300 ${isLight ? 'bg-emerald-300/15' : 'bg-green-500/5'}`}
+            animate={{
+              y: [0, 45, 0],
+              x: [0, -35, 0],
+              scale: [1, 0.88, 1],
+            }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+
+          {/* Hero Text with staggered slide-up entrances */}
+          <ContainerAnimated className="space-y-6 text-center max-w-3xl mx-auto pt-20 relative z-10">
             {/* Badge */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
               className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border transition-all duration-300 ${isLight ? 'border-green-200 bg-green-100 text-green-600' : 'border-green-500/30 bg-green-500/10 text-green-400'} text-sm`}
             >
               <span className={`w-2 h-2 rounded-full animate-pulse ${isLight ? 'bg-green-600' : 'bg-green-400'}`} />
@@ -151,20 +180,35 @@ const HeroPage = () => {
             </motion.div>
 
             {/* Main Heading */}
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-tight">
+            <motion.h1
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+              className="text-5xl md:text-7xl font-bold tracking-tight leading-tight"
+            >
               Enter the{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500 bg-clip-text text-transparent">
                 Grid
               </span>
-            </h1>
+            </motion.h1>
 
             {/* Subtitle */}
-            <p className={`text-lg md:text-xl max-w-2xl mx-auto leading-relaxed transition-colors duration-300 ${isLight ? 'text-slate-950' : 'text-gray-400'}`}>
+            <motion.p
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
+              className={`text-lg md:text-xl max-w-2xl mx-auto leading-relaxed transition-colors duration-300 ${isLight ? 'text-slate-950 font-medium' : 'text-gray-400'}`}
+            >
               Experience the next evolution of learning, where knowledge flows with unparalleled speed. Track playlists, generate AI notes, and build daily streaks.
-            </p>
+            </motion.p>
 
             {/* CTA Button Wrapper with Conditional State Controls */}
-            <div className="relative flex items-center justify-center min-h-[64px]">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+              className="relative flex items-center justify-center min-h-[64px]"
+            >
               {!showOnboarding ? (
                 <motion.button
                   key="explore-btn"
@@ -190,11 +234,11 @@ const HeroPage = () => {
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               )}
-            </div>
+            </motion.div>
           </ContainerAnimated>
 
           {/* Animated Video/Preview */}
-          <ContainerInset className="max-h-[450px] w-full max-w-4xl mx-auto py-6 mt-8">
+          <ContainerInset className="max-h-[450px] w-full max-w-4xl mx-auto py-6 mt-8 relative z-10">
             <HeroVideo
               src="https://videos.pexels.com/video-files/8566672/8566672-uhd_2560_1440_30fps.mp4"
             />
@@ -204,7 +248,7 @@ const HeroPage = () => {
       </ContainerScroll>
 
       {/* Features Section */}
-      <section className="py-24 px-6 bg-transparent">
+      <section className="py-24 px-6 bg-transparent relative z-10">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -218,7 +262,7 @@ const HeroPage = () => {
                 learn faster
               </span>
             </h2>
-            <p className={`text-lg transition-colors duration-300 ${isLight ? 'text-slate-950' : 'text-gray-400'}`}>
+            <p className={`text-lg transition-colors duration-300 ${isLight ? 'text-slate-950 font-medium' : 'text-gray-400'}`}>
               Powerful AI tools built for serious learners
             </p>
           </motion.div>
@@ -231,7 +275,7 @@ const HeroPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className={`group p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(34,197,94,0.12)] hover:border-green-500/40 ${isLight ? 'bg-white border-green-200 text-slate-950' : 'bg-white/5 border-white/10 text-gray-400'}`}
+                className={`group p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(34,197,94,0.12)] hover:border-green-500/40 ${isLight ? 'bg-white border-green-200 text-slate-950' : 'bg-white/5 border-white/10 text-gray-400'}`}
               >
                 <feature.icon className="w-8 h-8 text-green-400 mb-4 transition-transform duration-300 group-hover:scale-110" />
                 <h3 className={`text-lg font-semibold mb-2 transition-colors duration-300 ${isLight ? 'text-slate-950' : 'text-white'}`}>{feature.title}</h3>
@@ -243,7 +287,7 @@ const HeroPage = () => {
       </section>
 
       {/* How It Works */}
-      <section className={`py-24 px-6 transition-colors duration-300 ${isLight ? 'bg-green-50/50 border-t border-b border-green-200' : 'bg-[#030a05]'}`}>
+      <section className={`py-24 px-6 transition-colors duration-300 relative z-10 ${isLight ? 'bg-green-50/50 border-t border-b border-green-200' : 'bg-[#030a05]'}`}>
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -257,7 +301,7 @@ const HeroPage = () => {
                 works
               </span>
             </h2>
-            <p className={isLight ? 'text-slate-950' : 'text-gray-400'}>Get started in 3 simple steps</p>
+            <p className={isLight ? 'text-slate-950 font-medium' : 'text-gray-400'}>Get started in 3 simple steps</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -280,7 +324,7 @@ const HeroPage = () => {
       </section>
 
       {/* "Some More Features" Section */}
-      <section className="py-24 px-6 bg-transparent border-b dark:border-white/5 border-green-200">
+      <section className="py-24 px-6 bg-transparent border-b dark:border-white/5 border-green-200 relative z-10">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -294,7 +338,7 @@ const HeroPage = () => {
                 Features
               </span>
             </h2>
-            <p className={`text-lg transition-colors duration-300 ${isLight ? 'text-slate-950' : 'text-gray-400'}`}>
+            <p className={`text-lg transition-colors duration-300 ${isLight ? 'text-slate-950 font-medium' : 'text-gray-400'}`}>
               Advanced components built for your modern learning stack
             </p>
           </motion.div>
@@ -307,7 +351,7 @@ const HeroPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className={`group p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(34,197,94,0.12)] hover:border-green-500/40 ${isLight ? 'bg-white border-green-200 text-slate-950' : 'bg-white/5 border-white/10 text-gray-400'}`}
+                className={`group p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(34,197,94,0.12)] hover:border-green-500/40 ${isLight ? 'bg-white border-green-200 text-slate-950' : 'bg-white/5 border-white/10 text-gray-400'}`}
               >
                 <feature.icon className="w-8 h-8 text-green-400 mb-4 transition-transform duration-300 group-hover:scale-110" />
                 <h3 className={`text-lg font-semibold mb-2 transition-colors duration-300 ${isLight ? 'text-slate-950' : 'text-white'}`}>{feature.title}</h3>
@@ -319,7 +363,7 @@ const HeroPage = () => {
       </section>
 
       {/* My Achievements Section */}
-      <section className={`py-24 px-6 border-b transition-colors duration-300 ${isLight ? 'bg-white border-green-200' : 'bg-transparent border-white/5'}`}>
+      <section className={`py-24 px-6 border-b transition-colors duration-300 relative z-10 ${isLight ? 'bg-white border-green-200' : 'bg-transparent border-white/5'}`}>
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -343,7 +387,7 @@ const HeroPage = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className={`group p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(34,197,94,0.12)] hover:border-green-500/40 ${isLight ? 'bg-white border-green-200 text-slate-950' : 'bg-white/5 border-white/10 text-gray-400'}`}
+              className={`group p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(34,197,94,0.12)] hover:border-green-500/40 ${isLight ? 'bg-white border-green-200 text-slate-950' : 'bg-white/5 border-white/10 text-gray-400'}`}
             >
               <Award className="w-8 h-8 text-green-400 mb-4 transition-transform duration-300 group-hover:scale-110" />
               <h3 className={`text-xl font-bold mb-3 transition-colors duration-300 ${isLight ? 'text-slate-950' : 'text-white'}`}>
@@ -359,14 +403,14 @@ const HeroPage = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className={`group p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(34,197,94,0.12)] hover:border-green-500/40 ${isLight ? 'bg-white border-green-200 text-slate-950' : 'bg-white/5 border-white/10 text-gray-400'}`}
+              className={`group p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(34,197,94,0.12)] hover:border-green-500/40 ${isLight ? 'bg-white border-green-200 text-slate-950' : 'bg-white/5 border-white/10 text-gray-400'}`}
             >
               <Search className="w-8 h-8 text-green-400 mb-4 transition-transform duration-300 group-hover:scale-110" />
               <h3 className={`text-xl font-bold mb-3 transition-colors duration-300 ${isLight ? 'text-slate-950' : 'text-white'}`}>
                 Browse Courses
               </h3>
               <p className="text-sm leading-relaxed">
-                Search the catalog or generate a new course topic from AI.
+                Browse Courses: Search the catalog or generate a new course topic from AI
               </p>
             </motion.div>
           </div>
@@ -374,7 +418,7 @@ const HeroPage = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 px-6 bg-transparent">
+      <section className="py-24 px-6 bg-transparent relative z-10">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -398,7 +442,7 @@ const HeroPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className={`p-6 rounded-2xl border transition-all duration-300 ${isLight ? 'bg-white border-green-200 text-slate-950 shadow-sm' : 'bg-white/5 border-white/10 text-gray-300'}`}
+                className={`p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] ${isLight ? 'bg-white border-green-200 text-slate-950 shadow-sm' : 'bg-white/5 border-white/10 text-gray-300'}`}
               >
                 <p className="mb-6 italic">"{t.text}"</p>
                 <div className="flex items-center gap-3">
@@ -417,7 +461,7 @@ const HeroPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className={`py-24 px-6 text-center transition-colors duration-300 ${isLight ? 'bg-green-50/50 border-t border-green-200' : 'bg-[#030a05]'}`}>
+      <section className={`py-24 px-6 text-center transition-colors duration-300 relative z-10 ${isLight ? 'bg-green-50/50 border-t border-green-200' : 'bg-[#030a05]'}`}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -430,7 +474,7 @@ const HeroPage = () => {
               start learning?
             </span>
           </h2>
-          <p className={isLight ? 'text-slate-950' : 'text-gray-400'}>Join thousands of learners already using CourseCraft</p>
+          <p className={isLight ? 'text-slate-950 font-medium' : 'text-gray-400'}>Join thousands of learners already using CourseCraft</p>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -444,7 +488,7 @@ const HeroPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className={`py-8 px-6 border-t text-center text-sm transition-colors duration-300 ${isLight ? 'bg-white border-green-200 text-slate-950' : 'bg-black border-white/5 text-gray-500'}`}>
+      <footer className={`py-8 px-6 border-t text-center text-sm transition-colors duration-300 relative z-10 ${isLight ? 'bg-white border-green-200 text-slate-950' : 'bg-black border-white/5 text-gray-500'}`}>
         <p>© 2026 CourseCraft. Built with ❤️ for learners.</p>
       </footer>
 

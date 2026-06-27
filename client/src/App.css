@@ -21,3 +21,75 @@
 .font-merriweather {
   font-family: "Merriweather", serif;
 }
+
+/* Global Light Theme Overrides (White, Black & Emerald Green only, no gray clutter) */
+html.light,
+.light {
+  --background-color: #ffffff;
+  --text-color: #020617;
+  --border-color: #16a34a;
+}
+
+html.light body,
+.light body {
+  background-color: #ffffff !important;
+  color: #020617 !important;
+}
+
+/* Force backgrounds in light mode */
+html.light .bg-black,
+html.light .bg-slate-950,
+html.light .bg-slate-900,
+html.light .bg-slate-50,
+html.light .bg-zinc-900,
+html.light .bg-zinc-800,
+html.light .bg-zinc-950,
+html.light .bg-zinc-900\/50,
+html.light .bg-white\/5,
+html.light .bg-white\/10 {
+  background-color: #ffffff !important;
+}
+
+/* Force text colors in light mode */
+html.light .text-white,
+html.light .text-gray-400,
+html.light .text-gray-300,
+html.light .text-gray-500,
+html.light .text-slate-400,
+html.light .text-slate-300,
+html.light .text-slate-200,
+html.light .text-slate-900,
+html.light .text-slate-700,
+html.light .text-slate-600 {
+  color: #020617 !important;
+}
+
+/* Accent texts and states */
+html.light .text-green-400,
+html.light .text-green-500 {
+  color: #16a34a !important;
+}
+
+/* Green borders */
+html.light .border-white\/5,
+html.light .border-green-900\/40,
+html.light .border-green-500\/30,
+html.light .border-slate-200,
+html.light .border-slate-100 {
+  border-color: #16a34a !important;
+}
+
+/* Button & interactive component text override safety */
+html.light .bg-green-500,
+html.light .bg-green-600,
+html.light button.bg-green-500,
+html.light button.bg-green-600,
+html.light a.bg-green-500,
+html.light a.bg-green-600,
+html.light .bg-green-600 * {
+  color: #ffffff !important;
+}
+html.light button.bg-green-500:hover,
+html.light button.bg-green-600:hover {
+  background-color: #15803d !important; /* bg-green-700 */
+}

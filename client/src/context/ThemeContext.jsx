@@ -23,7 +23,7 @@ export const ThemeProvider = ({ children }) => {
     if (theme === 'light') {
       root.classList.add('light');
       root.classList.remove('dark');
-      document.body.className = 'bg-slate-50 text-slate-900 transition-colors duration-300';
+      document.body.className = 'bg-white text-slate-950 transition-colors duration-300';
     } else {
       root.classList.add('dark');
       root.classList.remove('light');
