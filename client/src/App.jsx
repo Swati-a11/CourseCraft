@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 // Auth Pages
 import Login from "./pages/auths/Login";
 import Register from "./pages/auths/Register";
+import HeroPage from "./pages/HeroPage";
 
 // Student Pages
 import Dashboard from "./pages/student/Dashboard";
@@ -34,8 +35,8 @@ function App() {
     <>
       <Routes>
 
-        {/* ROOT → ALWAYS LOGIN FIRST */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        {/* ROOT */}
+        <Route path="/" element={<HeroPage />} />
 
         {/* AUTH */}
         <Route
