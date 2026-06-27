@@ -6,7 +6,14 @@ import { useTheme } from '../../context/ThemeContext';
 import { getDashboardStats, subscribeNotifications } from '../../services/dashboardService';
 
 const Navbar = () => {
-  const { user } = useSelector((state) => state.auth);
+  const reduxUser = useSelector((state) => state.auth.user);
+  const user = reduxUser || (() => {
+    try {
+      return JSON.parse(localStorage.getItem('user'));
+    } catch (_) {
+      return null;
+    }
+  })();
 
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
@@ -233,7 +240,7 @@ const Navbar = () => {
             <p className={`transition-colors duration-300 ${
               isLight ? 'text-slate-950 font-bold text-sm tracking-wide' : 'text-sm font-medium text-white'
             }`}>
-              {user?.name || "Loading Profile..."}
+              {user?.name || user?.displayName || user?.fullName || "Authenticated User"}
             </p>
             <p className={`transition-colors duration-300 ${
               isLight ? 'text-green-600 text-xs font-semibold' : 'text-xs text-gray-400'

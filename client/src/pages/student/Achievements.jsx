@@ -14,7 +14,14 @@ import {
 import { Award, Medal, CheckCircle, Star } from 'lucide-react';
 
 const Achievements = () => {
-  const { user } = useSelector((state) => state.auth);
+  const reduxUser = useSelector((state) => state.auth.user);
+  const user = reduxUser || (() => {
+    try {
+      return JSON.parse(localStorage.getItem('user'));
+    } catch (_) {
+      return null;
+    }
+  })();
   const { isLight } = useTheme();
 
   const [achievements, setAchievements] = useState([]);
@@ -97,7 +104,7 @@ const Achievements = () => {
       doc.text('This certificate is proudly presented to', width / 2, 220, { align: 'center' });
 
       // Recipient Name
-      const nameText = user?.name || 'Loading Profile...';
+      const nameText = user?.name || user?.displayName || user?.fullName || "Authenticated User";
       doc.setTextColor(0, 0, 0); // text-black
       doc.setFontSize(30);
       doc.setFont(undefined, 'bold');
@@ -150,7 +157,7 @@ const Achievements = () => {
       doc.setFontSize(16);
       doc.text('This certificate is proudly presented to', width / 2, 220, { align: 'center' });
 
-      const nameText = user?.name || 'Loading Profile...';
+      const nameText = user?.name || user?.displayName || user?.fullName || "Authenticated User";
       doc.setTextColor(255, 215, 0);
       doc.setFontSize(30);
       doc.setFont(undefined, 'bold');
@@ -384,7 +391,7 @@ const Achievements = () => {
 
                   {/* Dynamic Name */}
                   <h3 className={isLight ? "text-black font-bold text-2xl mb-10" : "text-5xl font-extrabold text-yellow-400 mb-10"}>
-                    {user?.name || 'Loading Profile...'}
+                    {user?.name || user?.displayName || user?.fullName || "Authenticated User"}
                   </h3>
 
                   <p className={`text-lg mb-4 ${isLight ? 'text-slate-900/80 font-medium' : 'text-gray-300'}`}>
