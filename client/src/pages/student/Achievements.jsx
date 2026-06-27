@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { jsPDF } from 'jspdf';
+import { useSelector } from 'react-redux';
+import { useTheme } from '../../context/ThemeContext';
 
 import DashboardLayout from '../../layouts/DashboardLayout';
 
@@ -12,6 +14,9 @@ import {
 import { Award, Medal, CheckCircle, Star } from 'lucide-react';
 
 const Achievements = () => {
+  const { user } = useSelector((state) => state.auth);
+  const { isLight } = useTheme();
+
   const [achievements, setAchievements] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -62,144 +67,115 @@ const Achievements = () => {
     });
 
     const width = doc.internal.pageSize.getWidth();
-
     const height = doc.internal.pageSize.getHeight();
 
-    // Background
-    doc.setFillColor(5, 45, 35);
+    // Dynamically check light theme for PDF styling
+    if (isLight) {
+      // White Background
+      doc.setFillColor(255, 255, 255);
+      doc.rect(0, 0, width, height, 'F');
 
-    doc.rect(0, 0, width, height, 'F');
+      // Emerald green border border-green-600 (#16a34a)
+      doc.setDrawColor(22, 163, 74);
+      doc.setLineWidth(4);
+      doc.rect(30, 30, width - 60, height - 60);
 
-    // Border
-    doc.setDrawColor(212, 175, 55);
+      // Title
+      doc.setTextColor(2, 6, 23); // text-slate-950
+      doc.setFontSize(34);
+      doc.setFont(undefined, 'bold');
+      doc.text('CERTIFICATE', width / 2, 120, { align: 'center' });
 
-    doc.setLineWidth(4);
+      doc.setTextColor(22, 163, 74); // text-green-600
+      doc.setFontSize(20);
+      doc.text('OF APPRECIATION', width / 2, 155, { align: 'center' });
 
-    doc.rect(30, 30, width - 60, height - 60);
+      // Transition label
+      doc.setTextColor(71, 85, 105); // text-slate-600
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(16);
+      doc.text('This certificate is proudly presented to', width / 2, 220, { align: 'center' });
 
-    // Title
-    doc.setTextColor(255, 255, 255);
+      // Recipient Name
+      const nameText = user?.name || 'Learner';
+      doc.setTextColor(0, 0, 0); // text-black
+      doc.setFontSize(30);
+      doc.setFont(undefined, 'bold');
+      doc.text(nameText, width / 2, 270, { align: 'center' });
 
-    doc.setFontSize(34);
+      // Course text
+      doc.setTextColor(71, 85, 105);
+      doc.setFontSize(18);
+      doc.setFont(undefined, 'normal');
+      doc.text('For successfully completing', width / 2, 330, { align: 'center' });
 
-    doc.setFont(undefined, 'bold');
+      // Course Title
+      doc.setTextColor(2, 6, 23);
+      doc.setFontSize(24);
+      doc.setFont(undefined, 'bold');
+      doc.text(achievement.course?.title || achievement.title, width / 2, 380, { align: 'center' });
 
-    doc.text('CERTIFICATE', width / 2, 120, {
-      align: 'center',
-    });
+      // Date
+      const earnedDate = new Date(achievement.earnedAt).toLocaleDateString();
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(14);
+      doc.text(`Earned on ${earnedDate}`, width / 2, 430, { align: 'center' });
 
-    doc.setFontSize(20);
+      // Bottom elements / signature
+      doc.setDrawColor(22, 163, 74);
+      doc.line(120, 500, 250, 500);
+      doc.setTextColor(2, 6, 23);
+      doc.text('AI Learning Mentor', 185, 520, { align: 'center' });
 
-    doc.text('OF APPRECIATION', width / 2, 155, {
-      align: 'center',
-    });
+      doc.line(width - 250, 500, width - 120, 500);
+      doc.text('CourseCraft Verified', width - 185, 520, { align: 'center' });
+    } else {
+      // Dark Theme - Retained exactly as originally written
+      doc.setFillColor(5, 45, 35);
+      doc.rect(0, 0, width, height, 'F');
 
-    // Learner Name
-    let learnerName = 'Learner';
+      doc.setDrawColor(212, 175, 55);
+      doc.setLineWidth(4);
+      doc.rect(30, 30, width - 60, height - 60);
 
-    try {
-      const userData = localStorage.getItem('user');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(34);
+      doc.setFont(undefined, 'bold');
+      doc.text('CERTIFICATE', width / 2, 120, { align: 'center' });
 
-      if (userData) {
-        const parsedUser = JSON.parse(userData);
+      doc.setFontSize(20);
+      doc.text('OF APPRECIATION', width / 2, 155, { align: 'center' });
 
-        learnerName =
-          parsedUser?.name ||
-          parsedUser?.username ||
-          'Learner';
-      }
-    } catch (error) {
-      learnerName = 'Learner';
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(16);
+      doc.text('This certificate is proudly presented to', width / 2, 220, { align: 'center' });
+
+      const nameText = user?.name || 'Learner';
+      doc.setTextColor(255, 215, 0);
+      doc.setFontSize(30);
+      doc.setFont(undefined, 'bold');
+      doc.text(nameText, width / 2, 270, { align: 'center' });
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(18);
+      doc.setFont(undefined, 'normal');
+      doc.text('For successfully completing', width / 2, 330, { align: 'center' });
+
+      doc.setFontSize(24);
+      doc.setFont(undefined, 'bold');
+      doc.text(achievement.course?.title || achievement.title, width / 2, 380, { align: 'center' });
+
+      const earnedDate = new Date(achievement.earnedAt).toLocaleDateString();
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(14);
+      doc.text(`Earned on ${earnedDate}`, width / 2, 430, { align: 'center' });
+
+      doc.line(120, 500, 250, 500);
+      doc.text('AI Learning Mentor', 185, 520, { align: 'center' });
+
+      doc.line(width - 250, 500, width - 120, 500);
+      doc.text('CourseCraft Verified', width - 185, 520, { align: 'center' });
     }
-
-    doc.setFont(undefined, 'normal');
-
-    doc.setFontSize(16);
-
-    doc.text(
-      'This certificate is proudly presented to',
-      width / 2,
-      220,
-      {
-        align: 'center',
-      }
-    );
-
-    doc.setTextColor(255, 215, 0);
-
-    doc.setFontSize(30);
-
-    doc.setFont(undefined, 'bold');
-
-    doc.text(learnerName, width / 2, 270, {
-      align: 'center',
-    });
-
-    // Course Title
-    doc.setTextColor(255, 255, 255);
-
-    doc.setFontSize(18);
-
-    doc.setFont(undefined, 'normal');
-
-    doc.text(
-      'For successfully completing',
-      width / 2,
-      330,
-      {
-        align: 'center',
-      }
-    );
-
-    doc.setFontSize(24);
-
-    doc.setFont(undefined, 'bold');
-
-    doc.text(
-      achievement.course?.title ||
-        achievement.title,
-      width / 2,
-      380,
-      {
-        align: 'center',
-      }
-    );
-
-    // Date
-    const earnedDate = new Date(
-      achievement.earnedAt
-    ).toLocaleDateString();
-
-    doc.setFont(undefined, 'normal');
-
-    doc.setFontSize(14);
-
-    doc.text(
-      `Awarded on ${earnedDate}`,
-      width / 2,
-      430,
-      {
-        align: 'center',
-      }
-    );
-
-    // Signature
-    doc.line(120, 500, 250, 500);
-
-    doc.text('AI Learning Mentor', 185, 520, {
-      align: 'center',
-    });
-
-    doc.line(
-      width - 250,
-      500,
-      width - 120,
-      500
-    );
-
-    doc.text('CourseCraft Verified', width - 185, 520, {
-      align: 'center',
-    });
 
     // Save PDF
     const safeTitle = (
@@ -216,7 +192,7 @@ const Achievements = () => {
     return (
       <DashboardLayout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <div className="text-green-400 text-xl font-semibold">
+          <div className="text-green-400 text-xl font-semibold animate-pulse">
             Loading your achievements...
           </div>
         </div>
@@ -231,29 +207,25 @@ const Achievements = () => {
 
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
+          <h1 className={`text-4xl font-bold mb-2 ${isLight ? 'text-slate-950' : 'text-white'}`}>
             My Achievements
           </h1>
 
-          <p className="text-gray-400">
-            Celebrate your learning milestones
-            and earned certificates
+          <p className={isLight ? 'text-slate-900/80 font-medium' : 'text-gray-400'}>
+            Celebrate your learning milestones and earned certificates
           </p>
         </div>
 
-
-
         {/* Filter Buttons */}
         <div className="flex gap-3 mb-8">
-
           <button
             onClick={() =>
               setFilterType('certificate')
             }
             className={`px-4 py-2 flex items-center gap-2 rounded-lg font-medium transition ${
               filterType === 'certificate'
-                ? 'bg-green-600 text-black'
-                : 'bg-zinc-900 text-gray-300 hover:text-white'
+                ? 'bg-green-600 text-black font-bold shadow-md shadow-green-600/10'
+                : (isLight ? 'bg-white border border-green-500/20 text-slate-950 hover:bg-green-50/50' : 'bg-zinc-900 text-gray-300 hover:text-white')
             }`}
           >
             <Award size={18} /> Completed & Certificates
@@ -263,8 +235,8 @@ const Achievements = () => {
             onClick={() => setFilterType('badge')}
             className={`px-4 py-2 flex items-center gap-2 rounded-lg font-medium transition ${
               filterType === 'badge'
-                ? 'bg-green-600 text-black'
-                : 'bg-zinc-900 text-gray-300 hover:text-white'
+                ? 'bg-green-600 text-black font-bold shadow-md shadow-green-600/10'
+                : (isLight ? 'bg-white border border-green-500/20 text-slate-950 hover:bg-green-50/50' : 'bg-zinc-900 text-gray-300 hover:text-white')
             }`}
           >
             <Medal size={18} /> Badges
@@ -274,8 +246,8 @@ const Achievements = () => {
             onClick={() => setFilterType(null)}
             className={`px-4 py-2 flex items-center gap-2 rounded-lg font-medium transition ${
               filterType === null
-                ? 'bg-green-600 text-black'
-                : 'bg-zinc-900 text-gray-300 hover:text-white'
+                ? 'bg-green-600 text-black font-bold shadow-md shadow-green-600/10'
+                : (isLight ? 'bg-white border border-green-500/20 text-slate-950 hover:bg-green-50/50' : 'bg-zinc-900 text-gray-300 hover:text-white')
             }`}
           >
             <Star size={18} /> All
@@ -284,218 +256,175 @@ const Achievements = () => {
 
         {/* Empty */}
         {achievements.length === 0 ? (
-          <div className="text-center py-12">
-
+          <div className={`text-center py-12 rounded-2xl border ${
+            isLight ? 'bg-white border-green-500/10' : 'bg-zinc-900/30 border-white/5'
+          }`}>
             <div className="flex justify-center mb-4 text-green-500/50">
-              <Award size={64} />
+              <Award size={64} className="animate-bounce" />
             </div>
-
-            <p className="text-gray-400 text-lg">
+            <p className={isLight ? 'text-slate-950 font-semibold text-lg' : 'text-gray-400 text-lg'}>
               No achievements yet
             </p>
-
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
             {achievements.map((achievement) => (
               <div
                 key={achievement._id}
-                className="bg-gradient-to-br from-green-900/20 to-zinc-900 border border-green-900/30 rounded-xl p-6 hover:border-green-600 transition"
+                className={`border rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] ${
+                  isLight 
+                    ? 'bg-white border-green-500/20 hover:border-green-500/40 hover:shadow-[0_0_20px_rgba(34,197,94,0.08)]' 
+                    : 'bg-gradient-to-br from-green-900/20 to-zinc-900 border border-green-900/30 hover:border-green-600'
+                }`}
               >
-
                 {/* Icon */}
                 <div className="mb-4">
-                  {achievement.type ===
-                  'certificate'
-                    ? <Award size={48} className="text-green-400" />
-                    : <Medal size={48} className="text-blue-400" />}
+                  {achievement.type === 'certificate'
+                    ? <Award size={48} className="text-green-500" />
+                    : <Medal size={48} className="text-blue-500" />}
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-bold text-white mb-2">
+                <h3 className={`text-xl font-bold mb-2 ${isLight ? 'text-slate-950' : 'text-white'}`}>
                   {achievement.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-gray-400 text-sm mb-4">
+                <p className={`text-sm mb-4 ${isLight ? 'text-slate-900/70 font-medium' : 'text-gray-400'}`}>
                   {achievement.description}
                 </p>
 
                 {/* Course */}
-                <div className="mb-4 p-3 bg-zinc-800/50 rounded-lg">
-                  <p className="text-xs text-gray-400 mb-1">
+                <div className={`mb-4 p-3 rounded-lg ${isLight ? 'bg-green-50/50 border border-green-500/10' : 'bg-zinc-800/50'}`}>
+                  <p className={`text-xs mb-1 ${isLight ? 'text-slate-900/50 font-bold' : 'text-gray-400'}`}>
                     Course
                   </p>
-
-                  <p className="text-sm font-semibold text-green-400">
+                  <p className={`text-sm font-semibold ${isLight ? 'text-green-600' : 'text-green-400'}`}>
                     {achievement.course?.title}
                   </p>
                 </div>
 
                 {/* Footer */}
-                <div className="flex justify-between items-center text-xs text-gray-400">
-
+                <div className={`flex justify-between items-center text-xs ${isLight ? 'text-slate-900/60 font-semibold' : 'text-gray-400'}`}>
                   <span>
                     Earned on{' '}
-                    {new Date(
-                      achievement.earnedAt
-                    ).toLocaleDateString()}
+                    {new Date(achievement.earnedAt).toLocaleDateString()}
                   </span>
 
-                  {achievement.type ===
-                    'certificate' && (
-                    <div className="flex gap-3">
-
-                      {/* Preview */}
+                  {achievement.type === 'certificate' && (
+                    <div className="flex gap-3 font-bold">
                       <button
-                        onClick={() =>
-                          setPreviewCertificate(
-                            achievement
-                          )
-                        }
-                        className="text-blue-400 hover:text-blue-300 transition"
+                        onClick={() => setPreviewCertificate(achievement)}
+                        className="text-blue-600 hover:text-blue-700 transition"
                       >
                          Preview
                       </button>
 
-                      {/* Download */}
                       <button
-                        onClick={() =>
-                          downloadCertificatePDF(
-                            achievement
-                          )
-                        }
-                        className="text-green-400 hover:text-green-300 transition"
+                        onClick={() => downloadCertificatePDF(achievement)}
+                        className="text-green-600 hover:text-green-700 transition"
                       >
                          Download
                       </button>
-
                     </div>
                   )}
-
                 </div>
-
               </div>
             ))}
-
           </div>
         )}
 
         {/* Preview Modal */}
         {previewCertificate && (
-          <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6">
-
-            <div className="bg-zinc-900 rounded-2xl w-full max-w-5xl h-[90vh] overflow-hidden border border-green-500 relative">
+          <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6 backdrop-blur-sm">
+            <div className={`rounded-2xl w-full max-w-5xl h-[90vh] overflow-hidden border relative transition-colors duration-300 ${
+              isLight ? 'bg-white border-green-500/20' : 'bg-zinc-900 border-green-500'
+            }`}>
 
               {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-zinc-700">
-
-                <h2 className="text-xl font-bold text-white">
+              <div className={`flex items-center justify-between p-4 border-b ${isLight ? 'border-green-500/10 bg-slate-50' : 'border-zinc-700 bg-zinc-900/50'}`}>
+                <h2 className={`text-xl font-bold ${isLight ? 'text-slate-950' : 'text-white'}`}>
                   Certificate Preview
                 </h2>
-
                 <div className="flex gap-3">
-
                   <button
-                    onClick={() =>
-                      downloadCertificatePDF(
-                        previewCertificate
-                      )
-                    }
-                    className="px-4 py-2 bg-green-600 text-black rounded-lg font-semibold hover:bg-green-500"
+                    onClick={() => downloadCertificatePDF(previewCertificate)}
+                    className="px-4 py-2 bg-green-600 text-black rounded-lg font-bold hover:bg-green-500 transition-all duration-300 hover:scale-105 active:scale-95"
                   >
                     Download
                   </button>
-
                   <button
-                    onClick={() =>
-                      setPreviewCertificate(
-                        null
-                      )
-                    }
-                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500"
+                    onClick={() => setPreviewCertificate(null)}
+                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500 transition-all duration-300 hover:scale-105 active:scale-95"
                   >
                     Close
                   </button>
-
                 </div>
-
               </div>
 
-              {/* Certificate */}
-              <div className="p-8 overflow-auto h-full bg-zinc-950">
-
-                <div className="bg-[#052d23] border-[10px] border-yellow-500 rounded-xl p-12 text-center min-h-[700px] relative">
-
-                  <h1 className="text-5xl font-bold text-white tracking-widest mb-2">
+              {/* Certificate Canvas Block */}
+              <div className={`p-8 overflow-auto h-[calc(90vh-73px)] ${isLight ? 'bg-slate-100' : 'bg-zinc-950'}`}>
+                <div className={`rounded-xl p-12 text-center min-h-[580px] relative transition-all border-[10px] duration-300 ${
+                  isLight 
+                    ? 'bg-white border-green-600 shadow-xl' 
+                    : 'bg-[#052d23] border-yellow-500'
+                }`}>
+                  {/* Header text layout */}
+                  <h1 className={`text-5xl font-bold tracking-widest mb-2 ${isLight ? 'text-slate-950' : 'text-white'}`}>
                     CERTIFICATE
                   </h1>
-
-                  <h2 className="text-xl text-yellow-400 mb-10">
+                  <h2 className={`text-xl font-semibold mb-10 ${isLight ? 'text-green-600' : 'text-yellow-400'}`}>
                     OF APPRECIATION
                   </h2>
 
-                  <p className="text-gray-300 text-lg mb-6">
-                    This certificate is proudly
-                    presented to
+                  {/* Recipient transition label */}
+                  <p className={`text-lg mb-6 ${isLight ? 'text-slate-900/80 font-medium' : 'text-gray-300'}`}>
+                    This certificate is proudly presented to
                   </p>
 
-                  <h3 className="text-5xl font-bold text-yellow-400 mb-10">
-                    {JSON.parse(
-                      localStorage.getItem(
-                        'user'
-                      )
-                    )?.name || 'Learner'}
+                  {/* Dynamic Name */}
+                  <h3 className={`text-5xl font-extrabold mb-10 ${isLight ? 'text-black' : 'text-yellow-400'}`}>
+                    {user?.name || 'Learner'}
                   </h3>
 
-                  <p className="text-gray-300 text-lg mb-4">
+                  <p className={`text-lg mb-4 ${isLight ? 'text-slate-900/80 font-medium' : 'text-gray-300'}`}>
                     For successfully completing
                   </p>
 
-                  <h2 className="text-3xl text-white font-bold mb-8">
-                    {previewCertificate.course
-                      ?.title ||
-                      previewCertificate.title}
+                  {/* Achievement track title */}
+                  <h2 className={`text-3xl font-bold mb-8 ${isLight ? 'text-slate-950' : 'text-white'}`}>
+                    {previewCertificate.course?.title || previewCertificate.title}
                   </h2>
 
-                  <p className="text-gray-400 mb-16">
+                  <p className={`mb-16 font-semibold ${isLight ? 'text-slate-900/60' : 'text-gray-400'}`}>
                     Earned on{' '}
-                    {new Date(
-                      previewCertificate.earnedAt
-                    ).toLocaleDateString()}
+                    {new Date(previewCertificate.earnedAt).toLocaleDateString()}
                   </p>
 
-                  <div className="flex justify-between items-end mt-24 px-12">
-
-                    <div>
-                    
-
-                      <p className="text-white">
-                       AI Learning Mentor
+                  <div className="flex justify-between items-end mt-16 px-12">
+                    <div className="text-left">
+                      <div className={`w-36 h-0.5 mb-2 ${isLight ? 'bg-green-600' : 'bg-white'}`} />
+                      <p className={`text-sm font-bold ${isLight ? 'text-slate-950' : 'text-white'}`}>
+                        AI Learning Mentor
                       </p>
                     </div>
 
-                    <div className="text-yellow-500">
+                    <div className={isLight ? 'text-green-600' : 'text-yellow-500'}>
                       <Award size={64} />
                     </div>
 
-                    <div>
-                      
-
-                      <p className="text-white">
+                    <div className="text-right">
+                      <div className={`w-36 h-0.5 mb-2 ${isLight ? 'bg-green-600' : 'bg-white'}`} />
+                      <p className={`text-sm font-bold ${isLight ? 'text-slate-950' : 'text-white'}`}>
                         CourseCraft Verified
                       </p>
                     </div>
-
                   </div>
 
                 </div>
-
               </div>
 
             </div>
-
           </div>
         )}
 
