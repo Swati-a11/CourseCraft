@@ -8,14 +8,17 @@ import App from './App';
 import './App.css';
 import { store } from './stores/store';
 import { ThemeProvider } from './context/ThemeContext';
+import { DashboardDataProvider } from './context/DashboardDataContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <ThemeProvider>
-          <Toaster position="top-right" />
-          <App />
+          <DashboardDataProvider>
+            <Toaster position="top-right" />
+            <App />
+          </DashboardDataProvider>
         </ThemeProvider>
       </BrowserRouter>
     </Provider>

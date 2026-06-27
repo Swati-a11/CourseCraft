@@ -8,67 +8,36 @@ import DashboardLayout from '../../layouts/DashboardLayout';
 import StatCard from '../../components/dashboard/StatCard';
 import CourseCard from '../../components/dashboard/CourseCard';
 import RobotLoader from '../../components/common/RobotLoader';
-import { getDashboardStats } from '../../services/dashboardService';
+import { useDashboardData } from '../../context/DashboardDataContext';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { isLight } = useTheme();
-
-  const [stats, setStats] = useState({
-    coursesEnrolled: 0,
-    coursesCompleted: 0,
-    topicsCompleted: 0,
-    streak: 0,
-    xp: 0,
-  });
-
+  const { stats, loading, error } = useDashboardData();
   const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
   useEffect(() => {
-    const loadStats = async () => {
-      try {
-        const data = await getDashboardStats();
+    if (stats && Array.isArray(stats.courseProgress)) {
+      setCourses(
+        stats.courseProgress.map((cp, index) => ({
+          id: cp.courseId || index,
+          title: cp.title || `Course ${index + 1}`,
+          description: 'Continue your learning journey.',
+          topics: cp.totalTopics || 0,
+          duration: 'Unknown',
+          progress: cp.completion || 0,
+          image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1200&q=80',
+        }))
+      );
+    } else {
+      setCourses([]);
+    }
+  }, [stats]);
 
-        setStats({
-          coursesEnrolled: data.coursesEnrolled ?? 0,
-          coursesCompleted: data.coursesCompleted ?? 0,
-          topicsCompleted: data.topicsCompleted ?? 0,
-          streak: data.gamification?.streak ?? 0,
-          xp: data.gamification?.xp ?? 0,
-        });
-
-        if (Array.isArray(data.courseProgress) && data.courseProgress.length > 0) {
-          setCourses(
-            data.courseProgress.map((cp, index) => ({
-              id: cp.courseId || index,
-              title: cp.title || `Course ${index + 1}`,
-              description: 'Continue your learning journey.',
-              topics: cp.totalTopics || 0,
-              duration: 'Unknown',
-              progress: cp.completion || 0,
-              image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1200&q=80',
-            }))
-          );
-        } else {
-          setCourses([]);
-        }
-      } catch (err) {
-        console.error(err);
-        setError('Unable to load dashboard stats. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadStats();
-  }, []);
-
-  const displayEnrolled = stats.coursesEnrolled ?? 0;
-  const displayCompleted = stats.coursesCompleted ?? 0;
-  const displayStreak = stats.streak || 1;
-  const displayXP = stats.xp || 1270;
+  const displayEnrolled = stats?.coursesEnrolled ?? 0;
+  const displayCompleted = stats?.coursesCompleted ?? 0;
+  const displayStreak = stats?.gamification?.streak ?? stats?.streak ?? 0;
+  const displayXP = stats?.gamification?.xp ?? stats?.xp ?? 0;
 
   const dashboardMetrics = [
     {

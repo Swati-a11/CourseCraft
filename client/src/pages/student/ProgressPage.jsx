@@ -5,7 +5,7 @@ import { motion } from 'motion/react';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import StatCard from '../../components/dashboard/StatCard';
 import WeakTopicsList from '../../components/dashboard/WeakTopicsList';
-import { getDashboardStats } from '../../services/dashboardService';
+import { useDashboardData } from '../../context/DashboardDataContext';
 import api from '../../services/api';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -13,20 +13,13 @@ const trendingColors = ['#22c55e', '#facc15', '#ef4444'];
 
 const ProgressPage = () => {
   const { isLight } = useTheme();
-  const [stats, setStats] = useState(null);
+  const { stats, loading: statsLoading, error: statsError } = useDashboardData();
   const [learningData, setLearningData] = useState({ weakTopics: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const loadStats = async () => {
-      try {
-        const data = await getDashboardStats();
-        setStats(data);
-      } catch (err) {
-        console.error("Dashboard Stats Error:", err);
-      }
-
+    const loadLearningProgress = async () => {
       try {
         const token = localStorage.getItem('token');
         if (token) {
@@ -40,8 +33,10 @@ const ProgressPage = () => {
       }
     };
 
-    loadStats();
+    loadLearningProgress();
   }, []);
+
+  const isPageLoading = loading || statsLoading;
 
   const displayEnrolled = stats?.coursesEnrolled ?? 0;
   const displayCompleted = stats?.coursesCompleted ?? 0;
@@ -115,7 +110,7 @@ const ProgressPage = () => {
     },
   ];
 
-  if (loading) {
+  if (isPageLoading) {
     return (
       <DashboardLayout>
         <div className={`min-h-[70vh] flex flex-col items-center justify-center transition-colors duration-300 ${isLight ? 'bg-white' : 'bg-transparent'}`}>
@@ -287,7 +282,7 @@ const ProgressPage = () => {
                   <span className="text-sm font-bold text-slate-950 uppercase tracking-wider">{metric.title}</span>
                   <Icon className="w-5 h-5 text-green-600 transition-transform duration-300 group-hover:scale-110" />
                 </div>
-                <h3 className="text-black font-bold text-3xl mt-2">{loading ? '...' : metric.value}</h3>
+                <h3 className="text-black font-bold text-3xl mt-2">{isPageLoading ? '...' : metric.value}</h3>
                 {metric.subtitle && (
                   <p className="text-xs text-slate-950 font-medium mt-2">{metric.subtitle}</p>
                 )}
@@ -296,7 +291,7 @@ const ProgressPage = () => {
               <StatCard
                 key={metric.title}
                 title={metric.title}
-                value={loading ? '...' : metric.value}
+                value={isPageLoading ? '...' : metric.value}
                 subtitle={metric.subtitle}
               />
             );
