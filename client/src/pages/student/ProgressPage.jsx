@@ -45,10 +45,15 @@ const ProgressPage = () => {
 
   const displayEnrolled = stats?.coursesEnrolled || 1;
   const displayCompleted = stats?.coursesCompleted || 1;
-  const displayTopicsCompleted = stats?.topicsCompleted ?? 0;
+  
+  const quizScores = stats?.topicPerformance || [];
+  const displayTopicsCompleted = quizScores.length > 0
+    ? quizScores.filter(q => (q.averageScore ?? 0) >= 70).length
+    : (stats?.topicsCompleted ?? 0);
+
   const displayAvgScore = stats?.averageQuizScore || 73;
   const displayLastScore = stats?.lastQuizScore ?? 0;
-  const displayWeakTopics = stats?.weakTopics?.length || learningData?.weakTopics?.length || 2;
+  const displayWeakTopics = (stats?.weakTopics || learningData?.weakTopics || []).length || 2;
   const displayXP = stats?.gamification?.xp || 1270;
   const displayLevel = stats?.gamification?.level || 3;
   const displayStreak = stats?.gamification?.streak || 1;
@@ -282,7 +287,7 @@ const ProgressPage = () => {
                   <span className="text-sm font-bold text-slate-950 uppercase tracking-wider">{metric.title}</span>
                   <Icon className="w-5 h-5 text-green-600 transition-transform duration-300 group-hover:scale-110" />
                 </div>
-                <h3 className="text-4xl font-bold text-slate-950 mt-2">{loading ? '...' : metric.value}</h3>
+                <h3 className="text-black font-bold text-3xl mt-2">{loading ? '...' : metric.value}</h3>
                 {metric.subtitle && (
                   <p className="text-xs text-slate-950 font-medium mt-2">{metric.subtitle}</p>
                 )}
