@@ -7,6 +7,8 @@ import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeContext';
 
 const Settings = () => {
+  const { isLight, toggleTheme } = useTheme();
+
   // ===============================
   // USER PROFILE STATES
   // ===============================
@@ -65,6 +67,10 @@ const Settings = () => {
     }
   }, []);
 
+  useEffect(() => {
+    setSettings((prev) => (prev.darkMode === !isLight ? prev : { ...prev, darkMode: !isLight }));
+  }, [isLight]);
+
   const handleToggle = (key) => {
     if (key === 'darkMode') {
       toggleTheme();
@@ -120,8 +126,6 @@ const Settings = () => {
       setLoading(false);
     }
   };
-
-  const { isLight, toggleTheme } = useTheme();
 
   const SettingToggle = ({ icon: Icon, label, value, onChange, description }) => (
     <div className={`flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 ${

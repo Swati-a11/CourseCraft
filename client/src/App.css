@@ -22,74 +22,97 @@
   font-family: "Merriweather", serif;
 }
 
-/* Global Light Theme Overrides (White, Black & Emerald Green only, no gray clutter) */
-html.light,
-.light {
-  --background-color: #ffffff;
-  --text-color: #020617;
-  --border-color: #16a34a;
+/* Light mode palette from the reference image. */
+html.light {
+  color-scheme: light;
+  --coursecraft-page: #f7f0e4;
+  --coursecraft-surface: #fcfbfc;
+  --coursecraft-ink: #17110b;
+  --coursecraft-muted: #61513e;
+  --coursecraft-pale-gold: #edd68c;
+  --coursecraft-gold: #e5b23e;
+  --coursecraft-ochre: #b77929;
+  --coursecraft-accent-ink: #714308;
+  --coursecraft-border: #d8c5a2;
+
+  --background-color: var(--coursecraft-page);
+  --text-color: var(--coursecraft-ink);
+  --border-color: var(--coursecraft-border);
+
+  --color-black: var(--coursecraft-ink);
+  --color-white: var(--coursecraft-surface);
+  --color-slate-50: var(--coursecraft-page);
+  --color-slate-100: #f1e6d2;
+  --color-slate-200: var(--coursecraft-border);
+  --color-slate-400: var(--coursecraft-muted);
+  --color-slate-500: var(--coursecraft-muted);
+  --color-slate-600: var(--coursecraft-muted);
+  --color-slate-700: #453728;
+  --color-slate-800: var(--coursecraft-ink);
+  --color-slate-900: var(--coursecraft-ink);
+  --color-slate-950: var(--coursecraft-ink);
+  --color-gray-400: var(--coursecraft-muted);
+  --color-gray-500: var(--coursecraft-muted);
+
+  --color-green-50: #f6eac7;
+  --color-green-100: #f4e3ac;
+  --color-green-200: var(--coursecraft-pale-gold);
+  --color-green-300: var(--coursecraft-pale-gold);
+  --color-green-400: #dca529;
+  --color-green-500: var(--coursecraft-gold);
+  --color-green-600: var(--coursecraft-gold);
+  --color-green-700: #d49b24;
+  --color-green-800: var(--coursecraft-accent-ink);
+  --color-green-900: var(--coursecraft-ochre);
+  --color-emerald-50: var(--color-green-50);
+  --color-emerald-100: var(--color-green-100);
+  --color-emerald-200: var(--color-green-200);
+  --color-emerald-300: var(--color-green-300);
+  --color-emerald-400: var(--color-green-400);
+  --color-emerald-500: var(--color-green-500);
+  --color-emerald-600: var(--color-green-600);
+  --color-emerald-700: var(--color-green-700);
+  --color-emerald-800: var(--color-green-800);
+  --color-emerald-900: var(--color-green-900);
 }
 
 html.light body,
-.light body {
-  background-color: #ffffff !important;
-  color: #020617 !important;
+html.light :is(.bg-black, .bg-slate-950, .bg-zinc-950) {
+  background-color: var(--coursecraft-page);
+  color: var(--coursecraft-ink);
 }
 
-/* Force backgrounds in light mode */
-html.light .bg-black,
-html.light .bg-slate-950,
-html.light .bg-slate-900,
-html.light .bg-slate-50,
-html.light .bg-zinc-900,
-html.light .bg-zinc-800,
-html.light .bg-zinc-950,
-html.light .bg-zinc-900\/50,
-html.light .bg-white\/5,
-html.light .bg-white\/10 {
-  background-color: #ffffff !important;
+html.light :is(.bg-white, .bg-slate-900, .bg-zinc-900, .bg-zinc-800, .bg-zinc-855, .bg-zinc-900\/50, .bg-white\/5, .bg-white\/10),
+html.light :is(input, textarea, select) {
+  background-color: var(--coursecraft-surface);
 }
 
-/* Force text colors in light mode */
-html.light .text-white,
-html.light .text-gray-400,
-html.light .text-gray-300,
-html.light .text-gray-500,
-html.light .text-slate-400,
-html.light .text-slate-300,
-html.light .text-slate-200,
-html.light .text-slate-900,
-html.light .text-slate-700,
-html.light .text-slate-600 {
-  color: #020617 !important;
+html.light :is(input, textarea, select) {
+  color: var(--coursecraft-ink);
 }
 
-/* Accent texts and states */
-html.light .text-green-400,
-html.light .text-green-500 {
-  color: #16a34a !important;
+html.light :is(input, textarea)::placeholder {
+  color: var(--coursecraft-muted);
 }
 
-/* Green borders */
-html.light .border-white\/5,
-html.light .border-green-900\/40,
-html.light .border-green-500\/30,
-html.light .border-slate-200,
-html.light .border-slate-100 {
-  border-color: #16a34a !important;
+html.light :is(.text-white, .text-gray-200, .text-gray-300, .text-slate-200, .text-slate-300) {
+  color: var(--coursecraft-ink);
 }
 
-/* Button & interactive component text override safety */
-html.light .bg-green-500,
-html.light .bg-green-600,
-html.light button.bg-green-500,
-html.light button.bg-green-600,
-html.light a.bg-green-500,
-html.light a.bg-green-600,
-html.light .bg-green-600 * {
-  color: #ffffff !important;
+html.light :is(.text-green-400, .text-green-500, .text-green-600, .text-green-700, .text-emerald-400, .text-emerald-500, .text-emerald-600, .text-emerald-700),
+html.light :is(.hover\:text-green-600, .hover\:text-green-700, .hover\:text-emerald-600):hover {
+  color: var(--coursecraft-accent-ink);
 }
-html.light button.bg-green-500:hover,
-html.light button.bg-green-600:hover {
-  background-color: #15803d !important; /* bg-green-700 */
-}
+
+html.light :is(.border-white\/5, .border-white\/10, .border-green-900\/40, .border-green-500\/30, .border-slate-200, .border-slate-100) {
+  border-color: var(--coursecraft-border);
+}
+
+html.light :is(button, a):is(.bg-green-500, .bg-green-600, .bg-emerald-500, .bg-emerald-600),
+html.light :is(button, a):is(.bg-green-500, .bg-green-600, .bg-emerald-500, .bg-emerald-600) * {
+  color: var(--coursecraft-ink) !important;
+}
+
+html.light .coursecraft-landing {
+  background-color: var(--coursecraft-page);
+}

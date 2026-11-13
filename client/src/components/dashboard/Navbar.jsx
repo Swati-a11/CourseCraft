@@ -1,4 +1,4 @@
-import { Bell, Search, UserCircle, Mail, BookOpen, Award, CheckCircle } from 'lucide-react';
+import { Bell, Search, UserCircle, Mail, BookOpen, Award, CheckCircle, Moon, Sun } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -17,7 +17,7 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
-  const { isLight } = useTheme();
+  const { isLight, toggleTheme } = useTheme();
 
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -116,6 +116,18 @@ const Navbar = () => {
       {/* Right Section */}
       <div className="flex items-center gap-4">
         
+        <button
+          type="button"
+          onClick={toggleTheme}
+          aria-label={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
+          title={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
+          className={`shrink-0 rounded-full p-2 transition-colors cursor-pointer ${
+            isLight ? 'text-green-600 hover:bg-green-100' : 'text-gray-300 hover:bg-zinc-900'
+          }`}
+        >
+          {isLight ? <Moon size={20} aria-hidden="true" /> : <Sun size={20} aria-hidden="true" />}
+        </button>
+
         {/* Notification */}
         <div className="relative">
           <button 

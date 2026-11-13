@@ -96,12 +96,12 @@ const HeroPage = () => {
 
   const stickyBgStyle = {
     background: isLight
-      ? 'radial-gradient(40% 40% at 50% 20%, #dcfce7 0%, #f0fdf4 40%, #ffffff 80%, #ffffff 100%)'
+      ? 'radial-gradient(65% 55% at 50% 20%, var(--coursecraft-pale-gold) 0%, var(--coursecraft-page) 100%)'
       : 'radial-gradient(40% 40% at 50% 20%, #0e3320 0%, #071a0f 40%, #030a05 80%, #020617 100%)',
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${isLight ? 'bg-white text-slate-950' : 'bg-slate-950 text-white'}`}>
+    <div className={`coursecraft-landing min-h-screen transition-colors duration-300 ${isLight ? 'bg-white text-slate-950' : 'bg-slate-950 text-white'}`}>
 
       {/* Navbar */}
       <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 backdrop-blur-md border-b transition-colors duration-300 ${isLight ? 'bg-white/80 border-green-200' : 'bg-slate-950/80 border-white/5'}`}>
@@ -113,7 +113,9 @@ const HeroPage = () => {
           <button
             onClick={toggleTheme}
             className={`p-2 rounded-full border transition-all cursor-pointer ${isLight ? 'border-green-200 hover:bg-green-100 text-green-600 hover:text-green-700' : 'border-white/10 hover:bg-white/5 text-gray-300 hover:text-white'}`}
-            title="Toggle theme"
+            type="button"
+            aria-label={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
+            title={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
           >
             {isLight ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
           </button>
@@ -215,7 +217,7 @@ const HeroPage = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleExploreClick}
-                  className={`group relative flex items-center gap-2 mx-auto w-fit rounded-full border px-8 py-3 transition-all text-lg cursor-pointer ${isLight ? 'border-green-600 bg-green-100 text-green-600 shadow-[0px_4px_24px_rgba(22,163,74,0.2)] hover:bg-green-200' : 'border-green-500 bg-black/20 text-green-400 shadow-[0px_4px_24px_rgba(34,197,94,0.3)] hover:bg-green-500/10'}`}
+                  className={`group relative flex items-center gap-2 mx-auto w-fit rounded-full border px-8 py-3 transition-all text-lg cursor-pointer ${isLight ? 'border-green-600 bg-green-100 text-green-600 shadow-[0px_4px_24px_rgba(183,121,41,0.2)] hover:bg-green-200' : 'border-green-500 bg-black/20 text-green-400 shadow-[0px_4px_24px_rgba(34,197,94,0.3)] hover:bg-green-500/10'}`}
                 >
                   Explore the Network
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -228,7 +230,7 @@ const HeroPage = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => navigate('/register')}
-                  className={`group relative flex items-center gap-2 mx-auto w-fit rounded-full border px-8 py-3 transition-all text-lg cursor-pointer ${isLight ? 'border-green-600 bg-green-600 text-white shadow-[0px_4px_24px_rgba(22,163,74,0.3)] hover:bg-green-700' : 'border-green-500 bg-green-500 text-black shadow-[0px_4px_24px_rgba(34,197,94,0.5)] hover:bg-green-400'}`}
+                  className={`group relative flex items-center gap-2 mx-auto w-fit rounded-full border px-8 py-3 transition-all text-lg cursor-pointer ${isLight ? 'border-green-600 bg-green-600 text-black shadow-[0px_4px_24px_rgba(183,121,41,0.3)] hover:bg-green-700' : 'border-green-500 bg-green-500 text-black shadow-[0px_4px_24px_rgba(34,197,94,0.5)] hover:bg-green-400'}`}
                 >
                   Get Started for Free
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -479,7 +481,7 @@ const HeroPage = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleCtaClick}
-            className={`group font-bold px-8 py-4 rounded-full text-lg transition-all flex items-center gap-2 mx-auto cursor-pointer ${isLight ? 'bg-green-600 hover:bg-green-700 text-white shadow-[0px_4px_30px_rgba(22,163,74,0.3)]' : 'bg-green-500 hover:bg-green-400 text-black shadow-[0px_4px_30px_rgba(34,197,94,0.4)]'}`}
+            className={`group font-bold px-8 py-4 rounded-full text-lg transition-all flex items-center gap-2 mx-auto cursor-pointer ${isLight ? 'bg-green-600 hover:bg-green-700 text-black shadow-[0px_4px_30px_rgba(183,121,41,0.3)]' : 'bg-green-500 hover:bg-green-400 text-black shadow-[0px_4px_30px_rgba(34,197,94,0.4)]'}`}
           >
             Get Started Free
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
