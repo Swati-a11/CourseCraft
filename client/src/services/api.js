@@ -19,7 +19,7 @@ API.interceptors.request.use((req) => {
 API.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    if (error.response && error.response.status === 401 && error.config?.headers?.Authorization) {
       localStorage.clear();
       window.location.href = '/login';
     }
