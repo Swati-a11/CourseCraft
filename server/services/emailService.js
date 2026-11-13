@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 export const sendSystemNotification = async (toEmail, subject, textBody) => {
-  // Trim any accidental spaces from the environment variable
-  const apiKey = (process.env.RESEND_API_KEY || 're_MyGBZWuC_6kXfhDVHgU7pyi74yVQFqz56').trim();
-  
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  if (!apiKey) throw new Error('Email service is not configured.');
+
   console.log(`📡 REST API Request Log: Forwarding HTTP payload to -> ${toEmail}`);
   
   try {
