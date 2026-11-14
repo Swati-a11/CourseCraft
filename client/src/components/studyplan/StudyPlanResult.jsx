@@ -6,10 +6,18 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import toast from "react-hot-toast";
 
+const stripStudyPlanEmojis = (text) => text
+  .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
+  .replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$1 ($2)")
+  .replace(/[\p{Extended_Pictographic}\uFE0F\u200D]/gu, "")
+  .replace(/(^|\s)[#>*_~`]+(?=\s|$)/gm, "$1")
+  .replace(/[ \t]{2,}/g, " ")
+  .replace(/[ \t]+$/gm, "");
+
 const StudyPlanResult = ({ plan }) => {
   const contentRef = useRef(null);
   const cleanPlan = typeof plan === "string"
-    ? plan.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu, "").replace(/[ \t]{2,}/g, " ")
+    ? stripStudyPlanEmojis(plan)
     : plan;
 
   if (!plan) return null;
@@ -39,7 +47,7 @@ const StudyPlanResult = ({ plan }) => {
 
           // Force all text colors to standard hex colors
           root.querySelectorAll("*").forEach((el) => {
-            el.style.color = "#d1d5db"; // gray-300
+            el.style.color = "#203247";
             el.style.backgroundColor =
               el.tagName === "CODE" ? "#27272a" : "transparent";
             el.style.borderColor = "#173a60"; // azure-900
@@ -47,20 +55,20 @@ const StudyPlanResult = ({ plan }) => {
 
           // Headings
           root.querySelectorAll("h1").forEach((el) => {
-            el.style.color = "#6cb5ff"; // azure-400
+            el.style.color = "#174878";
           });
 
           root.querySelectorAll("h2").forEach((el) => {
-            el.style.color = "#90c7ff"; // azure-300
+            el.style.color = "#205b88";
           });
 
           root.querySelectorAll("h3").forEach((el) => {
-            el.style.color = "#bfdcff"; // azure-200
+            el.style.color = "#205b88";
           });
 
           // Links
           root.querySelectorAll("a").forEach((el) => {
-            el.style.color = "#60a5fa"; // blue-400
+            el.style.color = "#075985";
             el.style.textDecoration = "underline";
           });
 
@@ -74,7 +82,7 @@ const StudyPlanResult = ({ plan }) => {
 
           // Blockquotes
           root.querySelectorAll("blockquote").forEach((el) => {
-            el.style.borderLeft = "4px solid #53a6f5";
+            el.style.borderLeft = "4px solid #438fdd";
             el.style.paddingLeft = "16px";
             el.style.fontStyle = "italic";
             el.style.color = "#9ca3af";
@@ -165,7 +173,7 @@ const StudyPlanResult = ({ plan }) => {
               ),
 
               h2: ({ children }) => (
-                <h2 className="mt-6 mb-3 text-xl font-semibold text-[var(--cc-study-subheading)]">
+                <h2 className="mt-6 mb-3 text-xl font-semibold text-[var(--cc-study-heading)]">
                   {children}
                 </h2>
               ),
