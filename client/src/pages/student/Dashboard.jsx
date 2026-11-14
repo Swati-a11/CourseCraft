@@ -100,16 +100,9 @@ const Dashboard = () => {
   return (
     <DashboardLayout>
       <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-8">
-        {/* Header Section */}
-        <motion.div variants={itemVariants} className="flex items-start justify-between flex-wrap gap-4">
-          <div>
-            <h1 className={`font-merriweather text-6xl sm:text-7xl transition-colors ${isLight ? 'text-slate-900' : 'text-white'}`}>
-              Welcome Back
-            </h1>
-            <p className="font-condiment text-3xl text-green-600 mt-2">
-              Continue your AI-powered learning journey.
-            </p>
-          </div>
+        <motion.div variants={itemVariants} className="cc-dashboard-intro">
+          <h1>Welcome back</h1>
+          <p>Pick up a course or see how your study progress is adding up.</p>
         </motion.div>
 
         {/* Error */}
@@ -126,43 +119,21 @@ const Dashboard = () => {
 
         {/* Stats Grid */}
         <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {dashboardMetrics.map((metric) => {
-            const Icon = metric.icon;
-            return isLight ? (
-              <div
-                key={metric.title}
-                className="group border border-green-500/20 bg-white rounded-2xl p-6 shadow-sm hover:-translate-y-0.5 hover:scale-[1.01] hover:border-green-500/40 hover:shadow-[0_0_30px_rgba(34,197,94,0.12)] transition-all duration-300"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm font-bold text-slate-950 uppercase tracking-wider">{metric.title}</span>
-                  <Icon className="w-5 h-5 text-green-500 transition-transform duration-300 group-hover:scale-110" />
-                </div>
-                <h3 className="text-3xl font-bold text-slate-950 mt-2">{loading ? '...' : metric.value}</h3>
-                {metric.subtitle && (
-                  <p className="text-xs text-slate-950/80 font-medium mt-2">{metric.subtitle}</p>
-                )}
-              </div>
-            ) : (
-              <StatCard
-                key={metric.title}
-                title={metric.title}
-                value={loading ? '...' : metric.value}
-                subtitle={metric.subtitle}
-              />
-            );
-          })}
+          {dashboardMetrics.map(({ title, icon, value, subtitle }) => (
+            <StatCard key={title} title={title} icon={icon} value={value} subtitle={subtitle} />
+          ))}
         </motion.div>
 
         {/* My Courses */}
         <motion.div variants={itemVariants}>
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
-            <h2 className={`text-2xl font-condiment transition-colors ${isLight ? 'text-slate-900' : 'text-white'}`}>
+            <h2 className={`text-2xl font-semibold tracking-tight transition-colors ${isLight ? 'text-slate-900' : 'text-white'}`}>
               My Courses
             </h2>
 
             <button
               onClick={() => navigate('/browse-courses')}
-              className="bg-green-500 hover:bg-green-400 font-cabin text-black px-5 py-2 rounded-xl font-semibold shadow-lg shadow-green-500/20 transition-all duration-300 hover:scale-105"
+              className="min-h-11 bg-green-500 hover:bg-green-400 px-5 py-2 rounded-xl font-semibold transition-colors cursor-pointer"
             >
               Browse Courses
             </button>

@@ -5,7 +5,7 @@ const ThemeContext = createContext();
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('theme');
-    if (saved) return saved;
+    if (saved === 'light' || saved === 'dark') return saved;
     
     // Fallback check on userSettings in localStorage
     const savedSettings = localStorage.getItem('userSettings');
@@ -20,15 +20,8 @@ export const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     const root = window.document.documentElement;
-    if (theme === 'light') {
-      root.classList.add('light');
-      root.classList.remove('dark');
-      document.body.className = 'bg-white text-slate-950 transition-colors duration-300';
-    } else {
-      root.classList.add('dark');
-      root.classList.remove('light');
-      document.body.className = 'bg-black text-white transition-colors duration-300';
-    }
+    root.classList.toggle('light', theme === 'light');
+    root.classList.toggle('dark', theme === 'dark');
     localStorage.setItem('theme', theme);
     
     // Sync settings in localStorage

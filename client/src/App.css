@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Condiment&family=Cabin:wght@400;500;600;700&family=Catamaran:wght@400;500;600;700&family=Merriweather:wght@300;400;700&display=swap');
-
 @import "tailwindcss";
 
 /* Condiment */
@@ -22,48 +20,36 @@
   font-family: "Merriweather", serif;
 }
 
-/* Light mode palette from the reference image. */
-html.light {
-  color-scheme: light;
-  --coursecraft-page: #f7f0e4;
-  --coursecraft-surface: #fcfbfc;
-  --coursecraft-ink: #17110b;
-  --coursecraft-muted: #61513e;
-  --coursecraft-pale-gold: #edd68c;
-  --coursecraft-gold: #e5b23e;
-  --coursecraft-ochre: #b77929;
-  --coursecraft-accent-ink: #714308;
-  --coursecraft-border: #d8c5a2;
+@custom-variant dark (&:where(.dark, .dark *));
 
-  --background-color: var(--coursecraft-page);
-  --text-color: var(--coursecraft-ink);
-  --border-color: var(--coursecraft-border);
+:root {
+  color-scheme: dark;
+  --cc-bg: #000;
+  --cc-surface: #0d1219;
+  --cc-raised: #141d28;
+  --cc-ink: #f3f8ff;
+  --cc-muted: #a7b5c6;
+  --cc-line: #263648;
+  --cc-input-line: #577086;
+  --cc-sky: #38bdf8;
+  --cc-action: var(--cc-sky);
+  --cc-action-ink: #062339;
+  --cc-accent: var(--cc-sky);
+  --cc-good: #83d9af;
+  --cc-error: #ffb6b9;
+  --cc-shadow: #000;
 
-  --color-black: var(--coursecraft-ink);
-  --color-white: var(--coursecraft-surface);
-  --color-slate-50: var(--coursecraft-page);
-  --color-slate-100: #f1e6d2;
-  --color-slate-200: var(--coursecraft-border);
-  --color-slate-400: var(--coursecraft-muted);
-  --color-slate-500: var(--coursecraft-muted);
-  --color-slate-600: var(--coursecraft-muted);
-  --color-slate-700: #453728;
-  --color-slate-800: var(--coursecraft-ink);
-  --color-slate-900: var(--coursecraft-ink);
-  --color-slate-950: var(--coursecraft-ink);
-  --color-gray-400: var(--coursecraft-muted);
-  --color-gray-500: var(--coursecraft-muted);
-
-  --color-green-50: #f6eac7;
-  --color-green-100: #f4e3ac;
-  --color-green-200: var(--coursecraft-pale-gold);
-  --color-green-300: var(--coursecraft-pale-gold);
-  --color-green-400: #dca529;
-  --color-green-500: var(--coursecraft-gold);
-  --color-green-600: var(--coursecraft-gold);
-  --color-green-700: #d49b24;
-  --color-green-800: var(--coursecraft-accent-ink);
-  --color-green-900: var(--coursecraft-ochre);
+  /* Existing workspace controls share the same accent scale. */
+  --color-green-50: #f0f9ff;
+  --color-green-100: #e0f2fe;
+  --color-green-200: #bae6fd;
+  --color-green-300: #7dd3fc;
+  --color-green-400: #69d0fb;
+  --color-green-500: var(--cc-sky);
+  --color-green-600: #2eade7;
+  --color-green-700: #249ed7;
+  --color-green-800: #075985;
+  --color-green-900: #123e58;
   --color-emerald-50: var(--color-green-50);
   --color-emerald-100: var(--color-green-100);
   --color-emerald-200: var(--color-green-200);
@@ -76,43 +62,120 @@ html.light {
   --color-emerald-900: var(--color-green-900);
 }
 
-html.light body,
+html.light {
+  color-scheme: light;
+  --cc-bg: #f7faff;
+  --cc-surface: #fff;
+  --cc-raised: #eaf4fc;
+  --cc-ink: #102137;
+  --cc-muted: #465b72;
+  --cc-line: #d5e2ed;
+  --cc-input-line: #758da2;
+  --cc-accent: #03638f;
+  --cc-good: #176245;
+  --cc-error: #a52d3b;
+  --cc-shadow: #173a5c;
+
+  --color-white: var(--cc-surface);
+  --color-slate-50: var(--cc-bg);
+  --color-slate-100: var(--cc-raised);
+  --color-slate-200: var(--cc-line);
+  --color-slate-400: var(--cc-muted);
+  --color-slate-500: var(--cc-muted);
+  --color-slate-600: var(--cc-muted);
+  --color-slate-700: #30445c;
+  --color-slate-800: var(--cc-ink);
+  --color-slate-900: var(--cc-ink);
+  --color-slate-950: var(--cc-ink);
+  --color-gray-400: var(--cc-muted);
+  --color-gray-500: var(--cc-muted);
+}
+
+body {
+  background: var(--cc-bg);
+  color: var(--cc-ink);
+  font-family: 'Instrument Sans', system-ui, sans-serif;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cc-accent);
+  outline-offset: 3px;
+}
+
+.cc-theme {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  color: var(--cc-accent);
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-line);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 180ms, border-color 180ms;
+}
+
+.cc-theme:hover {
+  background: var(--cc-raised);
+  border-color: var(--cc-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-theme { transition: none; }
+}
+
 html.light :is(.bg-black, .bg-slate-950, .bg-zinc-950) {
-  background-color: var(--coursecraft-page);
-  color: var(--coursecraft-ink);
+  background-color: var(--cc-bg);
+  color: var(--cc-ink);
 }
 
 html.light :is(.bg-white, .bg-slate-900, .bg-zinc-900, .bg-zinc-800, .bg-zinc-855, .bg-zinc-900\/50, .bg-white\/5, .bg-white\/10),
 html.light :is(input, textarea, select) {
-  background-color: var(--coursecraft-surface);
+  background-color: var(--cc-surface);
 }
 
 html.light :is(input, textarea, select) {
-  color: var(--coursecraft-ink);
+  color: var(--cc-ink);
 }
 
 html.light :is(input, textarea)::placeholder {
-  color: var(--coursecraft-muted);
+  color: var(--cc-muted);
 }
 
 html.light :is(.text-white, .text-gray-200, .text-gray-300, .text-slate-200, .text-slate-300) {
-  color: var(--coursecraft-ink);
+  color: var(--cc-ink);
 }
 
-html.light :is(.text-green-400, .text-green-500, .text-green-600, .text-green-700, .text-emerald-400, .text-emerald-500, .text-emerald-600, .text-emerald-700),
+html.light :is(.text-green-300, .text-green-400, .text-green-500, .text-green-600, .text-green-700, .text-emerald-300, .text-emerald-400, .text-emerald-500, .text-emerald-600, .text-emerald-700),
 html.light :is(.hover\:text-green-600, .hover\:text-green-700, .hover\:text-emerald-600):hover {
-  color: var(--coursecraft-accent-ink);
+  color: var(--cc-accent);
 }
 
 html.light :is(.border-white\/5, .border-white\/10, .border-green-900\/40, .border-green-500\/30, .border-slate-200, .border-slate-100) {
-  border-color: var(--coursecraft-border);
+  border-color: var(--cc-line);
 }
 
-html.light :is(button, a):is(.bg-green-500, .bg-green-600, .bg-emerald-500, .bg-emerald-600),
-html.light :is(button, a):is(.bg-green-500, .bg-green-600, .bg-emerald-500, .bg-emerald-600) * {
-  color: var(--coursecraft-ink) !important;
+/* Accent fills use dark ink in both themes. */
+:is(button, a):is(.bg-green-500, .bg-green-600, .bg-emerald-500, .bg-emerald-600) {
+  color: var(--cc-action-ink);
 }
 
-html.light .coursecraft-landing {
-  background-color: var(--coursecraft-page);
+.cc-dashboard-intro {
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border: 1px solid var(--cc-line);
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 92% 0%, color-mix(in srgb, var(--cc-sky) 15%, transparent), transparent 65%),
+    var(--cc-surface);
+}
+
+.cc-dashboard-intro h1 {
+  font: 400 clamp(2.75rem, 6vw, 4.5rem) / 1 'Instrument Serif', Georgia, serif;
+  letter-spacing: -.02em;
+}
+
+.cc-dashboard-intro p {
+  margin-top: .7rem;
+  color: var(--cc-muted);
 }

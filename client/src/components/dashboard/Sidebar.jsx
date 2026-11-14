@@ -91,20 +91,22 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         } ${
           isLight
             ? 'bg-white text-slate-900 border-slate-200'
-            : 'bg-zinc-950 border-green-900/30 text-white'
+            : 'bg-black border-white/10 text-white'
         }`}
       >
         {/* Brand Header */}
         <div className={`flex items-center gap-3 p-4 border-b border-slate-100 dark:border-slate-800 transition-all duration-300 ${isOpen ? 'justify-start px-6' : 'justify-center'} h-20`}>
           <button
             onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? "Collapse sidebar" : "Expand sidebar"}
+            aria-expanded={isOpen}
             className="relative flex items-center justify-center p-3 rounded-full transition-all duration-300 ease-out hover:rounded-xl hover:bg-slate-100/60 dark:hover:bg-slate-800/40 hover:border-slate-200/50 cursor-pointer"
           >
             <BookOpen size={24} className={isLight ? 'text-green-600' : 'text-green-400'} />
           </button>
           {isOpen && (
             <div className="flex flex-col items-start transition-opacity duration-300 animate-fadeIn">
-              <span className={`text-3xl font-condiment ${isLight ? 'text-green-600' : 'text-green-400'} leading-none select-none`}>
+              <span className={`text-lg font-bold tracking-tight ${isLight ? 'text-green-600' : 'text-green-400'} leading-none select-none`}>
                 CourseCraft
               </span>
               <span className="text-[10px] tracking-wide text-slate-400 font-medium whitespace-nowrap mt-1">
@@ -129,7 +131,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                     className={({ isActive }) =>
                       `group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                         isActive
-                          ? `${isLight ? 'bg-green-100 text-green-800' : 'bg-green-600 text-black'} font-condiment text-3xl`
+                          ? `${isLight ? 'bg-green-100 text-green-800' : 'bg-green-600 text-black'} font-semibold`
                           : `${isLight ? 'text-slate-700 hover:bg-slate-100 hover:text-green-600' : 'text-gray-300 hover:bg-zinc-900 hover:text-green-400'}`
                       }`
                     }

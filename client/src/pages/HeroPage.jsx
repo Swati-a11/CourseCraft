@@ -35,17 +35,19 @@ export default function HeroPage() {
     <div className="cc-public">
       <SiteHeader showAccountLinks />
       <main>
-        <section className="cc-container cc-hero">
-          <div className="cc-hero-copy">
-            <h1>Learn at your pace.<br /><em>Keep your place.</em></h1>
-            <p>Pick a skill and build an AI study plan around your schedule. Keep lessons, notes, and quizzes together so you always know what to study next.</p>
-            <div className="cc-actions">
-              <Link className="cc-primary" to="/register">Get started <ArrowRight size={18} aria-hidden="true" /></Link>
-              <a className="cc-secondary" href="#features">Explore features</a>
+        <div className="cc-hero-band">
+          <section className="cc-container cc-hero">
+            <div className="cc-hero-copy">
+              <h1>Learn at your pace.<br /><em>Keep your place.</em></h1>
+              <p>Pick a skill and build an AI study plan around your schedule. Keep lessons, notes, and quizzes together so you always know what to study next.</p>
+              <div className="cc-actions">
+                <Link className="cc-primary" to="/register">Get started <ArrowRight size={18} aria-hidden="true" /></Link>
+                <a className="cc-secondary" href="#features">Explore features</a>
+              </div>
             </div>
-          </div>
-          <WorkspacePreview />
-        </section>
+            <WorkspacePreview />
+          </section>
+        </div>
         <section id="features" className="cc-container cc-features" aria-labelledby="features-title">
           <h2 id="features-title">From first lesson to final quiz</h2>
           <div className="cc-feature-grid">

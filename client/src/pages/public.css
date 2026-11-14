@@ -1,19 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Instrument+Sans:wght@400..700&family=Instrument+Serif:ital@0;1&display=swap');
-
 .cc-public {
-  --cc-bg: #191421;
-  --cc-surface: #211a2b;
-  --cc-raised: #2e2239;
-  --cc-ink: #fff5e8;
-  --cc-muted: #cbbdd2;
-  --cc-line: #695775;
-  --cc-gold: #ecaf56;
-  --cc-accent: var(--cc-gold);
-  --cc-action: var(--cc-gold);
-  --cc-action-ink: #27192e;
-  --cc-good: #b2dfbd;
-  --cc-error: #ffb6b9;
-  --cc-shadow: #100b18;
   --cc-display-font: 'Instrument Serif', Georgia, serif;
   --cc-label-font: 'IBM Plex Mono', monospace;
   min-height: 100vh;
@@ -21,19 +6,6 @@
   color: var(--cc-ink);
   font-family: 'Instrument Sans', system-ui, sans-serif;
   line-height: 1.5;
-}
-
-html.light .cc-public {
-  --cc-bg: #f8f0e4;
-  --cc-surface: #fffaf2;
-  --cc-raised: #f1e2e7;
-  --cc-ink: #2c2032;
-  --cc-muted: #625466;
-  --cc-line: #b6a3b0;
-  --cc-accent: #854b16;
-  --cc-good: #245a43;
-  --cc-error: #a52d3b;
-  --cc-shadow: #53334a;
 }
 
 .cc-public a, .cc-public button { cursor: pointer; }
@@ -56,26 +28,24 @@ html.light .cc-public {
   background: var(--cc-raised);
   color: var(--cc-accent);
 }
-.cc-brand-icon { background: var(--cc-gold); color: var(--cc-action-ink); }
+.cc-brand-icon { background: var(--cc-sky); color: var(--cc-action-ink); }
 .cc-nav { gap: clamp(.65rem, 2.6vw, 2rem); }
 .cc-nav a, .cc-footer a, .cc-back { display: inline-flex; align-items: center; min-height: 44px; gap: .5rem; }
 .cc-nav a:hover, .cc-footer a:hover, .cc-back:hover, .cc-auth-switch a:hover { text-decoration: underline; }
-.cc-theme {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--cc-line);
-  border-radius: 50%;
+.cc-secondary:hover { background: var(--cc-raised); }
+
+.cc-hero-band {
+  background:
+    radial-gradient(ellipse at 78% 38%, color-mix(in srgb, var(--cc-sky) 13%, transparent), transparent 46%),
+    var(--cc-bg);
 }
-.cc-theme:hover, .cc-secondary:hover { background: var(--cc-raised); }
 
 .cc-hero {
   display: grid;
   grid-template-columns: 1.12fr 1fr;
   gap: clamp(2rem, 5vw, 5rem);
   align-items: center;
-  padding-block: clamp(3rem, 8vw, 7rem);
+  padding-block: clamp(3.5rem, 7.5vw, 7.25rem);
 }
 .cc-public h1, .cc-features > h2, .cc-auth-panel h2 {
   font-family: var(--cc-display-font);
@@ -84,7 +54,7 @@ html.light .cc-public {
   line-height: .99;
   text-wrap: balance;
 }
-.cc-hero h1 { font-size: clamp(3.3rem, 7.1vw, 6.5rem); }
+.cc-hero h1 { font-size: clamp(3.35rem, 7.05vw, 6.5rem); }
 .cc-hero h1 em { color: var(--cc-accent); font-weight: inherit; }
 .cc-hero p { color: var(--cc-muted); font-size: 1.125rem; margin-block: 1.5rem 1.85rem; max-width: 42ch; }
 .cc-actions { gap: .75rem; flex-wrap: wrap; }
@@ -108,12 +78,13 @@ html.light .cc-public {
 
 .cc-preview {
   padding: .85rem;
-  border-radius: 22px;
-  background: linear-gradient(145deg, color-mix(in srgb, var(--cc-gold) 16%, var(--cc-raised)), var(--cc-raised) 56%);
+  border-radius: 26px;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--cc-sky) 16%, var(--cc-raised)), var(--cc-raised) 56%);
   border: 1px solid var(--cc-line);
-  box-shadow: 0 24px 52px -36px color-mix(in srgb, var(--cc-shadow) 60%, transparent);
+  box-shadow: 0 28px 72px -30px color-mix(in srgb, var(--cc-shadow) 58%, transparent);
 }
 .cc-preview figcaption { display: flex; gap: .55rem; align-items: center; color: var(--cc-muted); font-size: .9rem; padding: .35rem .45rem .85rem; }
+.cc-preview figcaption svg { color: var(--cc-accent); }
 .cc-preview-body { background: var(--cc-surface); border: 1px solid var(--cc-line); padding: clamp(.85rem, 3vw, 1.6rem); border-radius: 15px; }
 .cc-preview-title { display: flex; justify-content: space-between; gap: .6rem; align-items: flex-start; }
 .cc-preview-title h2 { font-size: clamp(1.15rem, 2vw, 1.5rem); line-height: 1.25; font-weight: 700; margin-top: .3rem; }
@@ -121,7 +92,7 @@ html.light .cc-public {
 .cc-preview-week { white-space: nowrap; background: var(--cc-raised); border-radius: 6px; padding: .35rem .55rem; }
 .cc-progress-label { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .4rem; font-size: .86rem; margin-top: 1.4rem; color: var(--cc-muted); }
 .cc-progress-label strong { color: var(--cc-ink); }
-.cc-preview progress { display: block; width: 100%; height: .45rem; margin: .5rem 0 1.25rem; accent-color: var(--cc-accent); }
+.cc-preview progress { display: block; width: 100%; height: .45rem; margin: .5rem 0 1.25rem; accent-color: var(--cc-sky); }
 .cc-lessons { display: grid; gap: .6rem; }
 .cc-lessons li { display: flex; align-items: center; gap: .65rem; border: 1px solid var(--cc-line); border-radius: 10px; padding: .55rem; }
 .cc-lessons small { display: block; color: var(--cc-muted); font-size: .82rem; }
@@ -129,10 +100,10 @@ html.light .cc-public {
 .cc-done { color: var(--cc-good); }
 .cc-next { background: var(--cc-action); color: var(--cc-action-ink); }
 
-.cc-features { padding-block: 2rem 4rem; scroll-margin-top: 1rem; border-top: 1px solid var(--cc-line); }
-.cc-features > h2 { font-size: clamp(2.4rem, 5vw, 4rem); margin-block: 1.1rem 1.65rem; }
+.cc-features { padding-block: clamp(2.5rem, 5vw, 4.5rem) clamp(3rem, 6vw, 5rem); scroll-margin-top: 1rem; border-top: 1px solid var(--cc-line); }
+.cc-features > h2 { font-size: clamp(2.4rem, 5vw, 4rem); margin-bottom: 1.75rem; }
 .cc-feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-.cc-feature-grid article { background: var(--cc-surface); border: 1px solid var(--cc-line); padding: 1.4rem; border-radius: 16px; }
+.cc-feature-grid article { background: var(--cc-surface); border: 1px solid var(--cc-line); padding: clamp(1.35rem, 2.5vw, 2rem); border-radius: 18px; }
 .cc-feature-grid h3 { font-weight: 700; font-size: 1.22rem; margin-block: .8rem .35rem; }
 .cc-feature-grid p, .cc-auth-card > p { color: var(--cc-muted); }
 .cc-footer { border-top: 1px solid var(--cc-line); justify-content: space-between; gap: 1rem; padding-block: 1rem; }
@@ -151,7 +122,7 @@ html.light .cc-public {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: var(--cc-raised);
+  background: radial-gradient(ellipse at 12% 25%, color-mix(in srgb, var(--cc-sky) 15%, transparent), transparent 75%), var(--cc-raised);
   border-inline-end: 1px solid var(--cc-line);
   padding: clamp(1.5rem, 5vw, 3.5rem);
 }
@@ -169,7 +140,7 @@ html.light .cc-public {
   width: 100%;
   min-height: 48px;
   border-radius: 8px;
-  border: 1px solid var(--cc-line);
+  border: 1px solid var(--cc-input-line);
   background: var(--cc-bg);
   color: var(--cc-ink);
   padding: .55rem .75rem;
@@ -184,6 +155,7 @@ html.light .cc-public {
   .cc-hero, .cc-feature-grid, .cc-auth { grid-template-columns: 1fr; }
   .cc-auth-panel { display: none; }
   .cc-auth { max-width: 32rem; }
+  .cc-hero-band { background-position: center bottom; background-size: 100% 75%; background-repeat: no-repeat; }
   .cc-hero p { margin-block: 1.1rem 1.35rem; }
 }
 

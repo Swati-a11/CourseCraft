@@ -1,7 +1,8 @@
-import { Bell, Search, UserCircle, Mail, BookOpen, Award, CheckCircle, Moon, Sun } from 'lucide-react';
+import { Bell, Search, UserCircle, Mail, BookOpen, Award, CheckCircle } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import ThemeToggle from '../common/ThemeToggle';
 import { useTheme } from '../../context/ThemeContext';
 import { getDashboardStats, subscribeNotifications } from '../../services/dashboardService';
 
@@ -17,7 +18,7 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
-  const { isLight, toggleTheme } = useTheme();
+  const { isLight } = useTheme();
 
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -107,32 +108,24 @@ const Navbar = () => {
 
   return (
     <header className={`h-20 border-b transition-all duration-300 ${
-      isLight ? 'bg-white border-slate-200 text-slate-900' : 'bg-zinc-950 border-green-900/30 text-white'
-    } px-6 flex items-center justify-between`}>
+      isLight ? 'bg-white border-slate-200 text-slate-900' : 'bg-black border-white/10 text-white'
+    } px-4 sm:px-6 flex items-center justify-between`}>
       
       {/* Search space placeholder if needed, otherwise empty div to keep flex-between aligned */}
       <div></div>
 
       {/* Right Section */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-4">
         
-        <button
-          type="button"
-          onClick={toggleTheme}
-          aria-label={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
-          title={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
-          className={`shrink-0 rounded-full p-2 transition-colors cursor-pointer ${
-            isLight ? 'text-green-600 hover:bg-green-100' : 'text-gray-300 hover:bg-zinc-900'
-          }`}
-        >
-          {isLight ? <Moon size={20} aria-hidden="true" /> : <Sun size={20} aria-hidden="true" />}
-        </button>
+        <ThemeToggle />
 
         {/* Notification */}
         <div className="relative">
           <button 
             onClick={handleBellClick}
-            className={`relative p-2 rounded-full transition ${isLight ? 'hover:bg-slate-100' : 'hover:bg-zinc-900'}`}
+            aria-label="Notifications"
+            aria-expanded={showNotifications}
+            className={`relative grid size-11 place-items-center rounded-full cursor-pointer transition ${isLight ? 'hover:bg-slate-100' : 'hover:bg-zinc-900'}`}
           >
             <Bell className={isLight ? 'text-slate-700' : 'text-gray-300'} size={22} />
             {notifications.length > 0 && (
@@ -143,7 +136,7 @@ const Navbar = () => {
           {/* Dropdown Modal/Overlay */}
           {showNotifications && (
             <div
-              className={`absolute right-0 mt-3 w-80 sm:w-96 rounded-2xl border shadow-2xl z-50 overflow-hidden transition-all duration-300 ${
+              className={`fixed inset-x-4 top-[4.5rem] sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-3 sm:w-96 rounded-2xl border shadow-2xl z-50 overflow-hidden transition-all duration-300 ${
                 isLight ? 'bg-white border-slate-200 text-slate-900' : 'bg-zinc-950 border-white/10 text-white'
               }`}
             >
@@ -221,7 +214,7 @@ const Navbar = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="your@email.com"
-                      className={`flex-1 text-xs px-3 py-2 rounded-lg border focus:outline-none transition ${
+                      className={`min-w-0 flex-1 text-xs px-3 py-2 rounded-lg border focus:outline-none transition ${
                         isLight
                           ? 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-green-500'
                           : 'bg-zinc-900 border-white/10 text-white placeholder-gray-500 focus:border-green-500'
@@ -230,7 +223,7 @@ const Navbar = () => {
                     <button
                       type="submit"
                       disabled={subscribing}
-                      className="bg-green-500 hover:bg-green-400 text-black text-xs font-semibold px-3 py-2 rounded-lg transition-all duration-300 hover:scale-105 active:scale-95 shrink-0"
+                      className="bg-green-500 hover:bg-green-400 text-[var(--cc-action-ink)] text-xs font-semibold px-3 py-2 rounded-lg transition-colors shrink-0 cursor-pointer"
                     >
                       {subscribing ? '...' : 'Subscribe'}
                     </button>

@@ -1,16 +1,16 @@
-import { useTheme } from '../../context/ThemeContext';
-
-const StatCard = ({ title, value, subtitle }) => {
-  const { isLight } = useTheme();
-  return (
-    <div className={`border rounded-2xl p-6 shadow-lg transition-all duration-300 ${
-      isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-green-900/30'
-    }`}>
-      <p className={`text-sm transition-colors ${isLight ? 'text-slate-500' : 'text-gray-400'}`}>{title}</p>
-      <h3 className={`text-3xl font-bold mt-2 transition-colors ${isLight ? 'text-slate-900' : 'text-green-400'}`}>{value}</h3>
-      {subtitle && <p className={`text-xs mt-2 transition-colors ${isLight ? 'text-slate-400' : 'text-gray-500'}`}>{subtitle}</p>}
+const StatCard = ({ title, value, subtitle, icon: Icon }) => (
+  <div className="rounded-2xl border border-[var(--cc-line)] bg-[var(--cc-surface)] p-5">
+    <div className="flex min-h-9 items-center justify-between gap-3">
+      <p className="text-sm font-medium text-[var(--cc-muted)]">{title}</p>
+      {Icon && (
+        <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[var(--cc-raised)] text-[var(--cc-accent)]">
+          <Icon size={18} aria-hidden="true" />
+        </span>
+      )}
     </div>
-  );
-};
+    <h3 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--cc-ink)]">{value}</h3>
+    {subtitle && <p className="mt-2 text-sm text-[var(--cc-muted)]">{subtitle}</p>}
+  </div>
+);
 
 export default StatCard;
