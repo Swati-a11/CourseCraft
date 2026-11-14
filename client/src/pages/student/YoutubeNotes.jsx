@@ -341,7 +341,7 @@ const YoutubeNotes = () => {
                       <h2 className={`text-2xl font-bold mb-4 flex items-center gap-2 border-b pb-3 transition-colors ${
                         isLight ? 'text-azure-600 border-slate-200' : 'text-azure-400 border-white/10'
                       }`}>
-                        📝 Generated Lecture Notes
+                        Generated Lecture Notes
                       </h2>
                       {summary ? (
                         <pre className={`whitespace-pre-wrap font-sans text-sm sm:text-base leading-relaxed transition-colors ${
@@ -516,7 +516,7 @@ const YoutubeNotes = () => {
                 <h2 className={`text-2xl font-bold mb-4 flex items-center gap-2 border-b pb-3 transition-colors ${
                   isLight ? 'text-azure-600 border-slate-200' : 'text-azure-400 border-white/10'
                 }`}>
-                  📝 Generated Lecture Notes
+                  Generated Lecture Notes
                 </h2>
                 {summary ? (
                   <pre className={`whitespace-pre-wrap font-sans text-sm sm:text-base leading-relaxed transition-colors ${

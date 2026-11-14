@@ -5,7 +5,7 @@ const Reminders = () => {
     {
       title: 'Complete Today’s Study Session',
       message:
-        'You have not completed your study session today. Keep your streak alive! 🔥',
+        'You have not completed your study session today. Keep your streak alive! ',
     },
     {
       title: 'Review Weak Topics',

@@ -122,7 +122,7 @@ const QuizTab = ({ topicId, topicTitle, questions = [], onComplete }) => {
         <div className="rounded-2xl border border-white/10 bg-zinc-900 p-6">
           <p className="text-lg text-gray-400 mb-3">Quiz complete.</p>
           <p className="text-3xl font-semibold text-white">Score: {score}/{totalQuestions}</p>
-          <p className="text-xl mt-2 text-azure-400">{quizPassed ? 'Quiz Passed 🎉' : 'Quiz Needs Revision'}</p>
+          <p className="text-xl mt-2 text-azure-400">{quizPassed ? 'Quiz Passed' : 'Quiz Needs Revision'}</p>
           <p className="text-sm text-gray-400 mt-1">
             Your final score is {Math.round((score / totalQuestions) * 100)}%.
           </p>

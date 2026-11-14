@@ -52,7 +52,7 @@ html.light {
   --cc-input-line: #758da2;
   --cc-accent: #03638f;
   --cc-good: #225792;
-  --cc-course-link: #225792;
+  --cc-course-link: #174878;
   --cc-error: #a52d3b;
   --cc-shadow: #173a5c;
 
@@ -127,9 +127,9 @@ html.light :is(.text-white, .text-gray-200, .text-gray-300, .text-slate-200, .te
   color: var(--cc-ink);
 }
 
-html.light :is(.text-azure-300, .text-azure-400, .text-azure-500, .text-azure-600, .text-azure-700, .text-sky-300, .text-sky-400, .text-sky-500, .text-sky-600),
+html.light :is(.text-azure-300, .text-azure-400, .text-azure-500, .text-azure-600, .text-azure-700, .text-azure-800, .text-sky-300, .text-sky-400, .text-sky-500, .text-sky-600),
 html.light :is(.hover\:text-azure-600, .hover\:text-azure-700, .hover\:text-sky-600):hover {
-  color: #225792;
+  color: #174878;
 }
 
 html.light :is(.border-white\/5, .border-white\/10, .border-azure-900\/40, .border-azure-500\/30, .border-slate-200, .border-slate-100) {

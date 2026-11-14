@@ -384,7 +384,7 @@ const TopicPage = () => {
         ) : (
           <div className="text-center py-10 text-gray-400">
             Complete Notes +
-            Video to unlock Quiz 🔒
+            Watch the video to unlock the quiz
           </div>
         );
 

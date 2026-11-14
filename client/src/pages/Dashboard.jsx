@@ -5,7 +5,7 @@ const Dashboard = () => {
     <DashboardLayout>
 
       <h2 className="text-3xl font-bold text-azure-400 mb-6">
-        Welcome to CourseCraft 🚀
+        Welcome to CourseCraft
       </h2>
 
       {/* STATS CARDS */}

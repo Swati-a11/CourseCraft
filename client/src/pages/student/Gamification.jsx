@@ -3,9 +3,9 @@ import DashboardLayout from '../../layouts/DashboardLayout';
 const Gamification = () => {
   const badges = [
     '🏅 First Step',
-    '🧠 Quiz Master',
-    '🔥 Consistency Champion',
-    '🏆 Course Finisher',
+    'Quiz Master',
+    ' Consistency Champion',
+    ' Course Finisher',
   ];
 
   return (
@@ -18,7 +18,7 @@ const Gamification = () => {
       <div className="grid md:grid-cols-2 gap-6 mb-8">
         <div className="bg-zinc-900 border border-azure-900/30 rounded-2xl p-6">
           <h2 className="text-gray-400 mb-2">Current Streak</h2>
-          <p className="text-4xl font-bold text-azure-400">6 Days 🔥</p>
+          <p className="text-4xl font-bold text-azure-400">6 Days </p>
         </div>
 
         <div className="bg-zinc-900 border border-azure-900/30 rounded-2xl p-6">

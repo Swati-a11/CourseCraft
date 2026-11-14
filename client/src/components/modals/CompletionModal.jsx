@@ -24,11 +24,11 @@ const CompletionModal = ({ isOpen, onClose, completionType, data, onStartRecomme
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-3xl font-bold text-white">🎉 Awesome!</h2>
+            <h2 className="text-3xl font-bold text-white">Awesome!</h2>
             <p className="text-gray-400 mt-2">
               {completionType === 'topic'
                 ? 'You completed a topic successfully!'
-                : 'You completed a course! 🏆'}
+                : 'You completed a course!'}
             </p>
           </div>
           <button
@@ -61,7 +61,7 @@ const CompletionModal = ({ isOpen, onClose, completionType, data, onStartRecomme
             <p className="text-xs text-gray-400 mt-1">Badge</p>
           </div>
           <div className="rounded-xl bg-white/5 border border-white/10 p-3 text-center">
-            <p className="text-2xl font-bold text-cyan-400">🔥</p>
+            <p className="text-2xl font-bold text-cyan-400"></p>
             <p className="text-xs text-gray-400 mt-1">Streak</p>
           </div>
         </div>
