@@ -1,23 +1,23 @@
 @import "tailwindcss";
 
-/* Condiment */
-.font-condiment {
-  font-family: "Condiment", cursive;
+@theme {
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --color-azure-50: #eff7ff;
+  --color-azure-100: #deeeff;
+  --color-azure-200: #bfdcff;
+  --color-azure-300: #90c7ff;
+  --color-azure-400: #6cb5ff;
+  --color-azure-500: #53a6f5;
+  --color-azure-600: #4999eb;
+  --color-azure-700: #438fdd;
+  --color-azure-800: #194b87;
+  --color-azure-900: #173a60;
 }
 
-/* Catamaran */
-.font-catamaran {
-  font-family: "Catamaran", sans-serif;
-}
-
-/* Cabin */
-.font-cabin {
-  font-family: "Cabin", sans-serif;
-}
-
-/* Merriweather */
-.font-merriweather {
-  font-family: "Merriweather", serif;
+@layer base {
+  h1 { font-family: var(--font-display); }
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -35,31 +35,10 @@
   --cc-action: var(--cc-sky);
   --cc-action-ink: #062339;
   --cc-accent: var(--cc-sky);
-  --cc-good: #83d9af;
+  --cc-good: #90c7ff;
+  --cc-course-link: var(--color-azure-400);
   --cc-error: #ffb6b9;
   --cc-shadow: #000;
-
-  /* Existing workspace controls share the same accent scale. */
-  --color-green-50: #f0f9ff;
-  --color-green-100: #e0f2fe;
-  --color-green-200: #bae6fd;
-  --color-green-300: #7dd3fc;
-  --color-green-400: #69d0fb;
-  --color-green-500: var(--cc-sky);
-  --color-green-600: #2eade7;
-  --color-green-700: #249ed7;
-  --color-green-800: #075985;
-  --color-green-900: #123e58;
-  --color-emerald-50: var(--color-green-50);
-  --color-emerald-100: var(--color-green-100);
-  --color-emerald-200: var(--color-green-200);
-  --color-emerald-300: var(--color-green-300);
-  --color-emerald-400: var(--color-green-400);
-  --color-emerald-500: var(--color-green-500);
-  --color-emerald-600: var(--color-green-600);
-  --color-emerald-700: var(--color-green-700);
-  --color-emerald-800: var(--color-green-800);
-  --color-emerald-900: var(--color-green-900);
 }
 
 html.light {
@@ -72,7 +51,8 @@ html.light {
   --cc-line: #d5e2ed;
   --cc-input-line: #758da2;
   --cc-accent: #03638f;
-  --cc-good: #176245;
+  --cc-good: #225792;
+  --cc-course-link: #225792;
   --cc-error: #a52d3b;
   --cc-shadow: #173a5c;
 
@@ -94,7 +74,7 @@ html.light {
 body {
   background: var(--cc-bg);
   color: var(--cc-ink);
-  font-family: 'Instrument Sans', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 
 :focus-visible {
@@ -147,18 +127,13 @@ html.light :is(.text-white, .text-gray-200, .text-gray-300, .text-slate-200, .te
   color: var(--cc-ink);
 }
 
-html.light :is(.text-green-300, .text-green-400, .text-green-500, .text-green-600, .text-green-700, .text-emerald-300, .text-emerald-400, .text-emerald-500, .text-emerald-600, .text-emerald-700),
-html.light :is(.hover\:text-green-600, .hover\:text-green-700, .hover\:text-emerald-600):hover {
-  color: var(--cc-accent);
+html.light :is(.text-azure-300, .text-azure-400, .text-azure-500, .text-azure-600, .text-azure-700, .text-sky-300, .text-sky-400, .text-sky-500, .text-sky-600),
+html.light :is(.hover\:text-azure-600, .hover\:text-azure-700, .hover\:text-sky-600):hover {
+  color: #225792;
 }
 
-html.light :is(.border-white\/5, .border-white\/10, .border-green-900\/40, .border-green-500\/30, .border-slate-200, .border-slate-100) {
+html.light :is(.border-white\/5, .border-white\/10, .border-azure-900\/40, .border-azure-500\/30, .border-slate-200, .border-slate-100) {
   border-color: var(--cc-line);
-}
-
-/* Accent fills use dark ink in both themes. */
-:is(button, a):is(.bg-green-500, .bg-green-600, .bg-emerald-500, .bg-emerald-600) {
-  color: var(--cc-action-ink);
 }
 
 .cc-dashboard-intro {
@@ -171,11 +146,86 @@ html.light :is(.border-white\/5, .border-white\/10, .border-green-900\/40, .bord
 }
 
 .cc-dashboard-intro h1 {
-  font: 400 clamp(2.75rem, 6vw, 4.5rem) / 1 'Instrument Serif', Georgia, serif;
+  font: 400 clamp(2.75rem, 6vw, 4.5rem) / 1 var(--font-display);
   letter-spacing: -.02em;
 }
 
 .cc-dashboard-intro p {
   margin-top: .7rem;
   color: var(--cc-muted);
+}
+
+.cc-enrolled-course {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  border: 1px solid var(--cc-line);
+  border-radius: 20px;
+  background: var(--cc-surface);
+  transition: border-color 180ms;
+}
+
+.cc-enrolled-course:focus-within,
+.cc-enrolled-course:hover {
+  border-color: var(--cc-course-link);
+}
+
+.cc-enrolled-link {
+  color: var(--cc-course-link);
+}
+
+.cc-enrolled-link::after {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  content: '';
+}
+
+.cc-unenroll {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--cc-line);
+  border-radius: 10px;
+  color: var(--cc-error);
+  cursor: pointer;
+}
+
+.cc-unenroll:hover {
+  background: color-mix(in srgb, var(--cc-error) 10%, var(--cc-surface));
+}
+
+.cc-progress {
+  display: block;
+  appearance: none;
+  width: 100%;
+  height: .5rem;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cc-raised);
+  color: var(--cc-sky);
+}
+
+.cc-progress::-webkit-progress-bar {
+  background: var(--cc-raised);
+}
+
+.cc-progress::-webkit-progress-value {
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-azure-700), var(--cc-sky));
+}
+
+.cc-progress::-moz-progress-bar {
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-azure-700), var(--cc-sky));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-enrolled-course { transition: none; }
 }

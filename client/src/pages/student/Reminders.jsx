@@ -29,9 +29,9 @@ const Reminders = () => {
         {reminders.map((reminder, index) => (
           <div
             key={index}
-            className="bg-zinc-900 border border-green-900/30 rounded-2xl p-6"
+            className="bg-zinc-900 border border-azure-900/30 rounded-2xl p-6"
           >
-            <h2 className="text-xl font-semibold text-green-400 mb-2">
+            <h2 className="text-xl font-semibold text-azure-400 mb-2">
               {reminder.title}
             </h2>
             <p className="text-gray-300">{reminder.message}</p>

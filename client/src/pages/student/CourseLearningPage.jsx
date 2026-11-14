@@ -84,12 +84,12 @@ const CourseLearningPage = () => {
           <button onClick={() => navigate('/my-courses')} className="text-zinc-400 hover:text-white mb-4 text-sm flex items-center gap-2">
             ← Back to My Courses
           </button>
-          <h2 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-600">
+          <h2 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-azure-400 to-azure-600">
             {course.title}
           </h2>
           <div className="mt-4 bg-zinc-800 h-2 rounded-full overflow-hidden">
             <div 
-              className="bg-green-500 h-full transition-all duration-500" 
+              className="bg-azure-500 h-full transition-all duration-500"
               style={{ width: `${progress?.totalProgress || 0}%` }}
             ></div>
           </div>
@@ -124,7 +124,7 @@ const CourseLearningPage = () => {
                     onClick={() => setActiveTab('video')}
                     className={`px-6 py-3 rounded-t-lg font-semibold flex items-center gap-2 transition-all ${
                       activeTab === 'video'
-                        ? 'bg-green-600/20 text-green-400 border-b-2 border-green-500'
+                        ? 'bg-azure-600/20 text-azure-400 border-b-2 border-azure-500'
                         : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
                     }`}
                   >
@@ -136,7 +136,7 @@ const CourseLearningPage = () => {
                     onClick={() => setActiveTab('notes')}
                     className={`px-6 py-3 rounded-t-lg font-semibold flex items-center gap-2 transition-all ${
                       activeTab === 'notes'
-                        ? 'bg-green-600/20 text-green-400 border-b-2 border-green-500'
+                        ? 'bg-azure-600/20 text-azure-400 border-b-2 border-azure-500'
                         : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
                     }`}
                   >
@@ -162,7 +162,7 @@ const CourseLearningPage = () => {
                 <p className="text-zinc-400 mb-6 max-w-md">Take the topic quiz to earn XP, maintain your streak, and unlock the next topics!</p>
                 <button 
                   onClick={handleStartQuiz}
-                  className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white px-8 py-3 rounded-full font-bold transition-all shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:shadow-[0_0_30px_rgba(34,197,94,0.5)] transform hover:-translate-y-1"
+                  className="bg-gradient-to-r from-azure-500 to-azure-600 hover:from-azure-400 hover:to-sky-400 text-[var(--cc-action-ink)] px-8 py-3 rounded-full font-bold transition-all shadow-[0_0_20px_rgba(83,166,245,0.3)] hover:shadow-[0_0_30px_rgba(83,166,245,0.5)] transform hover:-translate-y-1"
                 >
                   Start Quiz
                 </button>

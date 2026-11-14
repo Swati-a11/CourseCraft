@@ -52,7 +52,7 @@ const StudyPlan = () => {
         </p>
 
         {/* Main Card */}
-        <div className="bg-zinc-900 border border-green-900/30 rounded-2xl p-6 shadow-lg">
+        <div className="bg-zinc-900 border border-azure-900/30 rounded-2xl p-6 shadow-lg">
           {/* Form */}
           <StudyPlanForm
             onGenerate={handleGenerate}
@@ -61,9 +61,9 @@ const StudyPlan = () => {
 
           {/* Loading */}
           {loading && (
-            <div className="mt-6 flex items-center gap-3 bg-zinc-800 border border-green-500/20 rounded-xl p-4">
-              <div className="w-5 h-5 border-2 border-green-400 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-green-400">
+            <div className="mt-6 flex items-center gap-3 bg-zinc-800 border border-azure-500/20 rounded-xl p-4">
+              <div className="w-5 h-5 border-2 border-azure-400 border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-azure-400">
                 Generating your AI study plan...
               </p>
             </div>

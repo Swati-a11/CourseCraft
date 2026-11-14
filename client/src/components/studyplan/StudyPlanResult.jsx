@@ -39,20 +39,20 @@ const StudyPlanResult = ({ plan }) => {
             el.style.color = "#d1d5db"; // gray-300
             el.style.backgroundColor =
               el.tagName === "CODE" ? "#27272a" : "transparent";
-            el.style.borderColor = "#14532d"; // green-900
+            el.style.borderColor = "#173a60"; // azure-900
           });
 
           // Headings
           root.querySelectorAll("h1").forEach((el) => {
-            el.style.color = "#4ade80"; // green-400
+            el.style.color = "#6cb5ff"; // azure-400
           });
 
           root.querySelectorAll("h2").forEach((el) => {
-            el.style.color = "#86efac"; // green-300
+            el.style.color = "#90c7ff"; // azure-300
           });
 
           root.querySelectorAll("h3").forEach((el) => {
-            el.style.color = "#bbf7d0"; // green-200
+            el.style.color = "#bfdcff"; // azure-200
           });
 
           // Links
@@ -71,7 +71,7 @@ const StudyPlanResult = ({ plan }) => {
 
           // Blockquotes
           root.querySelectorAll("blockquote").forEach((el) => {
-            el.style.borderLeft = "4px solid #22c55e";
+            el.style.borderLeft = "4px solid #53a6f5";
             el.style.paddingLeft = "16px";
             el.style.fontStyle = "italic";
             el.style.color = "#9ca3af";
@@ -134,16 +134,16 @@ const StudyPlanResult = ({ plan }) => {
   };
 
   return (
-    <div className="bg-zinc-950 border border-green-900/30 rounded-2xl p-6 mt-8">
+    <div className="bg-zinc-950 border border-azure-900/30 rounded-2xl p-6 mt-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <h2 className="text-3xl font-bold text-green-400">
+        <h2 className="text-3xl font-bold text-azure-400">
           Your Personalized Study Plan
         </h2>
 
         <button
           onClick={downloadPDF}
-          className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition"
+          className="px-4 py-2 bg-azure-600 hover:bg-azure-700 text-[var(--cc-action-ink)] rounded-lg font-medium transition"
         >
            Download PDF
         </button>
@@ -151,24 +151,24 @@ const StudyPlanResult = ({ plan }) => {
 
       {/* Content to Export */}
       <div ref={contentRef} data-pdf-content>
-        <div className="prose prose-invert max-w-none prose-headings:text-green-400 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline">
+        <div className="prose prose-invert max-w-none prose-headings:text-azure-400 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
               h1: ({ children }) => (
-                <h1 className="text-2xl font-bold text-green-400 mt-8 mb-4 border-b border-green-800 pb-2">
+                <h1 className="text-2xl font-bold text-azure-400 mt-8 mb-4 border-b border-azure-800 pb-2">
                   {children}
                 </h1>
               ),
 
               h2: ({ children }) => (
-                <h2 className="text-xl font-semibold text-green-300 mt-6 mb-3">
+                <h2 className="text-xl font-semibold text-azure-300 mt-6 mb-3">
                   {children}
                 </h2>
               ),
 
               h3: ({ children }) => (
-                <h3 className="text-lg font-semibold text-green-200 mt-4 mb-2">
+                <h3 className="text-lg font-semibold text-azure-200 mt-4 mb-2">
                   {children}
                 </h3>
               ),
@@ -229,7 +229,7 @@ const StudyPlanResult = ({ plan }) => {
                 if (isBlock) {
                   return (
                     <pre className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 overflow-x-auto mb-4">
-                      <code className="text-green-300">
+                      <code className="text-azure-300">
                         {children}
                       </code>
                     </pre>
@@ -237,14 +237,14 @@ const StudyPlanResult = ({ plan }) => {
                 }
 
                 return (
-                  <code className="bg-zinc-800 text-green-300 px-1 py-0.5 rounded">
+                  <code className="bg-zinc-800 text-azure-300 px-1 py-0.5 rounded">
                     {children}
                   </code>
                 );
               },
 
               blockquote: ({ children }) => (
-                <blockquote className="border-l-4 border-green-500 pl-4 italic text-gray-400 my-4">
+                <blockquote className="border-l-4 border-azure-500 pl-4 italic text-gray-400 my-4">
                   {children}
                 </blockquote>
               ),

@@ -108,7 +108,7 @@ function App() {
 
               <button
                 onClick={() => (window.location.href = "/dashboard")}
-                className="mt-6 bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-semibold transition"
+                className="mt-6 bg-azure-600 hover:bg-azure-700 text-[var(--cc-action-ink)] px-6 py-3 rounded-lg font-semibold transition"
               >
                 Go To Dashboard
               </button>
@@ -130,7 +130,7 @@ function App() {
         toastStyle={{
           background: "#18181b",
           color: "#ffffff",
-          border: "1px solid #14532d",
+          border: "1px solid #173a60",
         }}
       />
     </>

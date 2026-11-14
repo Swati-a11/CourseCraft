@@ -10,10 +10,10 @@ const WeakTopicsList = ({ weakTopics }) => {
   if (!weakTopics || weakTopics.length === 0) {
     return (
       <div className={`border rounded-2xl p-8 text-center transition-colors duration-300 ${
-        isLight ? 'bg-white border-green-500/10' : 'bg-zinc-900 border-zinc-800'
+        isLight ? 'bg-white border-azure-500/10' : 'bg-zinc-900 border-zinc-800'
       }`}>
         <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
-          isLight ? 'bg-green-100 text-green-600' : 'bg-green-500/10 text-green-500'
+          isLight ? 'bg-azure-100 text-azure-600' : 'bg-azure-500/10 text-azure-500'
         }`}>
           <Target className="w-8 h-8" />
         </div>
@@ -25,10 +25,10 @@ const WeakTopicsList = ({ weakTopics }) => {
 
   return (
     <div className={`border rounded-2xl p-6 transition-all duration-300 ${
-      isLight ? 'bg-white border-green-500/10' : 'bg-zinc-900 border-zinc-800'
+      isLight ? 'bg-white border-azure-500/10' : 'bg-zinc-900 border-zinc-800'
     }`}>
       <div className="flex items-center mb-6">
-        <AlertCircle className={`w-6 h-6 mr-3 ${isLight ? 'text-green-600' : 'text-orange-500'}`} />
+        <AlertCircle className={`w-6 h-6 mr-3 ${isLight ? 'text-azure-600' : 'text-orange-500'}`} />
         <h2 className={`text-xl font-bold ${isLight ? 'text-slate-950' : 'text-white'}`}>Areas for Improvement</h2>
       </div>
 
@@ -43,13 +43,13 @@ const WeakTopicsList = ({ weakTopics }) => {
               key={topic._id} 
               className={`border rounded-xl p-5 relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] ${
                 isLight 
-                  ? 'bg-white border-green-500/10 hover:border-green-500/30 hover:shadow-[0_0_20px_rgba(34,197,94,0.08)]' 
+                  ? 'bg-white border-azure-500/10 hover:border-azure-500/30 hover:shadow-[0_0_20px_rgba(83,166,245,0.08)]'
                   : 'bg-zinc-800/50 border border-zinc-700'
               }`}
             >
               {/* Status indicator line */}
               <div className={`absolute left-0 top-0 bottom-0 w-1 ${
-                statusText === 'Needs Review' ? 'bg-red-500' : 'bg-green-500'
+                statusText === 'Needs Review' ? 'bg-red-500' : 'bg-azure-500'
               }`}></div>
               
               <div className="flex justify-between items-start mb-3 pl-2">
@@ -69,10 +69,10 @@ const WeakTopicsList = ({ weakTopics }) => {
                       isLight 
                         ? (statusText === 'Needs Review' 
                             ? 'bg-red-50 text-red-700 border-red-200 font-bold' 
-                            : 'bg-green-50 text-green-700 border-green-200 font-bold') 
+                            : 'bg-azure-50 text-azure-700 border-azure-200 font-bold')
                         : (statusText === 'Needs Review' 
                             ? 'bg-red-500/20 text-red-400 border-transparent' 
-                            : 'bg-green-500/20 text-green-400 border-transparent')
+                            : 'bg-azure-500/20 text-azure-400 border-transparent')
                     }`}>
                       {statusText}
                     </span>
@@ -82,7 +82,7 @@ const WeakTopicsList = ({ weakTopics }) => {
                   onClick={() => navigate(`/course/${topic.course}`)}
                   className={`group p-2 rounded-lg transition-all ${
                     isLight 
-                      ? 'text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100' 
+                      ? 'text-azure-600 hover:text-azure-700 bg-azure-50 hover:bg-azure-100'
                       : 'text-zinc-400 hover:text-white bg-zinc-800'
                   }`}
                 >
@@ -91,7 +91,7 @@ const WeakTopicsList = ({ weakTopics }) => {
               </div>
 
               {topic.aiFeedback && (
-                <div className={`pl-2 mt-4 pt-4 border-t ${isLight ? 'border-green-500/10' : 'border-zinc-700'}`}>
+                <div className={`pl-2 mt-4 pt-4 border-t ${isLight ? 'border-azure-500/10' : 'border-zinc-700'}`}>
                   <p className={`text-sm leading-relaxed italic ${isLight ? 'text-slate-900/80 font-medium' : 'text-zinc-400'}`}>
                     "{topic.aiFeedback}"
                   </p>

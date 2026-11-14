@@ -129,7 +129,7 @@ const Navbar = () => {
           >
             <Bell className={isLight ? 'text-slate-700' : 'text-gray-300'} size={22} />
             {notifications.length > 0 && (
-              <span className="absolute top-1 right-1 w-2 h-2 bg-green-400 rounded-full" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-azure-400 rounded-full" />
             )}
           </button>
 
@@ -144,7 +144,7 @@ const Navbar = () => {
               <div className={`p-4 border-b flex items-center justify-between ${isLight ? 'border-slate-100' : 'border-white/5'}`}>
                 <h3 className="font-semibold text-sm">Notifications</h3>
                 {notifications.length > 0 && (
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-500/10 text-green-500">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-azure-500/10 text-azure-500">
                     {notifications.length} Active
                   </span>
                 )}
@@ -168,7 +168,7 @@ const Navbar = () => {
                             ? 'bg-amber-500/10 text-amber-500'
                             : notif.type === 'quiz'
                             ? 'bg-blue-500/10 text-blue-500'
-                            : 'bg-green-500/10 text-green-500'
+                            : 'bg-azure-500/10 text-azure-500'
                         }`}
                       >
                         {notif.type === 'streak' ? (
@@ -202,7 +202,7 @@ const Navbar = () => {
                 </p>
 
                 {subscribeSuccess ? (
-                  <div className="text-xs text-green-500 flex items-center gap-1 font-semibold py-1">
+                  <div className="text-xs text-azure-500 flex items-center gap-1 font-semibold py-1">
                     <CheckCircle size={14} className="shrink-0" />
                     {subscribeSuccess}
                   </div>
@@ -216,14 +216,14 @@ const Navbar = () => {
                       placeholder="your@email.com"
                       className={`min-w-0 flex-1 text-xs px-3 py-2 rounded-lg border focus:outline-none transition ${
                         isLight
-                          ? 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-green-500'
-                          : 'bg-zinc-900 border-white/10 text-white placeholder-gray-500 focus:border-green-500'
+                          ? 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-azure-500'
+                          : 'bg-zinc-900 border-white/10 text-white placeholder-gray-500 focus:border-azure-500'
                       }`}
                     />
                     <button
                       type="submit"
                       disabled={subscribing}
-                      className="bg-green-500 hover:bg-green-400 text-[var(--cc-action-ink)] text-xs font-semibold px-3 py-2 rounded-lg transition-colors shrink-0 cursor-pointer"
+                      className="bg-azure-500 hover:bg-azure-400 text-[var(--cc-action-ink)] text-xs font-semibold px-3 py-2 rounded-lg transition-colors shrink-0 cursor-pointer"
                     >
                       {subscribing ? '...' : 'Subscribe'}
                     </button>
@@ -237,9 +237,9 @@ const Navbar = () => {
 
         {/* User */}
         <div className={`flex items-center gap-3 px-3 py-2 rounded-xl border transition-colors duration-300 ${
-          isLight ? 'bg-white border-green-200' : 'bg-zinc-900 border-white/5'
+          isLight ? 'bg-white border-azure-200' : 'bg-zinc-900 border-white/5'
         }`}>
-          <UserCircle className={isLight ? 'text-green-600' : 'text-green-400'} size={30} />
+          <UserCircle className={isLight ? 'text-azure-600' : 'text-azure-400'} size={30} />
           
           <div>
             <p className={`transition-colors duration-300 ${
@@ -248,7 +248,7 @@ const Navbar = () => {
               {user?.name || user?.displayName || user?.fullName || (user?.email ? user.email.split('@')[0].split(/[._-]/).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ') : "Student")}
             </p>
             <p className={`transition-colors duration-300 ${
-              isLight ? 'text-green-600 text-xs font-semibold' : 'text-xs text-gray-400'
+              isLight ? 'text-azure-600 text-xs font-semibold' : 'text-xs text-gray-400'
             }`}>
               Student
             </p>

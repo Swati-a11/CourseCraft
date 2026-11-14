@@ -41,10 +41,10 @@ const PersonalNotes = ({ courseId, initialNotes = '' }) => {
   };
 
   return (
-    <div className="bg-zinc-900/50 rounded-2xl border border-green-500/20 p-5 flex flex-col h-full">
+    <div className="bg-zinc-900/50 rounded-2xl border border-azure-500/20 p-5 flex flex-col h-full">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-semibold text-white flex items-center gap-2">
-          <BookOpen className="text-green-400" size={20} />
+          <BookOpen className="text-azure-400" size={20} />
           Personal Course Notes
         </h3>
         
@@ -55,7 +55,7 @@ const PersonalNotes = ({ courseId, initialNotes = '' }) => {
             </span>
           )}
           {saveStatus === 'saved' && (
-            <span className="flex items-center gap-2 text-sm text-green-400">
+            <span className="flex items-center gap-2 text-sm text-azure-400">
               <CheckCircle2 size={14} /> Saved
             </span>
           )}
@@ -66,7 +66,7 @@ const PersonalNotes = ({ courseId, initialNotes = '' }) => {
             <button 
               onClick={saveNotes}
               disabled={isSaving}
-              className="flex items-center gap-2 text-sm bg-green-600/20 text-green-400 px-3 py-1.5 rounded-lg hover:bg-green-600/30 transition-colors"
+              className="flex items-center gap-2 text-sm bg-azure-600/20 text-azure-400 px-3 py-1.5 rounded-lg hover:bg-azure-600/30 transition-colors"
             >
               <Save size={14} /> Save Now
             </button>
@@ -79,7 +79,7 @@ const PersonalNotes = ({ courseId, initialNotes = '' }) => {
       </p>
 
       <textarea
-        className="flex-1 w-full bg-black/40 border border-green-500/10 rounded-xl p-4 text-gray-200 placeholder:text-gray-600 focus:outline-none focus:border-green-500/40 focus:ring-1 focus:ring-green-500/40 resize-none transition-all"
+        className="flex-1 w-full bg-black/40 border border-azure-500/10 rounded-xl p-4 text-gray-200 placeholder:text-gray-600 focus:outline-none focus:border-azure-500/40 focus:ring-1 focus:ring-azure-500/40 resize-none transition-all"
         placeholder="Type your notes here..."
         value={notes}
         onChange={(e) => {

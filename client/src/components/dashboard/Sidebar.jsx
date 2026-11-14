@@ -102,11 +102,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             aria-expanded={isOpen}
             className="relative flex items-center justify-center p-3 rounded-full transition-all duration-300 ease-out hover:rounded-xl hover:bg-slate-100/60 dark:hover:bg-slate-800/40 hover:border-slate-200/50 cursor-pointer"
           >
-            <BookOpen size={24} className={isLight ? 'text-green-600' : 'text-green-400'} />
+            <BookOpen size={24} className={isLight ? 'text-azure-600' : 'text-azure-400'} />
           </button>
           {isOpen && (
             <div className="flex flex-col items-start transition-opacity duration-300 animate-fadeIn">
-              <span className={`text-lg font-bold tracking-tight ${isLight ? 'text-green-600' : 'text-green-400'} leading-none select-none`}>
+              <span className={`text-lg font-bold tracking-tight ${isLight ? 'text-azure-600' : 'text-azure-400'} leading-none select-none`}>
                 CourseCraft
               </span>
               <span className="text-[10px] tracking-wide text-slate-400 font-medium whitespace-nowrap mt-1">
@@ -131,8 +131,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                     className={({ isActive }) =>
                       `group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                         isActive
-                          ? `${isLight ? 'bg-green-100 text-green-800' : 'bg-green-600 text-black'} font-semibold`
-                          : `${isLight ? 'text-slate-700 hover:bg-slate-100 hover:text-green-600' : 'text-gray-300 hover:bg-zinc-900 hover:text-green-400'}`
+                          ? `${isLight ? 'bg-azure-100 text-azure-800' : 'bg-azure-600 text-[var(--cc-action-ink)]'} font-semibold`
+                          : `${isLight ? 'text-slate-700 hover:bg-slate-100 hover:text-azure-600' : 'text-gray-300 hover:bg-zinc-900 hover:text-azure-400'}`
                       }`
                     }
                   >
@@ -155,7 +155,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             </nav>
 
             {/* Sidebar Footer / Logout */}
-            <div className={`p-4 border-t ${isLight ? 'border-slate-100' : 'border-green-900/30'}`}>
+            <div className={`p-4 border-t ${isLight ? 'border-slate-100' : 'border-azure-900/30'}`}>
               <button
                 onClick={handleLogout}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition ${
@@ -183,7 +183,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               className={({ isActive }) =>
                 `rounded-full p-2 transition-all duration-300 hover:rounded-xl hover:bg-slate-100 ${
                   isActive
-                    ? 'text-green-600 dark:text-green-400 bg-slate-100 dark:bg-slate-800'
+                    ? 'text-azure-600 dark:text-azure-400 bg-slate-100 dark:bg-slate-800'
                     : 'text-slate-500 dark:text-gray-400'
                 }`
               }

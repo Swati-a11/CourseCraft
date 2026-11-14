@@ -206,7 +206,7 @@ const YoutubeNotes = () => {
         <h1 className={`text-3xl sm:text-4xl font-bold mb-6 sm:mb-8 flex items-center gap-3 transition-colors ${
           isLight ? 'text-slate-900' : 'text-white'
         }`}>
-          <BookOpen className={isLight ? 'text-green-600' : 'text-green-400'} size={36} />
+          <BookOpen className={isLight ? 'text-azure-600' : 'text-azure-400'} size={36} />
           AI Learning Tools
         </h1>
 
@@ -223,7 +223,7 @@ const YoutubeNotes = () => {
             }}
             className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
               mode === 'single'
-                ? 'bg-green-500 text-black'
+                ? 'bg-azure-500 text-[var(--cc-action-ink)]'
                 : (isLight ? 'text-slate-600 hover:text-slate-900' : 'text-gray-400 hover:text-white')
             }`}
           >
@@ -239,7 +239,7 @@ const YoutubeNotes = () => {
             }}
             className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
               mode === 'playlist'
-                ? 'bg-green-500 text-black'
+                ? 'bg-azure-500 text-[var(--cc-action-ink)]'
                 : (isLight ? 'text-slate-600 hover:text-slate-900' : 'text-gray-400 hover:text-white')
             }`}
           >
@@ -250,10 +250,10 @@ const YoutubeNotes = () => {
 
         {/* INPUT PANEL */}
         <div className={`border rounded-3xl p-6 shadow-2xl transition-colors ${
-          isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-green-500/20'
+          isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-azure-500/20'
         }`}>
           <h2 className={`text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2 transition-colors ${
-            isLight ? 'text-green-600' : 'text-green-400'
+            isLight ? 'text-azure-600' : 'text-azure-400'
           }`}>
             {mode === 'single' ? 'YouTube Video Notes' : 'YouTube Playlist Explorer'}
           </h2>
@@ -265,8 +265,8 @@ const YoutubeNotes = () => {
             onChange={(e) => setUrl(e.target.value)}
             className={`w-full p-4 rounded-2xl border outline-none transition-all ${
               isLight
-                ? 'bg-slate-50 text-slate-900 border-slate-200 focus:border-green-500'
-                : 'bg-zinc-800 text-white border-white/5 focus:border-green-500/50'
+                ? 'bg-slate-50 text-slate-900 border-slate-200 focus:border-azure-500'
+                : 'bg-zinc-800 text-white border-white/5 focus:border-azure-500/50'
             }`}
           />
 
@@ -275,7 +275,7 @@ const YoutubeNotes = () => {
               <button
                 onClick={handleGenerate}
                 disabled={loading}
-                className="w-full sm:w-auto px-6 py-3.5 bg-green-500 hover:bg-green-400 text-black rounded-2xl font-bold transition-all disabled:bg-zinc-700 disabled:text-gray-400"
+                className="w-full sm:w-auto px-6 py-3.5 bg-azure-500 hover:bg-azure-400 text-[var(--cc-action-ink)] rounded-2xl font-bold transition-all disabled:bg-zinc-700 disabled:text-gray-400"
               >
                 {loading ? 'Generating...' : 'Generate Notes'}
               </button>
@@ -283,7 +283,7 @@ const YoutubeNotes = () => {
               <button
                 onClick={handleFetchPlaylist}
                 disabled={playlistLoading}
-                className="w-full sm:w-auto px-6 py-3.5 bg-green-500 hover:bg-green-400 text-black rounded-2xl font-bold transition-all disabled:bg-zinc-700 disabled:text-gray-400"
+                className="w-full sm:w-auto px-6 py-3.5 bg-azure-500 hover:bg-azure-400 text-[var(--cc-action-ink)] rounded-2xl font-bold transition-all disabled:bg-zinc-700 disabled:text-gray-400"
               >
                 {playlistLoading ? 'Loading Playlist...' : 'Load Playlist'}
               </button>
@@ -293,8 +293,8 @@ const YoutubeNotes = () => {
               <span className={`text-sm font-semibold flex items-center gap-2 mt-1 sm:mt-0 ${
                 isLight ? 'text-slate-500' : 'text-gray-400'
               }`}>
-                <span className="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></span>
-                Status: <span className="text-green-500">{statusText}</span>
+                <span className="w-2.5 h-2.5 bg-azure-400 rounded-full animate-pulse"></span>
+                Status: <span className="text-azure-500">{statusText}</span>
               </span>
             )}
           </div>
@@ -309,7 +309,7 @@ const YoutubeNotes = () => {
                 <div className="flex-1 space-y-6">
                   {/* Video Player */}
                   <div className={`border rounded-3xl p-4 shadow-2xl transition-colors ${
-                    isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-green-500/20'
+                    isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-azure-500/20'
                   }`}>
                     <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-inner bg-black">
                       <iframe
@@ -327,7 +327,7 @@ const YoutubeNotes = () => {
                       }`}>
                         {playlistVideos.find(v => v.videoId === activeVideoId)?.title || "Active Video Lecture"}
                       </h3>
-                      <span className="text-xs px-2.5 py-1 bg-green-500/20 text-green-400 font-semibold rounded-full uppercase tracking-wider animate-pulse">
+                      <span className="text-xs px-2.5 py-1 bg-azure-500/20 text-azure-400 font-semibold rounded-full uppercase tracking-wider animate-pulse">
                         Active Learning
                       </span>
                     </div>
@@ -339,7 +339,7 @@ const YoutubeNotes = () => {
                       isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-white/5'
                     }`}>
                       <h2 className={`text-2xl font-bold mb-4 flex items-center gap-2 border-b pb-3 transition-colors ${
-                        isLight ? 'text-green-600 border-slate-200' : 'text-green-400 border-white/10'
+                        isLight ? 'text-azure-600 border-slate-200' : 'text-azure-400 border-white/10'
                       }`}>
                         📝 Generated Lecture Notes
                       </h2>
@@ -355,8 +355,8 @@ const YoutubeNotes = () => {
                             <p className="text-sm text-gray-400">{response.data.summary || response.data.message}</p>
                             <div className="flex flex-wrap gap-2 mt-3">
                               {response.data.topics.map(topic => (
-                                <span key={topic} className="px-3 py-1 rounded-full bg-green-500/10 
-                                  text-green-400 border border-green-500/20 text-sm capitalize">
+                                <span key={topic} className="px-3 py-1 rounded-full bg-azure-500/10
+                                  text-azure-400 border border-azure-500/20 text-sm capitalize">
                                   {topic}
                                 </span>
                               ))}
@@ -369,7 +369,7 @@ const YoutubeNotes = () => {
                           href={pdfUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="mt-6 inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-black px-6 py-3 rounded-2xl font-bold transition-all"
+                          className="mt-6 inline-flex items-center gap-2 bg-azure-500 hover:bg-azure-400 text-[var(--cc-action-ink)] px-6 py-3 rounded-2xl font-bold transition-all"
                         >
                           Download PDF
                         </a>
@@ -386,7 +386,7 @@ const YoutubeNotes = () => {
                     <h3 className={`text-base font-bold flex items-center gap-2 pb-2 border-b transition-colors ${
                       isLight ? 'text-slate-900 border-slate-200' : 'text-white border-white/5'
                     }`}>
-                      <ListVideo className={isLight ? 'text-green-600' : 'text-green-400'} size={18} />
+                      <ListVideo className={isLight ? 'text-azure-600' : 'text-azure-400'} size={18} />
                       Playlist ({playlistVideos.length})
                     </h3>
                     <div className="space-y-3">
@@ -394,9 +394,9 @@ const YoutubeNotes = () => {
                         <div
                           key={idx}
                           onClick={() => !loading && handleVideoSelect(video)}
-                          className={`group flex gap-3 border rounded-xl overflow-hidden cursor-pointer p-2 transition-all hover:scale-[1.01] hover:border-green-500/30 ${
+                          className={`group flex gap-3 border rounded-xl overflow-hidden cursor-pointer p-2 transition-all hover:scale-[1.01] hover:border-azure-500/30 ${
                             activeVideoId === video.videoId
-                              ? 'border-green-500 bg-green-500/5 shadow-md shadow-green-500/5'
+                              ? 'border-azure-500 bg-azure-500/5 shadow-md shadow-azure-500/5'
                               : (isLight ? 'bg-white border-slate-200/80 hover:bg-slate-50' : 'bg-zinc-900 border-white/5')
                           }`}
                         >
@@ -413,13 +413,13 @@ const YoutubeNotes = () => {
                               </div>
                             )}
                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
-                              <Play className="text-green-400 fill-green-400" size={14} />
+                              <Play className="text-azure-400 fill-azure-400" size={14} />
                             </div>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className={`font-semibold line-clamp-2 text-[11px] leading-tight group-hover:text-green-500 transition-colors ${
+                            <h4 className={`font-semibold line-clamp-2 text-[11px] leading-tight group-hover:text-azure-500 transition-colors ${
                               activeVideoId === video.videoId
-                                ? (isLight ? 'text-green-600' : 'text-green-400')
+                                ? (isLight ? 'text-azure-600' : 'text-azure-400')
                                 : (isLight ? 'text-slate-800' : 'text-white')
                             }`}>
                               {video.title}
@@ -439,7 +439,7 @@ const YoutubeNotes = () => {
                 <h3 className={`text-xl font-bold mb-5 flex items-center gap-2 transition-colors ${
                   isLight ? 'text-slate-900' : 'text-white'
                 }`}>
-                  <ListVideo className={isLight ? 'text-green-600' : 'text-green-400'} />
+                  <ListVideo className={isLight ? 'text-azure-600' : 'text-azure-400'} />
                   Playlist Videos ({playlistVideos.length})
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[600px] overflow-y-auto pr-1">
@@ -447,9 +447,9 @@ const YoutubeNotes = () => {
                     <div
                       key={idx}
                       onClick={() => !loading && handleVideoSelect(video)}
-                      className={`group border rounded-2xl overflow-hidden cursor-pointer transition-all hover:scale-[1.02] hover:border-green-500/40 hover:shadow-lg hover:shadow-green-500/5 ${
+                      className={`group border rounded-2xl overflow-hidden cursor-pointer transition-all hover:scale-[1.02] hover:border-azure-500/40 hover:shadow-lg hover:shadow-azure-500/5 ${
                         activeVideoId === video.videoId
-                          ? 'border-green-500 shadow-lg shadow-green-500/10'
+                          ? 'border-azure-500 shadow-lg shadow-azure-500/10'
                           : (isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-white/5')
                       }`}
                     >
@@ -466,11 +466,11 @@ const YoutubeNotes = () => {
                           </div>
                         )}
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
-                          <Play className="text-green-400 fill-green-400 scale-125" size={24} />
+                          <Play className="text-azure-400 fill-azure-400 scale-125" size={24} />
                         </div>
                       </div>
                       <div className="p-4">
-                        <h4 className={`font-semibold line-clamp-2 text-sm transition-colors group-hover:text-green-600 ${
+                        <h4 className={`font-semibold line-clamp-2 text-sm transition-colors group-hover:text-azure-600 ${
                           isLight ? 'text-slate-800' : 'text-white'
                         }`}>
                           {video.title}
@@ -494,7 +494,7 @@ const YoutubeNotes = () => {
           <div className="mt-8 space-y-6">
             {/* Embedded player */}
             <div className={`border rounded-3xl p-4 shadow-2xl transition-colors ${
-              isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-green-500/20'
+              isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-azure-500/20'
             }`}>
               <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-inner bg-black">
                 <iframe
@@ -514,7 +514,7 @@ const YoutubeNotes = () => {
                 isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-white/5'
               }`}>
                 <h2 className={`text-2xl font-bold mb-4 flex items-center gap-2 border-b pb-3 transition-colors ${
-                  isLight ? 'text-green-600 border-slate-200' : 'text-green-400 border-white/10'
+                  isLight ? 'text-azure-600 border-slate-200' : 'text-azure-400 border-white/10'
                 }`}>
                   📝 Generated Lecture Notes
                 </h2>
@@ -530,8 +530,8 @@ const YoutubeNotes = () => {
                       <p className="text-sm text-gray-400">{response.data.summary || response.data.message}</p>
                       <div className="flex flex-wrap gap-2 mt-3">
                         {response.data.topics.map(topic => (
-                          <span key={topic} className="px-3 py-1 rounded-full bg-green-500/10 
-                            text-green-400 border border-green-500/20 text-sm capitalize">
+                          <span key={topic} className="px-3 py-1 rounded-full bg-azure-500/10
+                            text-azure-400 border border-azure-500/20 text-sm capitalize">
                             {topic}
                           </span>
                         ))}
@@ -545,7 +545,7 @@ const YoutubeNotes = () => {
                     href={pdfUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-6 inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-black px-6 py-3 rounded-2xl font-bold transition-all"
+                    className="mt-6 inline-flex items-center gap-2 bg-azure-500 hover:bg-azure-400 text-[var(--cc-action-ink)] px-6 py-3 rounded-2xl font-bold transition-all"
                   >
                     Download PDF
                   </a>

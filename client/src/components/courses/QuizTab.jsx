@@ -90,7 +90,7 @@ const QuizTab = ({ topicId, topicTitle, questions = [], onComplete }) => {
             onClick={() => setSelected(option)}
             className={`w-full text-left px-4 py-4 rounded-2xl border transition ${
               selected === option
-                ? 'bg-green-600 text-black border-green-500'
+                ? 'bg-azure-600 text-[var(--cc-action-ink)] border-azure-500'
                 : 'bg-zinc-800 text-white border-zinc-700'
             }`}
           >
@@ -104,7 +104,7 @@ const QuizTab = ({ topicId, topicTitle, questions = [], onComplete }) => {
           <button
             onClick={handleSubmit}
             disabled={submitted || !selected}
-            className="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-black px-6 py-3 rounded-xl font-semibold transition"
+            className="bg-azure-600 hover:bg-azure-700 disabled:opacity-50 text-[var(--cc-action-ink)] px-6 py-3 rounded-xl font-semibold transition"
           >
             {currentIndex === totalQuestions - 1 ? 'Finish Quiz' : 'Submit Answer'}
           </button>
@@ -112,7 +112,7 @@ const QuizTab = ({ topicId, topicTitle, questions = [], onComplete }) => {
           {submitted && currentIndex < totalQuestions - 1 && (
             <button
               onClick={handleNext}
-              className="border border-green-500 text-green-300 hover:bg-green-500/10 px-6 py-3 rounded-xl font-semibold transition"
+              className="border border-azure-500 text-azure-300 hover:bg-azure-500/10 px-6 py-3 rounded-xl font-semibold transition"
             >
               Next Question
             </button>
@@ -122,7 +122,7 @@ const QuizTab = ({ topicId, topicTitle, questions = [], onComplete }) => {
         <div className="rounded-2xl border border-white/10 bg-zinc-900 p-6">
           <p className="text-lg text-gray-400 mb-3">Quiz complete.</p>
           <p className="text-3xl font-semibold text-white">Score: {score}/{totalQuestions}</p>
-          <p className="text-xl mt-2 text-green-400">{quizPassed ? 'Quiz Passed 🎉' : 'Quiz Needs Revision'}</p>
+          <p className="text-xl mt-2 text-azure-400">{quizPassed ? 'Quiz Passed 🎉' : 'Quiz Needs Revision'}</p>
           <p className="text-sm text-gray-400 mt-1">
             Your final score is {Math.round((score / totalQuestions) * 100)}%.
           </p>

@@ -9,11 +9,11 @@ const QuizResults = ({ results, onRetry, onNext }) => {
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 max-w-3xl mx-auto shadow-2xl relative overflow-hidden">
       {/* Background glow based on pass/fail */}
-      <div className={`absolute top-0 left-0 w-full h-32 blur-3xl opacity-20 pointer-events-none ${passed ? 'bg-green-500' : 'bg-red-500'}`}></div>
+      <div className={`absolute top-0 left-0 w-full h-32 blur-3xl opacity-20 pointer-events-none ${passed ? 'bg-azure-500' : 'bg-red-500'}`}></div>
 
       <div className="relative z-10 flex flex-col items-center text-center">
         {/* Status Icon */}
-        <div className={`w-24 h-24 rounded-full flex items-center justify-center mb-6 shadow-lg ${passed ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'}`}>
+        <div className={`w-24 h-24 rounded-full flex items-center justify-center mb-6 shadow-lg ${passed ? 'bg-azure-500/20 text-azure-400 border border-azure-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'}`}>
           {passed ? <CheckCircle className="w-12 h-12" /> : <AlertTriangle className="w-12 h-12" />}
         </div>
 
@@ -21,7 +21,7 @@ const QuizResults = ({ results, onRetry, onNext }) => {
           {passed ? 'Quiz Passed!' : 'Needs Review'}
         </h2>
         <p className="text-zinc-400 text-lg mb-8">
-          You scored <span className={`font-bold ${passed ? 'text-green-400' : 'text-red-400'}`}>{Math.round(score)}%</span>
+          You scored <span className={`font-bold ${passed ? 'text-azure-400' : 'text-red-400'}`}>{Math.round(score)}%</span>
         </p>
 
         {/* Gamification Stats */}

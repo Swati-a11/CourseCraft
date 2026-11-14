@@ -29,7 +29,7 @@ const StudyPlanForm = ({ onGenerate, loading }) => {
         placeholder="Your Goal (e.g. Learn MERN Stack)"
         value={formData.goal}
         onChange={handleChange}
-        className="w-full bg-black border border-green-900 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+        className="w-full bg-black border border-azure-900 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-azure-500"
         required
       />
 
@@ -38,7 +38,7 @@ const StudyPlanForm = ({ onGenerate, loading }) => {
         name="level"
         value={formData.level}
         onChange={handleChange}
-        className="w-full bg-black border border-green-900 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+        className="w-full bg-black border border-azure-900 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-azure-500"
         required
       >
         <option value="" disabled className="text-gray-400">
@@ -57,7 +57,7 @@ const StudyPlanForm = ({ onGenerate, loading }) => {
         value={formData.hoursPerDay}
         onChange={handleChange}
         min="1"
-        className="w-full bg-black border border-green-900 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+        className="w-full bg-black border border-azure-900 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-azure-500"
         required
       />
 
@@ -69,7 +69,7 @@ const StudyPlanForm = ({ onGenerate, loading }) => {
         value={formData.duration}
         onChange={handleChange}
         min="1"
-        className="w-full bg-black border border-green-900 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+        className="w-full bg-black border border-azure-900 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-azure-500"
         required
       />
 
@@ -77,7 +77,7 @@ const StudyPlanForm = ({ onGenerate, loading }) => {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-green-600 hover:bg-green-700 disabled:opacity-60 text-black font-bold py-3 rounded-xl transition"
+        className="w-full bg-azure-600 hover:bg-azure-700 disabled:opacity-60 text-[var(--cc-action-ink)] font-bold py-3 rounded-xl transition"
       >
         {loading ? 'Generating...' : 'Generate Study Plan'}
       </button>

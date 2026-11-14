@@ -133,7 +133,7 @@ const Dashboard = () => {
 
             <button
               onClick={() => navigate('/browse-courses')}
-              className="min-h-11 bg-green-500 hover:bg-green-400 px-5 py-2 rounded-xl font-semibold transition-colors cursor-pointer"
+              className="min-h-11 bg-azure-500 hover:bg-azure-400 text-[var(--cc-action-ink)] px-5 py-2 rounded-xl font-semibold transition-colors cursor-pointer"
             >
               Browse Courses
             </button>

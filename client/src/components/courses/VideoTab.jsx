@@ -96,7 +96,7 @@ const VideoTab = ({
       {/* Debug URL */}
       <div className="mb-4 p-3 rounded-lg bg-zinc-900 border border-zinc-800">
         <p className="text-xs text-gray-400 break-all">
-          <span className="font-semibold text-green-400">
+          <span className="font-semibold text-azure-400">
             Embed URL:
           </span>{" "}
           {embedUrl}
@@ -115,7 +115,7 @@ const VideoTab = ({
 
         <div className="w-full bg-zinc-800 rounded-full h-2 overflow-hidden">
           <div
-            className="bg-green-500 h-2 rounded-full transition-all duration-500"
+            className="bg-azure-500 h-2 rounded-full transition-all duration-500"
             style={{
               width: completed ? "100%" : "0%",
             }}
@@ -129,12 +129,12 @@ const VideoTab = ({
         disabled={completed}
         className={`px-5 py-2 rounded-xl font-semibold transition-all duration-300 ${
           completed
-            ? "bg-green-500 text-black cursor-default"
-            : "bg-green-600 hover:bg-green-700 text-black"
+            ? "bg-azure-500 text-[var(--cc-action-ink)] cursor-default"
+            : "bg-azure-600 hover:bg-azure-700 text-[var(--cc-action-ink)]"
         }`}
       >
         {completed
-          ? "Video Completed ✅"
+          ? "Video completed"
           : "Mark Video as Complete"}
       </button>
     </div>

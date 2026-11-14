@@ -1,13 +1,13 @@
 const NotesTab = ({ title, notes, completed, onComplete }) => {
   return (
     <div className="prose prose-invert max-w-none">
-      <h2 className=" font-condiment text-2xl font-bold text-white mb-4">
+      <h2 className=" font-display text-2xl font-bold text-white mb-4">
         {title || 'Topic Notes'}
       </h2>
 
       {notes ? (
         <div 
-          className="font-condiment text-gray-300 leading-8 mb-6 whitespace-pre-wrap"
+          className="text-gray-300 leading-8 mb-6 whitespace-pre-wrap"
           dangerouslySetInnerHTML={{ __html: notes }}
         />
       ) : (
@@ -26,8 +26,8 @@ const NotesTab = ({ title, notes, completed, onComplete }) => {
           disabled={completed}
           className={`px-5 py-2 rounded-xl font-semibold transition ${
             completed
-              ? 'bg-green-500 text-black cursor-default'
-              : 'bg-green-600 hover:bg-green-700 text-black'
+              ? 'bg-azure-500 text-[var(--cc-action-ink)] cursor-default'
+              : 'bg-azure-600 hover:bg-azure-700 text-[var(--cc-action-ink)]'
           }`}
         >
           {completed ? 'Notes Completed ' : 'Mark Notes as Complete'}

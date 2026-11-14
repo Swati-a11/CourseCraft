@@ -96,7 +96,7 @@ const QuizEngine = ({ topic, onSubmit, onCancel }) => {
           <button
             onClick={handleSubmit}
             disabled={selectedAnswers[currentQuestionIdx] === null}
-            className="px-8 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white rounded-xl font-bold transition disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(34,197,94,0.3)]"
+            className="px-8 py-2.5 bg-gradient-to-r from-azure-500 to-azure-600 hover:from-azure-400 hover:to-sky-400 text-[var(--cc-action-ink)] rounded-xl font-bold transition disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(83,166,245,0.3)]"
           >
             Submit Quiz
           </button>

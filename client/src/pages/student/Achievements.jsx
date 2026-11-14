@@ -82,7 +82,6 @@ const Achievements = () => {
       doc.setFillColor(255, 255, 255);
       doc.rect(0, 0, width, height, 'F');
 
-      // Emerald green border border-green-600 (#16a34a)
       doc.setDrawColor(22, 163, 74);
       doc.setLineWidth(4);
       doc.rect(30, 30, width - 60, height - 60);
@@ -93,7 +92,7 @@ const Achievements = () => {
       doc.setFont(undefined, 'bold');
       doc.text('CERTIFICATE', width / 2, 120, { align: 'center' });
 
-      doc.setTextColor(22, 163, 74); // text-green-600
+      doc.setTextColor(22, 163, 74); // text-azure-600
       doc.setFontSize(20);
       doc.text('OF APPRECIATION', width / 2, 155, { align: 'center' });
 
@@ -199,7 +198,7 @@ const Achievements = () => {
     return (
       <DashboardLayout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <div className="text-green-400 text-xl font-semibold animate-pulse">
+          <div className="text-azure-400 text-xl font-semibold animate-pulse">
             Loading your achievements...
           </div>
         </div>
@@ -231,8 +230,8 @@ const Achievements = () => {
             }
             className={`px-4 py-2 flex items-center gap-2 rounded-lg font-medium transition ${
               filterType === 'certificate'
-                ? 'bg-green-600 text-black font-bold shadow-md shadow-green-600/10'
-                : (isLight ? 'bg-white border border-green-500/20 text-slate-950 hover:bg-green-50/50' : 'bg-zinc-900 text-gray-300 hover:text-white')
+                ? 'bg-azure-600 text-[var(--cc-action-ink)] font-bold shadow-md shadow-azure-600/10'
+                : (isLight ? 'bg-white border border-azure-500/20 text-slate-950 hover:bg-azure-50/50' : 'bg-zinc-900 text-gray-300 hover:text-white')
             }`}
           >
             <Award size={18} /> Completed & Certificates
@@ -242,8 +241,8 @@ const Achievements = () => {
             onClick={() => setFilterType('badge')}
             className={`px-4 py-2 flex items-center gap-2 rounded-lg font-medium transition ${
               filterType === 'badge'
-                ? 'bg-green-600 text-black font-bold shadow-md shadow-green-600/10'
-                : (isLight ? 'bg-white border border-green-500/20 text-slate-950 hover:bg-green-50/50' : 'bg-zinc-900 text-gray-300 hover:text-white')
+                ? 'bg-azure-600 text-[var(--cc-action-ink)] font-bold shadow-md shadow-azure-600/10'
+                : (isLight ? 'bg-white border border-azure-500/20 text-slate-950 hover:bg-azure-50/50' : 'bg-zinc-900 text-gray-300 hover:text-white')
             }`}
           >
             <Medal size={18} /> Badges
@@ -253,8 +252,8 @@ const Achievements = () => {
             onClick={() => setFilterType(null)}
             className={`px-4 py-2 flex items-center gap-2 rounded-lg font-medium transition ${
               filterType === null
-                ? 'bg-green-600 text-black font-bold shadow-md shadow-green-600/10'
-                : (isLight ? 'bg-white border border-green-500/20 text-slate-950 hover:bg-green-50/50' : 'bg-zinc-900 text-gray-300 hover:text-white')
+                ? 'bg-azure-600 text-[var(--cc-action-ink)] font-bold shadow-md shadow-azure-600/10'
+                : (isLight ? 'bg-white border border-azure-500/20 text-slate-950 hover:bg-azure-50/50' : 'bg-zinc-900 text-gray-300 hover:text-white')
             }`}
           >
             <Star size={18} /> All
@@ -264,9 +263,9 @@ const Achievements = () => {
         {/* Empty */}
         {achievements.length === 0 ? (
           <div className={`text-center py-12 rounded-2xl border ${
-            isLight ? 'bg-white border-green-500/10' : 'bg-zinc-900/30 border-white/5'
+            isLight ? 'bg-white border-azure-500/10' : 'bg-zinc-900/30 border-white/5'
           }`}>
-            <div className="flex justify-center mb-4 text-green-500/50">
+            <div className="flex justify-center mb-4 text-azure-500/50">
               <Award size={64} className="animate-bounce" />
             </div>
             <p className={isLight ? 'text-slate-950 font-semibold text-lg' : 'text-gray-400 text-lg'}>
@@ -280,14 +279,14 @@ const Achievements = () => {
                 key={achievement._id}
                 className={`border rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] ${
                   isLight 
-                    ? 'bg-white border-green-500/20 hover:border-green-500/40 hover:shadow-[0_0_20px_rgba(34,197,94,0.08)]' 
-                    : 'bg-gradient-to-br from-green-900/20 to-zinc-900 border border-green-900/30 hover:border-green-600'
+                    ? 'bg-white border-azure-500/20 hover:border-azure-500/40 hover:shadow-[0_0_20px_rgba(83,166,245,0.08)]'
+                    : 'bg-gradient-to-br from-azure-900/20 to-zinc-900 border border-azure-900/30 hover:border-azure-600'
                 }`}
               >
                 {/* Icon */}
                 <div className="mb-4">
                   {achievement.type === 'certificate'
-                    ? <Award size={48} className="text-green-500" />
+                    ? <Award size={48} className="text-azure-500" />
                     : <Medal size={48} className="text-blue-500" />}
                 </div>
 
@@ -302,11 +301,11 @@ const Achievements = () => {
                 </p>
 
                 {/* Course */}
-                <div className={`mb-4 p-3 rounded-lg ${isLight ? 'bg-green-50/50 border border-green-500/10' : 'bg-zinc-800/50'}`}>
+                <div className={`mb-4 p-3 rounded-lg ${isLight ? 'bg-azure-50/50 border border-azure-500/10' : 'bg-zinc-800/50'}`}>
                   <p className={`text-xs mb-1 ${isLight ? 'text-slate-900/50 font-bold' : 'text-gray-400'}`}>
                     Course
                   </p>
-                  <p className={`text-sm font-semibold ${isLight ? 'text-green-600' : 'text-green-400'}`}>
+                  <p className={`text-sm font-semibold ${isLight ? 'text-azure-600' : 'text-azure-400'}`}>
                     {achievement.course?.title}
                   </p>
                 </div>
@@ -329,7 +328,7 @@ const Achievements = () => {
 
                       <button
                         onClick={() => downloadCertificatePDF(achievement)}
-                        className="text-green-600 hover:text-green-700 transition"
+                        className="text-azure-600 hover:text-azure-700 transition"
                       >
                          Download
                       </button>
@@ -345,18 +344,18 @@ const Achievements = () => {
         {previewCertificate && (
           <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6 backdrop-blur-sm">
             <div className={`rounded-2xl w-full max-w-5xl h-[90vh] overflow-hidden border relative transition-colors duration-300 ${
-              isLight ? 'bg-white border-green-500/20' : 'bg-zinc-900 border-green-500'
+              isLight ? 'bg-white border-azure-500/20' : 'bg-zinc-900 border-azure-500'
             }`}>
 
               {/* Header */}
-              <div className={`flex items-center justify-between p-4 border-b ${isLight ? 'border-green-500/10 bg-slate-50' : 'border-zinc-700 bg-zinc-900/50'}`}>
+              <div className={`flex items-center justify-between p-4 border-b ${isLight ? 'border-azure-500/10 bg-slate-50' : 'border-zinc-700 bg-zinc-900/50'}`}>
                 <h2 className={`text-xl font-bold ${isLight ? 'text-slate-950' : 'text-white'}`}>
                   Certificate Preview
                 </h2>
                 <div className="flex gap-3">
                   <button
                     onClick={() => downloadCertificatePDF(previewCertificate)}
-                    className="px-4 py-2 bg-green-600 text-black rounded-lg font-bold hover:bg-green-500 transition-all duration-300 hover:scale-105 active:scale-95"
+                    className="px-4 py-2 bg-azure-600 text-[var(--cc-action-ink)] rounded-lg font-bold hover:bg-azure-500 transition-all duration-300 hover:scale-105 active:scale-95"
                   >
                     Download
                   </button>
@@ -373,14 +372,14 @@ const Achievements = () => {
               <div className={`p-8 overflow-auto h-[calc(90vh-73px)] ${isLight ? 'bg-slate-100' : 'bg-zinc-950'}`}>
                 <div className={`rounded-xl p-12 text-center min-h-[580px] relative transition-all border-[10px] duration-300 ${
                   isLight 
-                    ? 'bg-white border-green-600 shadow-xl' 
-                    : 'bg-[#052d23] border-yellow-500'
+                    ? 'bg-white border-azure-600 shadow-xl'
+                    : 'bg-[#102744] border-yellow-500'
                 }`}>
                   {/* Header text layout */}
                   <h1 className={`text-5xl font-bold tracking-widest mb-2 ${isLight ? 'text-slate-950' : 'text-white'}`}>
                     CERTIFICATE
                   </h1>
-                  <h2 className={`text-xl font-semibold mb-10 ${isLight ? 'text-green-600' : 'text-yellow-400'}`}>
+                  <h2 className={`text-xl font-semibold mb-10 ${isLight ? 'text-azure-600' : 'text-yellow-400'}`}>
                     OF APPRECIATION
                   </h2>
 
@@ -410,18 +409,18 @@ const Achievements = () => {
 
                   <div className="flex justify-between items-end mt-16 px-12">
                     <div className="text-left">
-                      <div className={`w-36 h-0.5 mb-2 ${isLight ? 'bg-green-600' : 'bg-white'}`} />
+                      <div className={`w-36 h-0.5 mb-2 ${isLight ? 'bg-azure-600' : 'bg-white'}`} />
                       <p className={`text-sm font-bold ${isLight ? 'text-slate-950' : 'text-white'}`}>
                         AI Learning Mentor
                       </p>
                     </div>
 
-                    <div className={isLight ? 'text-green-600' : 'text-yellow-500'}>
+                    <div className={isLight ? 'text-azure-600' : 'text-yellow-500'}>
                       <Award size={64} />
                     </div>
 
                     <div className="text-right">
-                      <div className={`w-36 h-0.5 mb-2 ${isLight ? 'bg-green-600' : 'bg-white'}`} />
+                      <div className={`w-36 h-0.5 mb-2 ${isLight ? 'bg-azure-600' : 'bg-white'}`} />
                       <p className={`text-sm font-bold ${isLight ? 'text-slate-950' : 'text-white'}`}>
                         CourseCraft Verified
                       </p>

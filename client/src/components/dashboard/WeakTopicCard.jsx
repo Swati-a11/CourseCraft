@@ -2,7 +2,7 @@ const WeakTopicCard = ({ topic, averageScore, difficulty, recommendation, course
   const difficultyStyles = {
     Weak: 'bg-red-500/10 text-red-300 border-red-500/30',
     Moderate: 'bg-yellow-500/10 text-yellow-300 border-yellow-500/30',
-    Strong: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30',
+    Strong: 'bg-sky-500/10 text-sky-300 border-sky-500/30',
   };
 
   return (
@@ -38,7 +38,7 @@ const WeakTopicCard = ({ topic, averageScore, difficulty, recommendation, course
               ? 'bg-red-500'
               : difficulty === 'Moderate'
               ? 'bg-yellow-400'
-              : 'bg-emerald-400'
+              : 'bg-sky-400'
           }`}
           style={{ width: `${Math.max(10, averageScore)}%` }}
         />

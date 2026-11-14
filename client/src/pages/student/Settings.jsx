@@ -134,8 +134,8 @@ const Settings = () => {
         : 'bg-gradient-to-r from-white/5 to-white/0 border-white/10 hover:border-white/20'
     }`}>
       <div className="flex items-center gap-4">
-        <div className={`rounded-lg p-2 transition-all duration-300 ${isLight ? 'bg-emerald-100' : 'bg-emerald-500/20'}`}>
-          <Icon className={isLight ? 'text-emerald-600' : 'text-emerald-400'} size={20} />
+        <div className={`rounded-lg p-2 transition-all duration-300 ${isLight ? 'bg-sky-100' : 'bg-sky-500/20'}`}>
+          <Icon className={isLight ? 'text-sky-600' : 'text-sky-400'} size={20} />
         </div>
         <div>
           <p className={`font-semibold transition-all duration-300 ${isLight ? 'text-slate-900' : 'text-white'}`}>{label}</p>
@@ -146,7 +146,7 @@ const Settings = () => {
         onClick={() => onChange(!value)}
         type="button"
         className={`relative w-12 h-7 rounded-full transition-all duration-300 ${
-          value ? 'bg-emerald-500' : 'bg-gray-600'
+          value ? 'bg-sky-500' : 'bg-gray-600'
         }`}
       >
         <div
@@ -165,8 +165,8 @@ const Settings = () => {
           {/* Header */}
           <section className={`rounded-4xl border p-6 sm:p-8 shadow-2xl backdrop-blur-xl transition-all duration-300 ${
             isLight 
-              ? 'bg-gradient-to-br from-emerald-500/10 via-white to-cyan-500/10 border-slate-200/80 shadow-slate-200/50' 
-              : 'bg-gradient-to-br from-emerald-900/20 via-zinc-950/80 to-cyan-900/20 border-emerald-500/40 shadow-emerald-900/20'
+              ? 'bg-gradient-to-br from-sky-500/10 via-white to-cyan-500/10 border-slate-200/80 shadow-slate-200/50'
+              : 'bg-gradient-to-br from-sky-900/20 via-zinc-950/80 to-cyan-900/20 border-sky-500/40 shadow-sky-900/20'
           }`}>
             <h1 className={`text-3xl sm:text-4xl font-bold transition-all duration-300 ${isLight ? 'text-slate-900' : 'text-white'}`}>Settings</h1>
             <p className={`mt-2 text-sm sm:text-base transition-all duration-300 ${isLight ? 'text-slate-600' : 'text-gray-400'}`}>Customize your learning experience and profile preferences</p>
@@ -181,7 +181,7 @@ const Settings = () => {
                 isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-white/5 shadow-2xl'
               }`}>
                 <div className="flex items-center gap-3 border-b border-white/10 pb-4">
-                  <User className="text-emerald-400" size={28} />
+                  <User className="text-sky-400" size={28} />
                   <h2 className={`text-xl sm:text-2xl font-bold transition-all duration-300 ${isLight ? 'text-slate-900' : 'text-white'}`}>Profile Information</h2>
                 </div>
 
@@ -196,7 +196,7 @@ const Settings = () => {
                       className={`w-full p-4 rounded-2xl outline-none transition-all duration-300 ${
                         isLight 
                           ? 'bg-slate-100 text-slate-900 border border-slate-200 focus:border-slate-450 focus:bg-white focus:ring-1 focus:ring-slate-350' 
-                          : 'bg-zinc-855 text-white border border-white/5 focus:border-emerald-500/50'
+                          : 'bg-zinc-855 text-white border border-white/5 focus:border-sky-500/50'
                       }`}
                     />
                   </div>
@@ -211,7 +211,7 @@ const Settings = () => {
                       className={`w-full p-4 rounded-2xl outline-none transition-all duration-300 ${
                         isLight 
                           ? 'bg-slate-100 text-slate-900 border border-slate-200 focus:border-slate-450 focus:bg-white focus:ring-1 focus:ring-slate-350' 
-                          : 'bg-zinc-855 text-white border border-white/5 focus:border-emerald-500/50'
+                          : 'bg-zinc-855 text-white border border-white/5 focus:border-sky-500/50'
                       }`}
                     />
                   </div>
@@ -223,7 +223,7 @@ const Settings = () => {
                 isLight ? 'bg-white border-slate-200' : 'bg-zinc-900 border-white/5 shadow-2xl'
               }`}>
                 <div className="flex items-center gap-3 border-b border-white/10 pb-4">
-                  <Lock className="text-emerald-400" size={28} />
+                  <Lock className="text-sky-400" size={28} />
                   <h2 className={`text-xl sm:text-2xl font-bold transition-all duration-300 ${isLight ? 'text-slate-900' : 'text-white'}`}>Security Credentials</h2>
                 </div>
 
@@ -238,7 +238,7 @@ const Settings = () => {
                       className={`w-full p-4 rounded-2xl outline-none transition-all duration-300 ${
                         isLight 
                           ? 'bg-slate-100 text-slate-900 border border-slate-200 focus:border-slate-450 focus:bg-white focus:ring-1 focus:ring-slate-350' 
-                          : 'bg-zinc-855 text-white border border-white/5 focus:border-emerald-500/50'
+                          : 'bg-zinc-855 text-white border border-white/5 focus:border-sky-500/50'
                       }`}
                     />
                   </div>
@@ -253,7 +253,7 @@ const Settings = () => {
                       className={`w-full p-4 rounded-2xl outline-none transition-all duration-300 ${
                         isLight 
                           ? 'bg-slate-100 text-slate-900 border border-slate-200 focus:border-slate-450 focus:bg-white focus:ring-1 focus:ring-slate-350' 
-                          : 'bg-zinc-855 text-white border border-white/5 focus:border-emerald-500/50'
+                          : 'bg-zinc-855 text-white border border-white/5 focus:border-sky-500/50'
                       }`}
                     />
                   </div>
@@ -360,20 +360,20 @@ const Settings = () => {
 
               {/* Save Button */}
               <div className="flex items-center justify-between pt-4">
-                <div className={`h-1 flex-1 rounded-full hidden sm:block ${isLight ? 'bg-slate-200' : 'bg-gradient-to-r from-emerald-500/20 to-transparent'}`}></div>
+                <div className={`h-1 flex-1 rounded-full hidden sm:block ${isLight ? 'bg-slate-200' : 'bg-gradient-to-r from-sky-500/20 to-transparent'}`}></div>
                 <div className="flex items-center gap-4 w-full sm:w-auto">
                   {saveStatus && (
-                    <p className="text-emerald-500 font-semibold animate-pulse text-sm">{saveStatus}</p>
+                    <p className="text-sky-500 font-semibold animate-pulse text-sm">{saveStatus}</p>
                   )}
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold hover:shadow-lg hover:shadow-emerald-500/50 transition-all hover:scale-105 disabled:bg-zinc-700 disabled:shadow-none"
+                    className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-cyan-500 text-white font-bold hover:shadow-lg hover:shadow-sky-500/50 transition-all hover:scale-105 disabled:bg-zinc-700 disabled:shadow-none"
                   >
                     {loading ? 'Saving Settings...' : ' Save Changes'}
                   </button>
                 </div>
-                <div className={`h-1 flex-1 rounded-full hidden sm:block ${isLight ? 'bg-slate-200' : 'bg-gradient-to-l from-emerald-500/20 to-transparent'}`}></div>
+                <div className={`h-1 flex-1 rounded-full hidden sm:block ${isLight ? 'bg-slate-200' : 'bg-gradient-to-l from-sky-500/20 to-transparent'}`}></div>
               </div>
             </div>
           </form>

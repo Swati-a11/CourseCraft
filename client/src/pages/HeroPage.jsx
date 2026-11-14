@@ -19,7 +19,7 @@ function WorkspacePreview() {
           <span className="cc-preview-week">Week 1</span>
         </div>
         <div className="cc-progress-label"><span>Weekly progress</span><strong>1 of 3 complete</strong></div>
-        <progress max={3} value={1} aria-label="Weekly progress" />
+        <progress className="cc-progress" max={3} value={1} aria-label="Weekly progress" />
         <ul className="cc-lessons">
           <li><span className="cc-lesson-icon cc-done"><Check size={17} aria-hidden="true" /></span><div><strong>Variables and types</strong><small>Completed</small></div></li>
           <li><span className="cc-lesson-icon cc-next"><Play size={16} aria-hidden="true" /></span><div><strong>Functions and scope</strong><small>Up next · Lesson</small></div></li>

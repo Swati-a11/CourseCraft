@@ -404,7 +404,7 @@ const TopicPage = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="flex justify-center items-center min-h-[60vh] text-green-400 text-lg">
+        <div className="flex justify-center items-center min-h-[60vh] text-azure-400 text-lg">
           Loading topic details...
         </div>
       </DashboardLayout>
@@ -427,7 +427,7 @@ const TopicPage = () => {
             onClick={() =>
               navigate('/dashboard')
             }
-            className="bg-green-500 hover:bg-green-600 text-black px-5 py-2 rounded-lg font-semibold"
+            className="bg-azure-500 hover:bg-azure-600 text-[var(--cc-action-ink)] px-5 py-2 rounded-lg font-semibold"
           >
             Go To Dashboard
           </button>
@@ -455,7 +455,7 @@ const TopicPage = () => {
 
       <div className="w-full bg-zinc-800 h-3 rounded-full mt-3">
         <div
-          className="bg-green-500 h-3 rounded-full transition-all duration-500"
+          className="bg-azure-500 h-3 rounded-full transition-all duration-500"
           style={{
             width: `${completionPercent}%`,
           }}
@@ -466,7 +466,7 @@ const TopicPage = () => {
         {completionPercent}% Complete
 
         {topicCompleted && (
-          <span className="text-green-400 ml-3 font-semibold">
+          <span className="text-azure-400 ml-3 font-semibold">
             ✔ Completed
           </span>
         )}
@@ -487,7 +487,7 @@ const TopicPage = () => {
             }
             className={`px-4 py-2 rounded-lg font-medium transition ${
               activeTab === tab
-                ? 'bg-green-600 text-black'
+                ? 'bg-azure-600 text-[var(--cc-action-ink)]'
                 : 'bg-zinc-800 text-gray-300 hover:bg-zinc-700'
             } ${
               tab === 'Quiz' &&

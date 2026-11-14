@@ -10,7 +10,7 @@ const CourseCard = ({ course }) => {
       className={`block border rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 ${
         isLight
           ? 'bg-white border-slate-200 hover:border-slate-300 shadow-sm'
-          : 'bg-zinc-900 border-green-900/30 hover:border-green-500/40'
+          : 'bg-zinc-900 border-azure-900/30 hover:border-azure-500/40'
       }`}
     >
       <img
@@ -42,7 +42,7 @@ const CourseCard = ({ course }) => {
           </div>
           <div className={`w-full rounded-full h-2 transition-colors ${isLight ? 'bg-slate-100' : 'bg-zinc-800'}`}>
             <div
-              className="bg-green-500 h-2 rounded-full"
+              className="bg-azure-500 h-2 rounded-full"
               style={{ width: `${course.progress}%` }}
             />
           </div>

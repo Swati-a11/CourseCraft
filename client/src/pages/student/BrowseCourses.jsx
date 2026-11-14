@@ -112,12 +112,12 @@ const BrowseCourses = () => {
             value={generateTopic}
             onChange={(event) => setGenerateTopic(event.target.value)}
             placeholder="Enter a topic to generate a new course"
-            className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-white placeholder:text-gray-500 focus:border-green-500 focus:outline-none"
+            className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-white placeholder:text-gray-500 focus:border-azure-500 focus:outline-none"
           />
           <button
             type="submit"
             disabled={generating}
-            className="rounded-2xl bg-green-600 px-6 py-3 text-black font-semibold hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-2xl bg-azure-600 px-6 py-3 text-[var(--cc-action-ink)] font-semibold hover:bg-azure-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {generating ? 'Generating...' : 'Generate Course'}
           </button>
@@ -146,7 +146,7 @@ const BrowseCourses = () => {
         {displayCourses.map((course) => (
           <div
             key={course._id}
-            className="bg-zinc-900 p-5 rounded-xl border border-green-900/30"
+            className="bg-zinc-900 p-5 rounded-xl border border-azure-900/30"
           >
             <h2 className="text-xl font-bold text-white mb-2">
               {course.title}
@@ -155,14 +155,14 @@ const BrowseCourses = () => {
             <p className="text-gray-400 mb-2">
               {course.description}
             </p>
-            <div className="flex flex-wrap gap-2 text-xs text-green-300 mb-4">
+            <div className="flex flex-wrap gap-2 text-xs text-azure-300 mb-4">
               {course.topics?.length ? (
-                <span className="bg-green-900/20 px-2 py-1 rounded-full">
+                <span className="bg-azure-900/20 px-2 py-1 rounded-full">
                   {course.topics.length} topics
                 </span>
               ) : null}
               {course.level ? (
-                <span className="bg-green-900/20 px-2 py-1 rounded-full">
+                <span className="bg-azure-900/20 px-2 py-1 rounded-full">
                   {course.level}
                 </span>
               ) : null}
@@ -177,7 +177,7 @@ const BrowseCourses = () => {
               </Link>
               <button
                 onClick={() => handleEnroll(course._id)}
-                className="w-full px-4 py-2 bg-green-600 text-black rounded-lg font-medium hover:bg-green-700 transition"
+                className="w-full px-4 py-2 bg-azure-600 text-[var(--cc-action-ink)] rounded-lg font-medium hover:bg-azure-700 transition"
               >
                 Enroll Now
               </button>

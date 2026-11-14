@@ -20,7 +20,7 @@ const CompletionModal = ({ isOpen, onClose, completionType, data, onStartRecomme
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
-      <div className="rounded-4xl bg-gradient-to-br from-emerald-900/40 via-zinc-950/95 to-cyan-900/40 border border-emerald-500/40 p-8 shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-auto">
+      <div className="rounded-4xl bg-gradient-to-br from-sky-900/40 via-zinc-950/95 to-cyan-900/40 border border-sky-500/40 p-8 shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -41,9 +41,9 @@ const CompletionModal = ({ isOpen, onClose, completionType, data, onStartRecomme
 
         {/* Completion Info */}
         {data && (
-          <div className="rounded-2xl bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/30 p-4 mb-6">
+          <div className="rounded-2xl bg-gradient-to-r from-sky-500/10 to-cyan-500/10 border border-sky-500/30 p-4 mb-6">
             <p className="text-sm text-gray-400">Completed</p>
-            <p className="text-xl font-bold text-emerald-300 mt-1">{data.title || 'Learning Unit'}</p>
+            <p className="text-xl font-bold text-sky-300 mt-1">{data.title || 'Learning Unit'}</p>
             {data.time && (
               <p className="text-xs text-gray-500 mt-2">⏱️ {data.time}</p>
             )}
@@ -53,7 +53,7 @@ const CompletionModal = ({ isOpen, onClose, completionType, data, onStartRecomme
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3 mb-6">
           <div className="rounded-xl bg-white/5 border border-white/10 p-3 text-center">
-            <p className="text-2xl font-bold text-green-400">+{completionType === 'topic' ? '50' : '500'}</p>
+            <p className="text-2xl font-bold text-azure-400">+{completionType === 'topic' ? '50' : '500'}</p>
             <p className="text-xs text-gray-400 mt-1">XP Earned</p>
           </div>
           <div className="rounded-xl bg-white/5 border border-white/10 p-3 text-center">
@@ -81,10 +81,10 @@ const CompletionModal = ({ isOpen, onClose, completionType, data, onStartRecomme
                   onStartRecommended?.(item.title);
                   onClose();
                 }}
-                className="w-full rounded-2xl bg-gradient-to-r from-white/5 to-white/0 border border-white/10 hover:border-emerald-500/50 hover:bg-gradient-to-r hover:from-emerald-500/10 hover:to-emerald-500/5 p-4 text-left transition-all hover:scale-105"
+                className="w-full rounded-2xl bg-gradient-to-r from-white/5 to-white/0 border border-white/10 hover:border-sky-500/50 hover:bg-gradient-to-r hover:from-sky-500/10 hover:to-sky-500/5 p-4 text-left transition-all hover:scale-105"
               >
                 <div className="flex items-center gap-3">
-                  <Icon className="text-emerald-400" size={20} />
+                  <Icon className="text-sky-400" size={20} />
                   <div>
                     <p className="font-semibold text-white">{item.title}</p>
                     <p className="text-xs text-gray-400">{item.desc}</p>
@@ -98,7 +98,7 @@ const CompletionModal = ({ isOpen, onClose, completionType, data, onStartRecomme
         {/* CTA */}
         <button
           onClick={onClose}
-          className="w-full px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold hover:shadow-lg hover:shadow-emerald-500/50 transition-all"
+          className="w-full px-6 py-3 rounded-2xl bg-gradient-to-r from-sky-500 to-cyan-500 text-white font-semibold hover:shadow-lg hover:shadow-sky-500/50 transition-all"
         >
           Continue Learning
         </button>
