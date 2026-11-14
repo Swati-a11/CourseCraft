@@ -37,6 +37,11 @@
   --cc-accent: var(--cc-sky);
   --cc-good: #90c7ff;
   --cc-course-link: var(--color-azure-400);
+  --cc-study-heading: #90c7ff;
+  --cc-study-subheading: #bfdcff;
+  --cc-study-body: #d4deea;
+  --cc-study-link: #90c7ff;
+  --cc-study-border: #438fdd;
   --cc-error: #ffb6b9;
   --cc-shadow: #000;
 }
@@ -53,6 +58,11 @@ html.light {
   --cc-accent: #03638f;
   --cc-good: #225792;
   --cc-course-link: #174878;
+  --cc-study-heading: #174878;
+  --cc-study-subheading: #205b88;
+  --cc-study-body: #203247;
+  --cc-study-link: #075985;
+  --cc-study-border: #438fdd;
   --cc-error: #a52d3b;
   --cc-shadow: #173a5c;
 

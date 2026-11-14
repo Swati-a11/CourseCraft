@@ -54,7 +54,7 @@ Instructions:
    - Codevolution
    - Programming with Mosh
 6. Include code examples when helpful.
-7. Use emojis to improve readability.
+7. Do not use emojis or decorative symbols anywhere in the study plan. Use clear headings and bullet points instead.
 8. At the end, include:
    -  Final Project Suggestion
    -  Additional Resources

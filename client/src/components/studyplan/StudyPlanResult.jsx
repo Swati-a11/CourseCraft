@@ -8,6 +8,9 @@ import toast from "react-hot-toast";
 
 const StudyPlanResult = ({ plan }) => {
   const contentRef = useRef(null);
+  const cleanPlan = typeof plan === "string"
+    ? plan.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu, "").replace(/[ \t]{2,}/g, " ")
+    : plan;
 
   if (!plan) return null;
 
@@ -134,59 +137,59 @@ const StudyPlanResult = ({ plan }) => {
   };
 
   return (
-    <div className="bg-zinc-950 border border-azure-900/30 rounded-2xl p-6 mt-8">
+    <div className="cc-study-plan mt-8 rounded-2xl border p-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <h2 className="text-3xl font-bold text-azure-400">
+        <h2 className="text-3xl font-bold text-[var(--cc-study-heading)]">
           Your Personalized Study Plan
         </h2>
 
-        <button
+          <button
           onClick={downloadPDF}
-          className="px-4 py-2 bg-azure-600 hover:bg-azure-700 text-[var(--cc-action-ink)] rounded-lg font-medium transition"
+          className="relative z-10 min-h-11 rounded-lg bg-azure-600 px-4 py-2 font-medium text-[var(--cc-action-ink)] transition hover:bg-azure-700"
         >
            Download PDF
         </button>
       </div>
 
       {/* Content to Export */}
-      <div ref={contentRef} data-pdf-content>
-        <div className="prose prose-invert max-w-none prose-headings:text-azure-400 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline">
+      <div ref={contentRef} data-pdf-content className="cc-study-plan-content">
+        <div className="max-w-none">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
               h1: ({ children }) => (
-                <h1 className="text-2xl font-bold text-azure-400 mt-8 mb-4 border-b border-azure-800 pb-2">
+                <h1 className="mt-8 mb-4 border-b border-[var(--cc-study-border)] pb-2 text-2xl font-bold text-[var(--cc-study-heading)]">
                   {children}
                 </h1>
               ),
 
               h2: ({ children }) => (
-                <h2 className="text-xl font-semibold text-azure-300 mt-6 mb-3">
+                <h2 className="mt-6 mb-3 text-xl font-semibold text-[var(--cc-study-subheading)]">
                   {children}
                 </h2>
               ),
 
               h3: ({ children }) => (
-                <h3 className="text-lg font-semibold text-azure-200 mt-4 mb-2">
+                <h3 className="mt-4 mb-2 text-lg font-semibold text-[var(--cc-study-subheading)]">
                   {children}
                 </h3>
               ),
 
               p: ({ children }) => (
-                <p className="text-gray-300 leading-7 mb-4">
+                <p className="mb-4 leading-7 text-[var(--cc-study-body)]">
                   {children}
                 </p>
               ),
 
               ul: ({ children }) => (
-                <ul className="list-disc pl-6 text-gray-300 mb-4 space-y-1">
+                <ul className="mb-4 list-disc space-y-1 pl-6 text-[var(--cc-study-body)]">
                   {children}
                 </ul>
               ),
 
               ol: ({ children }) => (
-                <ol className="list-decimal pl-6 text-gray-300 mb-4 space-y-1">
+                <ol className="mb-4 list-decimal space-y-1 pl-6 text-[var(--cc-study-body)]">
                   {children}
                 </ol>
               ),
@@ -216,7 +219,7 @@ const StudyPlanResult = ({ plan }) => {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-400 hover:text-blue-300 underline"
+                      className="text-[var(--cc-study-link)] underline hover:opacity-80"
                   >
                     {children}
                   </a>
@@ -229,7 +232,7 @@ const StudyPlanResult = ({ plan }) => {
                 if (isBlock) {
                   return (
                     <pre className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 overflow-x-auto mb-4">
-                      <code className="text-azure-300">
+                      <code className="text-[var(--cc-study-subheading)]">
                         {children}
                       </code>
                     </pre>
@@ -237,20 +240,20 @@ const StudyPlanResult = ({ plan }) => {
                 }
 
                 return (
-                  <code className="bg-zinc-800 text-azure-300 px-1 py-0.5 rounded">
+                  <code className="rounded bg-zinc-800 px-1 py-0.5 text-[var(--cc-study-subheading)]">
                     {children}
                   </code>
                 );
               },
 
               blockquote: ({ children }) => (
-                <blockquote className="border-l-4 border-azure-500 pl-4 italic text-gray-400 my-4">
+                <blockquote className="my-4 border-l-4 border-[var(--cc-study-border)] pl-4 italic text-[var(--cc-study-body)]">
                   {children}
                 </blockquote>
               ),
             }}
           >
-            {plan}
+            {cleanPlan}
           </ReactMarkdown>
         </div>
       </div>
