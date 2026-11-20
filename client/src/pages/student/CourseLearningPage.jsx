@@ -77,10 +77,10 @@ const CourseLearningPage = () => {
   const activeTopic = course.topics[activeTopicIndex];
 
   return (
-    <div className="flex h-screen bg-zinc-950 text-white overflow-hidden">
+    <div className="flex min-h-screen flex-col bg-zinc-950 text-white md:h-dvh md:flex-row md:overflow-hidden">
       {/* Sidebar */}
-      <div className="w-80 flex-shrink-0 bg-zinc-900 border-r border-zinc-800 flex flex-col h-full">
-        <div className="p-6 border-b border-zinc-800">
+      <div className="flex max-h-[42vh] w-full shrink-0 flex-col border-b border-zinc-800 bg-zinc-900 md:h-full md:max-h-none md:w-80 md:border-b-0 md:border-r">
+        <div className="p-4 sm:p-6 border-b border-zinc-800">
           <button onClick={() => navigate('/my-courses')} className="text-zinc-400 hover:text-white mb-4 text-sm flex items-center gap-2">
             ← Back to My Courses
           </button>
@@ -96,7 +96,7 @@ const CourseLearningPage = () => {
           <p className="text-xs text-zinc-400 mt-2">{progress?.totalProgress || 0}% Completed</p>
         </div>
         
-        <div className="flex-1 overflow-y-auto custom-scrollbar">
+        <div className="min-h-0 flex-1 overflow-y-auto custom-scrollbar">
           <TopicList 
             topics={course.topics} 
             progress={progress} 
@@ -107,9 +107,9 @@ const CourseLearningPage = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col h-full overflow-y-auto custom-scrollbar">
-        <div className="p-8 max-w-5xl mx-auto w-full">
-          <h1 className="text-3xl font-extrabold mb-8">{activeTopic?.title}</h1>
+      <div className="min-w-0 flex-1 md:h-full md:overflow-y-auto custom-scrollbar">
+        <div className="mx-auto w-full max-w-5xl p-4 sm:p-6 lg:p-8">
+          <h1 className="mb-6 break-words text-2xl font-extrabold sm:mb-8 sm:text-3xl">{activeTopic?.title}</h1>
           
           {quizResults ? (
             <QuizResults results={quizResults} onRetry={() => setQuizResults(null)} onNext={() => handleTopicSelect(Math.min(activeTopicIndex + 1, course.topics.length - 1))} />
@@ -118,11 +118,11 @@ const CourseLearningPage = () => {
           ) : (
             <div className="space-y-8">
               
-              <div className="flex gap-4 border-b border-zinc-800 pb-2">
+              <div className="flex gap-2 overflow-x-auto border-b border-zinc-800 pb-2">
                 {activeTopic?.videoUrl && (
                   <button
                     onClick={() => setActiveTab('video')}
-                    className={`px-6 py-3 rounded-t-lg font-semibold flex items-center gap-2 transition-all ${
+                    className={`min-h-11 shrink-0 px-3 sm:px-6 py-3 rounded-t-lg font-semibold flex items-center gap-2 transition-all ${
                       activeTab === 'video'
                         ? 'bg-azure-600/20 text-azure-400 border-b-2 border-azure-500'
                         : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
@@ -134,7 +134,7 @@ const CourseLearningPage = () => {
                 {activeTopic?.notes && (
                   <button
                     onClick={() => setActiveTab('notes')}
-                    className={`px-6 py-3 rounded-t-lg font-semibold flex items-center gap-2 transition-all ${
+                    className={`min-h-11 shrink-0 px-3 sm:px-6 py-3 rounded-t-lg font-semibold flex items-center gap-2 transition-all ${
                       activeTab === 'notes'
                         ? 'bg-azure-600/20 text-azure-400 border-b-2 border-azure-500'
                         : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
@@ -146,18 +146,18 @@ const CourseLearningPage = () => {
               </div>
 
               {activeTab === 'video' && activeTopic?.videoUrl && (
-                <section className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+                <section className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 sm:p-6">
                   <VideoPlayer url={activeTopic.videoUrl} />
                 </section>
               )}
               
               {activeTab === 'notes' && activeTopic?.notes && (
-                <section className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+                <section className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 sm:p-6">
                   <NotesView content={activeTopic.notes} />
                 </section>
               )}
               
-              <section className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 text-center flex flex-col items-center justify-center mt-8">
+              <section className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 sm:p-8 text-center flex flex-col items-center justify-center mt-8">
                 <h3 className="text-2xl font-bold mb-2">Ready to test your knowledge?</h3>
                 <p className="text-zinc-400 mb-6 max-w-md">Take the topic quiz to earn XP, maintain your streak, and unlock the next topics!</p>
                 <button 
@@ -168,7 +168,7 @@ const CourseLearningPage = () => {
                 </button>
               </section>
 
-              <section className="h-80 mt-12 border-t border-zinc-800 pt-8">
+              <section className="min-h-72 mt-12 border-t border-zinc-800 pt-8">
                 <PersonalNotes courseId={courseId} initialNotes={progress?.personalNotes || ''} />
               </section>
             </div>

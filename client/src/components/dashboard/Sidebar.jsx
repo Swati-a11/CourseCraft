@@ -77,10 +77,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     };
   }, [dispatch]);
 
-  // Filter out Achievements for mobile view to prevent layout overflow
-  const mobileMenuItems = menuItems.filter(
-    (item) => item.name !== 'Achievements'
-  );
+  const mobileMenuItems = menuItems;
 
   return (
     <>
@@ -172,7 +169,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
       {/* 2. MOBILE VIEW NAVIGATION (Horizontal bottom bar dock, hidden on desktop screens) */}
       <div
-        className="fixed bottom-0 left-0 right-0 h-16 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex justify-around items-center z-50 px-4 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] md:hidden"
+        aria-label="Mobile navigation"
+        className="fixed bottom-0 left-0 right-0 flex h-[4.5rem] items-stretch gap-1 overflow-x-auto overscroll-x-contain border-t border-slate-200 bg-white px-2 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] dark:border-slate-800 dark:bg-slate-900 md:hidden"
       >
         {mobileMenuItems.map((item) => {
           const Icon = item.icon;
@@ -181,23 +179,26 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               key={item.name}
               to={item.path}
               className={({ isActive }) =>
-                `rounded-full p-2 transition-all duration-300 hover:rounded-xl hover:bg-slate-100 ${
+                `flex min-w-[3.75rem] flex-1 flex-col items-center justify-center gap-1 rounded-lg px-1 py-2 text-[10px] font-medium transition-colors ${
                   isActive
                     ? 'text-azure-600 dark:text-azure-400 bg-slate-100 dark:bg-slate-800'
                     : 'text-slate-500 dark:text-gray-400'
                 }`
               }
             >
-              <Icon size={20} />
+              <Icon size={19} aria-hidden="true" />
+              <span className="whitespace-nowrap">{item.name === 'AI Study Plan' ? 'Plan' : item.name === 'Achievements' ? 'Awards' : item.name}</span>
             </NavLink>
           );
         })}
         {/* Dedicated Mobile Logout button */}
         <button
           onClick={handleLogout}
-          className="text-red-500 p-2 rounded-full hover:bg-red-50 transition-all duration-300"
+          aria-label="Log out"
+          className="flex min-w-[3.25rem] flex-col items-center justify-center gap-1 rounded-lg px-1 py-2 text-[10px] font-medium text-red-500 transition-colors hover:bg-red-50"
         >
-          <LogOut size={20} />
+          <LogOut size={19} aria-hidden="true" />
+          <span>Log out</span>
         </button>
       </div>
     </>

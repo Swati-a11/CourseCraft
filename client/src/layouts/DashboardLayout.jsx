@@ -39,7 +39,7 @@ const DashboardLayout = ({ children }) => {
       <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
 
       {/* Main Workspace Column - padded on bottom on mobile to prevent navbar overlapping */}
-      <div className={`flex-1 flex flex-col transition-all duration-300 min-w-0 pb-16 md:pb-0 pl-0 ${
+      <div className={`flex-1 flex flex-col transition-all duration-300 min-w-0 pb-20 md:pb-0 pl-0 ${
         isOpen ? 'md:pl-72' : 'md:pl-20'
       }`}>
         <Navbar />

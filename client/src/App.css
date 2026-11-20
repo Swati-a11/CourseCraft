@@ -87,6 +87,49 @@ body {
   font-family: var(--font-sans);
 }
 
+html,
+body,
+#root {
+  min-width: 320px;
+  max-width: 100%;
+}
+
+body {
+  overflow-x: clip;
+}
+
+main,
+main > *,
+main section,
+main article {
+  min-width: 0;
+  max-width: 100%;
+}
+
+main :is(img, video, iframe, canvas, svg) {
+  max-width: 100%;
+}
+
+main :is(input, select, textarea) {
+  max-width: 100%;
+  font-size: 16px;
+}
+
+main :is(pre, code, p, li, h1, h2, h3, a, button) {
+  overflow-wrap: anywhere;
+}
+
+main pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+main table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 :focus-visible {
   outline: 2px solid var(--cc-accent);
   outline-offset: 3px;
@@ -163,6 +206,25 @@ html.light :is(.border-white\/5, .border-white\/10, .border-azure-900\/40, .bord
 .cc-dashboard-intro p {
   margin-top: .7rem;
   color: var(--cc-muted);
+}
+
+@media (max-width: 639px) {
+  .cc-dashboard-intro {
+    padding: 1.25rem;
+    border-radius: 18px;
+  }
+
+  .cc-dashboard-intro > div {
+    align-items: stretch;
+  }
+
+  .cc-dashboard-intro > div a {
+    max-width: 100%;
+  }
+
+  main .recharts-responsive-container {
+    min-width: 0;
+  }
 }
 
 .cc-enrolled-course {
