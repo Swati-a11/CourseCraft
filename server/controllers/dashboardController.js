@@ -158,9 +158,14 @@ export const getDashboardStats = async (req, res) => {
       return {
         courseId: course?._id,
         title: course?.title,
+        description: course?.description,
+        duration: course?.duration,
+        level: course?.level,
+        thumbnail: course?.thumbnail,
         completion: progress?.totalProgress || 0,
         completedTopics,
         totalTopics,
+        lastAccessedAt: progress?.lastAccessedAt || null,
       };
     });
 

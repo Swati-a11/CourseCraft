@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BookOpen, Award, Flame, Sparkles } from 'lucide-react';
+import { ArrowRight, BookOpen, Award, Flame, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 
 import DashboardLayout from '../../layouts/DashboardLayout';
@@ -11,7 +11,6 @@ import RobotLoader from '../../components/common/RobotLoader';
 import { useDashboardData } from '../../context/DashboardDataContext';
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const { isLight } = useTheme();
   const { stats, loading, error } = useDashboardData();
   const [courses, setCourses] = useState([]);
@@ -19,20 +18,26 @@ const Dashboard = () => {
   useEffect(() => {
     if (stats && Array.isArray(stats.courseProgress)) {
       setCourses(
-        stats.courseProgress.map((cp, index) => ({
-          id: cp.courseId || index,
-          title: cp.title || `Course ${index + 1}`,
-          description: 'Continue your learning journey.',
+        stats.courseProgress.filter((cp) => cp.courseId).map((cp) => ({
+          id: cp.courseId,
+          title: cp.title || 'Untitled course',
+          description: cp.description || '',
           topics: cp.totalTopics || 0,
-          duration: 'Unknown',
+          duration: cp.duration || '',
+          level: cp.level || '',
           progress: cp.completion || 0,
-          image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1200&q=80',
+          image: cp.thumbnail || '',
+          lastAccessedAt: cp.lastAccessedAt,
         }))
       );
     } else {
       setCourses([]);
     }
   }, [stats]);
+
+  const nextCourse = courses
+    .filter((course) => course.progress < 100)
+    .sort((a, b) => new Date(b.lastAccessedAt || 0) - new Date(a.lastAccessedAt || 0))[0];
 
   const displayEnrolled = stats?.coursesEnrolled ?? 0;
   const displayCompleted = stats?.coursesCompleted ?? 0;
@@ -103,6 +108,28 @@ const Dashboard = () => {
         <motion.div variants={itemVariants} className="cc-dashboard-intro">
           <h1>Welcome back</h1>
           <p>Pick up a course or see how your study progress is adding up.</p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            {nextCourse ? (
+              <Link
+                to={`/course/${nextCourse.id}`}
+                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-azure-600 px-5 py-2 font-semibold text-[var(--cc-action-ink)] transition-colors hover:bg-azure-700"
+              >
+                Continue {nextCourse.title}
+                <ArrowRight size={18} aria-hidden="true" />
+              </Link>
+            ) : (
+              <Link
+                to="/browse-courses"
+                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-azure-600 px-5 py-2 font-semibold text-[var(--cc-action-ink)] transition-colors hover:bg-azure-700"
+              >
+                Find a course
+                <ArrowRight size={18} aria-hidden="true" />
+              </Link>
+            )}
+            <Link to="/study-plan" className="inline-flex min-h-11 items-center rounded-xl border border-[var(--cc-line)] px-5 py-2 font-semibold text-[var(--cc-ink)] transition-colors hover:bg-[var(--cc-raised)]">
+              Create a study plan
+            </Link>
+          </div>
         </motion.div>
 
         {/* Error */}
@@ -141,8 +168,11 @@ const Dashboard = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {courses.length === 0 ? (
-              <div className={`col-span-full text-center py-12 transition-colors ${isLight ? 'text-slate-500' : 'text-gray-400'}`}>
-                You are not enrolled in any courses yet.
+              <div className="col-span-full rounded-2xl border border-[var(--cc-line)] bg-[var(--cc-surface)] px-6 py-10 text-center">
+                <BookOpen className="mx-auto text-[var(--cc-accent)]" size={28} aria-hidden="true" />
+                <h3 className="mt-3 text-lg font-semibold text-[var(--cc-ink)]">Your learning starts here</h3>
+                <p className="mx-auto mt-2 max-w-md text-sm text-[var(--cc-muted)]">Browse the course catalog and enroll to keep your lessons and progress together.</p>
+                <Link to="/browse-courses" className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-azure-600 px-5 py-2 font-semibold text-[var(--cc-action-ink)] transition-colors hover:bg-azure-700">Browse courses</Link>
               </div>
             ) : (
               courses.map((course) => (

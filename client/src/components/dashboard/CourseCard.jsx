@@ -1,4 +1,4 @@
-import { Clock, BookOpen } from 'lucide-react';
+import { Clock, BookOpen, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -13,27 +13,25 @@ const CourseCard = ({ course }) => {
           : 'bg-zinc-900 border-azure-900/30 hover:border-azure-500/40'
       }`}
     >
-      <img
-        src={course.image}
-        alt={course.title}
-        className="w-full h-48 object-cover"
-      />
+      {course.image ? (
+        <img src={course.image} alt="" className="h-40 w-full object-cover" loading="lazy" />
+      ) : (
+        <div className="h-3 bg-gradient-to-r from-azure-700 to-sky-400" aria-hidden="true" />
+      )}
 
       <div className="p-5">
         <h3 className={`text-xl font-semibold mb-2 transition-colors ${isLight ? 'text-slate-900' : 'text-white'}`}>
           {course.title}
         </h3>
 
-        <p className={`text-sm mb-4 transition-colors ${isLight ? 'text-slate-600' : 'text-gray-400'}`}>{course.description}</p>
+        {course.description && <p className={`text-sm mb-4 line-clamp-3 transition-colors ${isLight ? 'text-slate-600' : 'text-gray-400'}`}>{course.description}</p>}
 
         <div className={`flex items-center justify-between text-sm mb-4 transition-colors ${isLight ? 'text-slate-500' : 'text-gray-400'}`}>
-          <span className="flex items-center gap-1">
-            <BookOpen size={16} /> {course.topics} Topics
-          </span>
-          <span className="flex items-center gap-1">
-            <Clock size={16} /> {course.duration}
-          </span>
+          {course.topics > 0 && <span className="flex items-center gap-1"><BookOpen size={16} aria-hidden="true" /> {course.topics} topics</span>}
+          {course.duration && <span className="flex items-center gap-1"><Clock size={16} aria-hidden="true" /> {course.duration}</span>}
+          {course.level && <span>{course.level}</span>}
         </div>
+        <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--cc-course-link)]">Continue learning <ArrowRight size={16} aria-hidden="true" /></span>
 
         <div>
           <div className={`flex justify-between text-xs mb-1 transition-colors ${isLight ? 'text-slate-500' : 'text-gray-400'}`}>
