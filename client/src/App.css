@@ -380,3 +380,19 @@ html.light :is(.border-white\/5, .border-white\/10, .border-azure-900\/40, .bord
 @keyframes cc-loader-spin { to { transform: rotate(360deg); } }
 @keyframes cc-loader-travel { from { transform: translateX(-5%); } to { transform: translateX(155%); } }
 @keyframes cc-loader-breathe { 50% { transform: translateY(-3px); } }
+
+/* Illustrated course covers also serve as a fallback for missing images. */
+.cc-course-cover, .cc-course-cover-image { display: block; width: 100%; height: 170px; }
+.cc-course-cover-image { object-fit: cover; }
+.cc-course-cover { position: relative; isolation: isolate; overflow: hidden; color: #d8efff; background: radial-gradient(ellipse at 70% 35%, #287ab0, transparent 48%), linear-gradient(130deg, #0b1930 0%, #102e50 58%, #144e70 100%); }
+.cc-course-cover--algorithm { background: radial-gradient(ellipse at 70% 35%, #3266b2, transparent 48%), linear-gradient(130deg, #0b1732, #112c57 60%, #1b5682); }
+.cc-course-cover--database { background: radial-gradient(ellipse at 70% 35%, #287f9f, transparent 48%), linear-gradient(130deg, #0a1c2c, #0d3951 60%, #17627e); }
+.cc-cover-grid { position: absolute; inset: 0; opacity: .13; background-image: linear-gradient(#9cdfff 1px, transparent 1px), linear-gradient(90deg, #9cdfff 1px, transparent 1px); background-size: 27px 27px; mask-image: linear-gradient(90deg, transparent, #000); }
+.cc-cover-label, .cc-cover-bottom { position: absolute; left: 1.15rem; font: 500 .57rem/1.4 var(--font-mono); letter-spacing: .1em; color: #c4e8ff; }
+.cc-cover-label { top: 1rem; }.cc-cover-bottom { bottom: 1rem; right: 1.15rem; display: flex; justify-content: space-between; align-items: center; }.cc-cover-bottom > span { font-size: 1rem; }
+.cc-cover-art { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: grid; place-items: center; width: 140px; height: 140px; }
+.cc-cover-orbit { position: absolute; inset: 13px; border: 1px solid #9bdeff66; border-radius: 50%; }.cc-cover-orbit-two { inset: 27px 4px; transform: rotate(-32deg); }
+.cc-cover-icon { display: grid; place-items: center; width: 74px; height: 74px; color: #cceeff; background: #60bff521; border: 1px solid #a4e3ff55; border-radius: 22px; transform: rotate(-7deg); }
+.cc-cover-spark { position: absolute; color: #8ddcff; font-size: 1rem; }.cc-cover-spark-one { top: 16px; right: 12px; }.cc-cover-spark-two { bottom: 22px; left: 12px; font-size: .7rem; }
+.cc-enrolled-course > .cc-course-cover, .cc-enrolled-course > .cc-course-cover-image { width: calc(100% + 2 * clamp(1.25rem, 3vw, 1.75rem)); max-width: none; margin: calc(-1 * clamp(1.25rem, 3vw, 1.75rem)) calc(-1 * clamp(1.25rem, 3vw, 1.75rem)) 1.35rem; border-radius: 19px 19px 0 0; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { .cc-cover-icon { transition: transform 250ms ease; }.cc-enrolled-course:hover .cc-cover-icon, a:hover > .cc-course-cover .cc-cover-icon { transform: rotate(0deg) scale(1.07); } }

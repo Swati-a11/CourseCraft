@@ -1,6 +1,7 @@
 import { Clock, BookOpen, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
+import CourseCover from './CourseCover';
 
 const CourseCard = ({ course }) => {
   const { isLight } = useTheme();
@@ -13,11 +14,7 @@ const CourseCard = ({ course }) => {
           : 'bg-zinc-900 border-azure-900/30 hover:border-azure-500/40'
       }`}
     >
-      {course.image ? (
-        <img src={course.image} alt="" className="h-40 w-full object-cover" loading="lazy" />
-      ) : (
-        <div className="h-3 bg-gradient-to-r from-azure-700 to-sky-400" aria-hidden="true" />
-      )}
+      <CourseCover title={course.title} image={course.image} />
 
       <div className="p-5">
         <h3 className={`text-xl font-semibold mb-2 transition-colors ${isLight ? 'text-slate-900' : 'text-white'}`}>

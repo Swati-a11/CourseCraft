@@ -5,6 +5,7 @@ import API from "../../services/api";
 import { toast } from "react-toastify";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import PageLoader from "../../components/common/PageLoader";
+import CourseCover from "../../components/dashboard/CourseCover";
 
 const MyCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -119,6 +120,7 @@ const MyCourses = () => {
 
               return (
                 <article key={item._id} className="cc-enrolled-course">
+                  <CourseCover title={title} image={item.thumbnail || item.course?.thumbnail} />
                   <span className="cc-course-kicker">Your course</span>
                   <div className="flex items-start justify-between gap-4">
                     <h2 className="min-w-0 text-xl font-semibold leading-snug tracking-tight">
