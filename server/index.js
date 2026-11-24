@@ -6,6 +6,7 @@ process.env.JWT_SECRET = process.env.JWT_SECRET ? process.env.JWT_SECRET.trim().
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import { corsOptions } from './middleware/corsOptions.js';
 
 // Routes
 import authRoutes from './routes/authRoutes.js';
@@ -33,31 +34,6 @@ const app = express();
    CORS CONFIG (FIXED)
 ========================= */
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://course-craft-ten.vercel.app"
-];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-
-    if (
-      origin.startsWith("http://localhost:") ||
-      origin.startsWith("http://127.0.0.1:") ||
-      origin.endsWith(".vercel.app") ||
-      allowedOrigins.includes(origin)
-    ) {
-      return callback(null, true);
-    }
-
-    console.warn(`⚠️ CORS Access Denied for Origin: ${origin}`);
-    return callback(null, false);
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"]
-};
 
 app.use(cors(corsOptions));
 app.options(/.*/, cors(corsOptions));
