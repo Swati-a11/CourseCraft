@@ -11,7 +11,7 @@ import {
   FileText,
   Menu,
 } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../features/auth/authSlice';
 import { useTheme } from '../../context/ThemeContext';
@@ -32,6 +32,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const dispatch = useDispatch();
   const { isLight } = useTheme();
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
+  const location = useLocation();
+  const isMoreActive = menuItems.slice(4).some(item => item.path === location.pathname);
+
+  useEffect(() => {
+    if (!mobileMoreOpen) return;
+    const closeOnEscape = event => { if (event.key === 'Escape') setMobileMoreOpen(false); };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [mobileMoreOpen]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -172,13 +181,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       </aside>
 
       {/* 2. MOBILE VIEW NAVIGATION (Horizontal bottom bar dock, hidden on desktop screens) */}
-      {mobileMoreOpen && <nav aria-label="More navigation" className="fixed bottom-[4.5rem] right-3 z-50 w-56 rounded-2xl border border-[var(--cc-line)] bg-[var(--cc-surface)] p-2 shadow-xl md:hidden">
+      {mobileMoreOpen && <nav id="mobile-more-menu" aria-label="More navigation" className="fixed bottom-[4.5rem] right-3 z-50 w-56 rounded-2xl border border-[var(--cc-line)] bg-[var(--cc-surface)] p-2 shadow-xl md:hidden">
         {menuItems.slice(4).map((item) => <NavLink key={item.path} to={item.path} onClick={() => setMobileMoreOpen(false)} className="flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium text-[var(--cc-ink)] hover:bg-[var(--cc-raised)]"><item.icon size={19} aria-hidden="true" />{item.name}</NavLink>)}
         <button onClick={handleLogout} className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-medium text-[var(--cc-error)]"><LogOut size={19} aria-hidden="true" />Log out</button>
       </nav>}
       <div
         aria-label="Mobile navigation"
-        className="fixed bottom-0 left-0 right-0 z-40 flex h-[4.5rem] items-stretch gap-1 overflow-x-auto overscroll-x-contain border-t border-slate-200 bg-white px-2 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] dark:border-slate-800 dark:bg-slate-900 md:hidden"
+        className="fixed bottom-0 left-0 right-0 z-40 flex h-[4.5rem] items-stretch gap-1 overflow-x-auto overscroll-x-contain border-t border-[var(--cc-line)] bg-[var(--cc-surface)] px-2 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] md:hidden"
       >
         {mobileMenuItems.map((item) => {
           const Icon = item.icon;
@@ -189,7 +198,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               className={({ isActive }) =>
                 `flex min-w-[3.75rem] flex-1 flex-col items-center justify-center gap-1 rounded-lg px-1 py-2 text-[10px] font-medium transition-colors ${
                   isActive
-                    ? 'text-azure-600 dark:text-azure-400 bg-slate-100 dark:bg-slate-800'
+                    ? 'text-[var(--cc-accent)] bg-[var(--cc-raised)]'
                     : 'text-slate-500 dark:text-gray-400'
                 }`
               }
@@ -203,7 +212,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           onClick={() => setMobileMoreOpen(open => !open)}
           aria-label="More navigation"
           aria-expanded={mobileMoreOpen}
-          className="flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-lg px-1 py-2 text-[10px] font-medium text-[var(--cc-muted)]"
+          aria-controls="mobile-more-menu"
+          className={`flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-lg px-1 py-2 text-[10px] font-medium ${isMoreActive || mobileMoreOpen ? 'bg-[var(--cc-raised)] text-[var(--cc-accent)]' : 'text-[var(--cc-muted)]'}`}
         >
           <Menu size={19} aria-hidden="true" />
           <span>More</span>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PageLoader from '../../components/common/PageLoader';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../../services/api';
 import TopicList from '../../components/learning/TopicList';
 import NotesView from '../../components/learning/NotesView';
@@ -13,6 +13,7 @@ import { PlayCircle, FileText } from 'lucide-react';
 const CourseLearningPage = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [course, setCourse] = useState(null);
   const [progress, setProgress] = useState(null);
@@ -37,6 +38,13 @@ const CourseLearningPage = () => {
       const res = await api.get(`/learning/course/${courseId}`);
       setCourse(res.data.course);
       setProgress(res.data.progress);
+      if (loading && searchParams.has('topic')) {
+        const requested = Number(searchParams.get('topic'));
+        const topics = res.data.course?.topics || [];
+        const passed = res.data.progress?.completedTopics || [];
+        const isUnlocked = requested === 0 || passed.some(item => item.topicIndex === requested - 1 && item.quizPassed);
+        if (Number.isInteger(requested) && requested >= 0 && requested < topics.length && isUnlocked) setActiveTopicIndex(requested);
+      }
       setLoading(false);
     } catch (error) {
       console.error("Failed to load course", error);

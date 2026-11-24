@@ -106,10 +106,12 @@ const MyCourses = () => {
 
         {error ? <p role="alert" className="rounded-2xl border border-red-400/40 bg-red-500/10 p-6 text-[var(--cc-error)]">{error}</p> : courses.length === 0 ? (
           <div className="rounded-2xl border border-[var(--cc-line)] bg-[var(--cc-surface)] p-6">
-            <p className="text-[var(--cc-muted)]">No courses enrolled.</p>
+            <h2 className="text-xl font-semibold text-[var(--cc-ink)]">Your learning starts here</h2>
+            <p className="mt-2 text-[var(--cc-muted)]">Find a course to explore or create a plan for your next goal.</p>
             <Link to="/browse-courses" className="mt-2 inline-flex min-h-11 items-center font-semibold text-[var(--cc-course-link)] hover:underline">
               Browse courses
             </Link>
+            <Link to="/study-plan" className="ml-5 mt-2 inline-flex min-h-11 items-center font-semibold text-[var(--cc-course-link)] hover:underline">Create a study plan</Link>
           </div>
         ) : (
           <div className="grid gap-5 lg:grid-cols-2">
@@ -138,13 +140,13 @@ const MyCourses = () => {
                     </button>
                   </div>
 
-                  <p className="mt-3 mb-6 leading-relaxed text-[var(--cc-muted)]">
+                  <p className="mt-3 mb-6 line-clamp-2 leading-relaxed text-[var(--cc-muted)]">
                     {item.description || item.course?.description || "No description available."}
                   </p>
 
                   <div className="mt-auto">
                     <div className="mb-2 flex items-center justify-between gap-3 font-mono text-xs">
-                      <span className="text-[var(--cc-muted)]">Progress</span>
+                      <span className="text-[var(--cc-muted)]">{typeof item.completedTopics === 'number' && item.topics?.length ? `${item.completedTopics} of ${item.topics.length} lessons completed` : 'Progress'}</span>
                       <span className="font-semibold text-[var(--cc-course-link)]">{progress}%</span>
                     </div>
                     <progress className="cc-progress" max={100} value={progress} aria-label={`${title} progress`} />

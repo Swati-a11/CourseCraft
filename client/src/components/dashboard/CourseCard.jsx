@@ -7,7 +7,7 @@ const CourseCard = ({ course }) => {
   const { isLight } = useTheme();
   return (
     <Link
-      to={`/course/${course.shortId || course._id || course.id}`}
+      to={`/course/${course.shortId || course._id || course.id}${Number.isInteger(course.nextTopicIndex) ? `?topic=${course.nextTopicIndex}` : ''}`}
       className={`block border rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 ${
         isLight
           ? 'bg-white border-slate-200 hover:border-slate-300 shadow-sm'
@@ -21,18 +21,17 @@ const CourseCard = ({ course }) => {
           {course.title}
         </h3>
 
-        {course.description && <p className={`text-sm mb-4 line-clamp-3 transition-colors ${isLight ? 'text-slate-600' : 'text-gray-400'}`}>{course.description}</p>}
+        {course.description && <p className={`text-sm mb-4 line-clamp-2 transition-colors ${isLight ? 'text-slate-600' : 'text-gray-400'}`}>{course.description}</p>}
 
-        <div className={`flex items-center justify-between text-sm mb-4 transition-colors ${isLight ? 'text-slate-500' : 'text-gray-400'}`}>
+        <div className={`flex flex-wrap items-center gap-x-4 gap-y-2 text-sm mb-4 transition-colors ${isLight ? 'text-slate-500' : 'text-gray-400'}`}>
           {course.topics > 0 && <span className="flex items-center gap-1"><BookOpen size={16} aria-hidden="true" /> {course.topics} topics</span>}
           {course.duration && <span className="flex items-center gap-1"><Clock size={16} aria-hidden="true" /> {course.duration}</span>}
           {course.level && <span>{course.level}</span>}
         </div>
-        <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--cc-course-link)]">Continue learning <ArrowRight size={16} aria-hidden="true" /></span>
-
+        {course.nextTopicTitle && <p className="mb-3 text-sm text-[var(--cc-muted)]"><strong className="text-[var(--cc-ink)]">Up next:</strong> {course.nextTopicTitle}</p>}
         <div>
           <div className={`flex justify-between text-xs mb-1 transition-colors ${isLight ? 'text-slate-500' : 'text-gray-400'}`}>
-            <span>Progress</span>
+            <span>{typeof course.completedTopics === 'number' && course.topics > 0 ? `${course.completedTopics} of ${course.topics} lessons completed` : 'Progress'}</span>
             <span>{course.progress}%</span>
           </div>
           <div className={`w-full rounded-full h-2 transition-colors ${isLight ? 'bg-slate-100' : 'bg-zinc-800'}`}>
@@ -42,6 +41,7 @@ const CourseCard = ({ course }) => {
             />
           </div>
         </div>
+        <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--cc-course-link)]">{course.progress >= 100 ? 'Review course' : 'Continue learning'} <ArrowRight size={16} aria-hidden="true" /></span>
       </div>
     </Link>
   );

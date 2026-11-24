@@ -85,6 +85,7 @@ export const getMyCourses = async (req, res) => {
           topics: e.course.topics || [],
 
           progress: progressRecord ? progressRecord.totalProgress : 0,
+          completedTopics: (progressRecord?.completedTopics || []).filter(t => t.notesCompleted && t.videoCompleted && t.quizPassed).length,
           enrolledAt: e.createdAt,
         };
       });

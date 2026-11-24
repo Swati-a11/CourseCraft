@@ -25,6 +25,9 @@ const Dashboard = () => {
           title: cp.title || 'Untitled course',
           description: cp.description || '',
           topics: cp.totalTopics || 0,
+          completedTopics: cp.completedTopics,
+          nextTopicIndex: cp.nextTopicIndex,
+          nextTopicTitle: cp.nextTopicTitle,
           duration: cp.duration || '',
           level: cp.level || '',
           progress: cp.completion || 0,
@@ -110,17 +113,16 @@ const Dashboard = () => {
         <motion.div variants={itemVariants} className="cc-dashboard-intro">
           <span className="cc-eyebrow">Your learning space</span>
           <h1>Welcome back</h1>
-          <p>Pick up a course or see how your study progress is adding up.</p>
+          <p>Pick up where you left off and keep your learning moving.</p>
+          {nextCourse && <div className="cc-continue-card">
+            <div><span className="cc-eyebrow">Continue learning</span><h2>{nextCourse.title}</h2>
+              <p>{nextCourse.nextTopicTitle ? `Up next: ${nextCourse.nextTopicTitle}` : 'Open your course to choose your next lesson.'}</p>
+              {typeof nextCourse.completedTopics === 'number' && nextCourse.topics > 0 && <p className="cc-continue-progress">{nextCourse.completedTopics} of {nextCourse.topics} lessons completed · {Math.round(nextCourse.progress)}%</p>}
+            </div>
+            <Link to={`/course/${nextCourse.id}${Number.isInteger(nextCourse.nextTopicIndex) ? `?topic=${nextCourse.nextTopicIndex}` : ''}`} className="cc-continue-action">{nextCourse.progress > 0 ? 'Resume lesson' : 'Start learning'} <ArrowRight size={18} aria-hidden="true" /></Link>
+          </div>}
           <div className="mt-6 flex flex-wrap gap-3">
-            {nextCourse ? (
-              <Link
-                to={`/course/${nextCourse.id}`}
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-azure-600 px-5 py-2 font-semibold text-[var(--cc-action-ink)] transition-colors hover:bg-azure-700"
-              >
-                Continue {nextCourse.title}
-                <ArrowRight size={18} aria-hidden="true" />
-              </Link>
-            ) : (
+            {!nextCourse && (
               <Link
                 to="/browse-courses"
                 className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-azure-600 px-5 py-2 font-semibold text-[var(--cc-action-ink)] transition-colors hover:bg-azure-700"
@@ -170,12 +172,13 @@ const Dashboard = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {courses.length === 0 ? (
+            {courses.length === 0 && !error ? (
               <div className="col-span-full rounded-2xl border border-[var(--cc-line)] bg-[var(--cc-surface)] px-6 py-10 text-center">
                 <BookOpen className="mx-auto text-[var(--cc-accent)]" size={28} aria-hidden="true" />
                 <h3 className="mt-3 text-lg font-semibold text-[var(--cc-ink)]">Your learning starts here</h3>
                 <p className="mx-auto mt-2 max-w-md text-sm text-[var(--cc-muted)]">Browse the course catalog and enroll to keep your lessons and progress together.</p>
                 <Link to="/browse-courses" className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-azure-600 px-5 py-2 font-semibold text-[var(--cc-action-ink)] transition-colors hover:bg-azure-700">Browse courses</Link>
+                <Link to="/study-plan" className="ml-3 mt-5 inline-flex min-h-11 items-center rounded-xl border border-[var(--cc-line)] px-5 py-2 font-semibold text-[var(--cc-ink)]">Create a study plan</Link>
               </div>
             ) : (
               courses.map((course) => (

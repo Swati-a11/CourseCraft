@@ -155,6 +155,11 @@ export const getDashboardStats = async (req, res) => {
           ).length
         : 0;
 
+      // Topic navigation unlocks the next lesson after its quiz is passed.
+      const nextTopicIndex = (course?.topics || []).findIndex((_, index) =>
+        !(progress?.completedTopics || []).some(t => t.topicIndex === index && t.quizPassed)
+      );
+
       return {
         courseId: course?._id,
         title: course?.title,
@@ -165,6 +170,8 @@ export const getDashboardStats = async (req, res) => {
         completion: progress?.totalProgress || 0,
         completedTopics,
         totalTopics,
+        nextTopicIndex: nextTopicIndex >= 0 ? nextTopicIndex : null,
+        nextTopicTitle: nextTopicIndex >= 0 ? course.topics[nextTopicIndex]?.title : null,
         lastAccessedAt: progress?.lastAccessedAt || null,
       };
     });
