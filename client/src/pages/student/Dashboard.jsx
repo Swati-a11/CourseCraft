@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, BookOpen, Award, Flame, Sparkles } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
@@ -12,6 +12,7 @@ import { useDashboardData } from '../../context/DashboardDataContext';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const reducedMotion = useReducedMotion();
   const { isLight } = useTheme();
   const { stats, loading, error } = useDashboardData();
   const [courses, setCourses] = useState([]);
@@ -105,8 +106,9 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout>
-      <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-8">
+      <motion.div variants={reducedMotion ? undefined : containerVariants} initial={reducedMotion ? false : 'hidden'} animate="visible" className="space-y-8">
         <motion.div variants={itemVariants} className="cc-dashboard-intro">
+          <span className="cc-eyebrow">Your learning space</span>
           <h1>Welcome back</h1>
           <p>Pick up a course or see how your study progress is adding up.</p>
           <div className="mt-6 flex flex-wrap gap-3">
@@ -177,7 +179,7 @@ const Dashboard = () => {
               </div>
             ) : (
               courses.map((course) => (
-                <motion.div key={course.id} whileHover={{ y: -5 }} transition={{ duration: 0.2 }}>
+                <motion.div key={course.id} whileHover={reducedMotion ? undefined : { y: -5 }} transition={{ duration: 0.2 }}>
                   <CourseCard course={course} />
                 </motion.div>
               ))

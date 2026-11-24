@@ -178,7 +178,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       </nav>}
       <div
         aria-label="Mobile navigation"
-        className="fixed bottom-0 left-0 right-0 flex h-[4.5rem] items-stretch gap-1 overflow-x-auto overscroll-x-contain border-t border-slate-200 bg-white px-2 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] dark:border-slate-800 dark:bg-slate-900 md:hidden"
+        className="fixed bottom-0 left-0 right-0 z-40 flex h-[4.5rem] items-stretch gap-1 overflow-x-auto overscroll-x-contain border-t border-slate-200 bg-white px-2 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] dark:border-slate-800 dark:bg-slate-900 md:hidden"
       >
         {mobileMenuItems.map((item) => {
           const Icon = item.icon;

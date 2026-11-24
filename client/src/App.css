@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'DM Sans', system-ui, sans-serif;
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-display: 'Newsreader', Georgia, serif;
+  --font-mono: 'DM Mono', ui-monospace, monospace;
   --color-azure-50: #eff7ff;
   --color-azure-100: #deeeff;
   --color-azure-200: #bfdcff;
@@ -311,3 +311,40 @@ html.light :is(.border-white\/5, .border-white\/10, .border-azure-900\/40, .bord
 .cc-document-answer { line-height: 1.7; }
 .cc-document-answer :is(p, ul, ol) { margin-bottom: .8rem; }
 .cc-document-answer ul { list-style: disc; padding-left: 1.5rem; }
+
+/* A calmer editorial type system with small, purposeful interactions. */
+.cc-eyebrow, .cc-course-kicker {
+  display: inline-block;
+  color: var(--cc-accent);
+  font: 500 .69rem/1.4 var(--font-mono);
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+.cc-dashboard-intro .cc-eyebrow { margin-bottom: 1rem; }
+.cc-page-heading { display: flex; align-items: end; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap; }
+.cc-page-heading h1 { margin-top: .75rem; font-weight: 400; }
+.cc-page-heading p { margin-top: .65rem; color: var(--cc-muted); line-height: 1.65; max-width: 45rem; }
+.cc-count-badge { border: 1px solid var(--cc-line); border-radius: 999px; padding: .55rem .85rem; background: var(--cc-surface); color: var(--cc-muted); font: 500 .7rem/1 var(--font-mono); white-space: nowrap; }
+.cc-dashboard-intro { position: relative; overflow: hidden; isolation: isolate; }
+.cc-dashboard-intro::after { content: ''; position: absolute; z-index: -1; right: -3rem; bottom: -9rem; width: 19rem; height: 19rem; border: 1px solid color-mix(in srgb, var(--cc-sky) 24%, transparent); border-radius: 50%; box-shadow: 0 0 0 2.5rem color-mix(in srgb, var(--cc-sky) 4%, transparent), 0 0 0 5rem color-mix(in srgb, var(--cc-sky) 3%, transparent); pointer-events: none; }
+.cc-stat-card, .cc-enrolled-course, .cc-document-card { transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease; }
+.cc-stat-card { position: relative; overflow: hidden; }
+.cc-stat-card::after { content: ''; position: absolute; top: 0; left: 1.25rem; width: 2.5rem; height: 2px; background: var(--cc-sky); opacity: .7; }
+.cc-stat-card h3 { font-family: var(--font-display); font-size: 2.15rem; font-weight: 500; }
+.cc-course-kicker { margin-bottom: 1.15rem; }
+.cc-enrolled-course::before { content: ''; display: block; position: absolute; inset: 0 auto 0 0; width: 3px; border-radius: 20px 0 0 20px; background: linear-gradient(var(--cc-sky), transparent 85%); opacity: .7; }
+.cc-enrolled-course h2 { line-height: 1.35; }
+.cc-progress::-webkit-progress-value { transition: width 500ms ease; }
+.cc-progress::-moz-progress-bar { transition: width 500ms ease; }
+.cc-unenroll { z-index: 1; transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease; }
+.cc-document-button, .cc-dashboard-intro a { transition: transform 180ms ease, filter 180ms ease, background-color 180ms ease; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .cc-stat-card:hover, .cc-enrolled-course:hover, .cc-document-card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--cc-sky) 55%, var(--cc-line)); box-shadow: 0 20px 40px -28px color-mix(in srgb, var(--cc-sky) 55%, transparent); }
+  .cc-dashboard-intro a:hover, .cc-document-button:hover:not(:disabled) { transform: translateY(-2px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cc-stat-card, .cc-enrolled-course, .cc-document-card, .cc-dashboard-intro a, .cc-document-button { transition: none; }
+  .cc-progress::-webkit-progress-value { transition: none; }
+  .cc-progress::-moz-progress-bar { transition: none; }
+  .animate-spin, .animate-pulse, .animate-\[spin_3s_linear_infinite_reverse\] { animation: none !important; }
+}

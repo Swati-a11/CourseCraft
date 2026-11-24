@@ -1,7 +1,8 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Bot } from "lucide-react";
 
 const RobotLoader = ({ text = " Analyzing your progress..." }) => {
+  const reducedMotion = useReducedMotion();
   return (
     <div className="flex-1 flex flex-col items-center justify-center min-h-[70vh]">
       <div className="relative flex items-center justify-center">
@@ -9,7 +10,7 @@ const RobotLoader = ({ text = " Analyzing your progress..." }) => {
         <div className="absolute w-32 h-32 border-2 border-azure-900 border-l-transparent border-r-transparent rounded-full animate-[spin_3s_linear_infinite_reverse]"></div>
         
         <motion.div 
-          animate={{ y: [0, -10, 0] }} 
+          animate={reducedMotion ? undefined : { y: [0, -10, 0] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
           className="z-10 bg-black p-4 rounded-full shadow-[0_0_20px_rgba(83,166,245,0.3)]"
         >

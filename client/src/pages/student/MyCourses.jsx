@@ -94,9 +94,14 @@ const MyCourses = () => {
   return (
     <DashboardLayout>
       <section className="mx-auto max-w-6xl py-6 sm:py-10" aria-labelledby="my-courses-title">
-        <h1 id="my-courses-title" className="mb-7 text-4xl tracking-tight sm:text-5xl">
-          My Courses
-        </h1>
+        <header className="cc-page-heading mb-8">
+          <div>
+            <span className="cc-eyebrow">Your learning library</span>
+            <h1 id="my-courses-title" className="text-4xl tracking-tight sm:text-5xl">My Courses</h1>
+            <p>Every step forward is worth celebrating. Pick up where you left off.</p>
+          </div>
+          {!error && <span className="cc-count-badge">{courses.length} {courses.length === 1 ? 'course' : 'courses'}</span>}
+        </header>
 
         {error ? <p role="alert" className="rounded-2xl border border-red-400/40 bg-red-500/10 p-6 text-[var(--cc-error)]">{error}</p> : courses.length === 0 ? (
           <div className="rounded-2xl border border-[var(--cc-line)] bg-[var(--cc-surface)] p-6">
@@ -114,6 +119,7 @@ const MyCourses = () => {
 
               return (
                 <article key={item._id} className="cc-enrolled-course">
+                  <span className="cc-course-kicker">Your course</span>
                   <div className="flex items-start justify-between gap-4">
                     <h2 className="min-w-0 text-xl font-semibold leading-snug tracking-tight">
                       <Link to={`/course/${courseId}`} className="cc-enrolled-link break-words hover:underline">

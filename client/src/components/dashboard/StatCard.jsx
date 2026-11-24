@@ -1,5 +1,5 @@
 const StatCard = ({ title, value, subtitle, icon: Icon }) => (
-  <div className="rounded-2xl border border-[var(--cc-line)] bg-[var(--cc-surface)] p-5">
+  <div className="cc-stat-card rounded-2xl border border-[var(--cc-line)] bg-[var(--cc-surface)] p-5">
     <div className="flex min-h-9 items-center justify-between gap-3">
       <p className="text-sm font-medium text-[var(--cc-muted)]">{title}</p>
       {Icon && (

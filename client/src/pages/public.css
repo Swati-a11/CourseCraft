@@ -185,3 +185,12 @@
 @media (prefers-reduced-motion: reduce) {
   .cc-public *, .cc-public *::before, .cc-public *::after { transition: none; }
 }
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .cc-feature-grid article { transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease; }
+  .cc-feature-grid article:hover { transform: translateY(-5px); border-color: color-mix(in srgb, var(--cc-sky) 55%, var(--cc-line)); box-shadow: 0 22px 40px -32px var(--cc-sky); }
+  .cc-feature-icon { transition: transform 220ms ease; }
+  .cc-feature-grid article:hover .cc-feature-icon { transform: rotate(-7deg) scale(1.06); }
+  .cc-preview { transition: transform 300ms ease, box-shadow 300ms ease; }
+  .cc-preview:hover { transform: translateY(-5px) rotate(-.5deg); }
+}
