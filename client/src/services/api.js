@@ -1,9 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: ["localhost", "127.0.0.1"].includes(window.location.hostname)
-    ? "http://localhost:5000/api"
-    : "https://coursecraft-lgaf.onrender.com/api",
+  baseURL: import.meta.env.VITE_API_URL || "https://coursecraft-lgaf.onrender.com/api",
 });
 
 API.interceptors.request.use((req) => {
