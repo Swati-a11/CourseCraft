@@ -1,11 +1,10 @@
 import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
+import { classifyStudyPlanError, generateStudyPlanWithFallback } from '../services/studyPlanGeneration.js';
 
 dotenv.config();
 
 export const generateStudyPlan = async (req, res) => {
-  console.log('📦 STUDY PLAN GENERATION INCOMING BODY:', JSON.stringify(req.body, null, 2));
-  console.log('👤 AUTHENTICATED USER CONTEXT:', req.user);
   try {
     const { goal, level, duration, hoursPerDay } = req.body;
 
@@ -68,43 +67,18 @@ https://www.youtube.com/results?search_query=React useState Traversy Media
 Generate the study plan now.
 `;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
-    });
+    const studyPlan = await generateStudyPlanWithFallback(ai, prompt);
+    return res.status(200).json({ success: true, studyPlan });
 
-    let studyPlan = response.text?.trim();
-
-    if (!studyPlan && response?.response) {
-      const output = await response.response;
-      if (typeof output?.text === 'function') {
-        studyPlan = await output.text();
-      } else if (typeof output?.text === 'string') {
-        studyPlan = output.text;
-      }
-    }
-
-    if (!studyPlan || studyPlan.trim() === '') {
-      throw new Error('Gemini returned an empty study plan');
-    }
-
-    try {
-      res.status(200).json({
-        success: true,
-        studyPlan,
-      });
-    } catch (dbError) {
-      console.error('❌ MONGOOSE STUDY PLAN VALIDATION/SAVE CRASH:', dbError.message);
-      console.error('Full Database Error Object:', dbError);
-      return res.status(500).json({ error: "Database mapping constraint failed.", details: dbError.message });
-    }
   } catch (error) {
-    console.error('AI ERROR:', error);
-
-    res.status(500).json({
-      success: false,
-      message: 'Failed to generate AI study plan',
-      error: error.message,
-    });
+    const kind = classifyStudyPlanError(error);
+    console.error('Study plan generation failed:', kind);
+    if (kind === 'unavailable' || kind === 'model') {
+      return res.status(503).json({ success: false, message: 'The AI service is busy right now. Please try again in a moment.' });
+    }
+    if (kind === 'quota') {
+      return res.status(429).json({ success: false, message: 'The AI service has reached a usage limit. Please try again later.' });
+    }
+    return res.status(500).json({ success: false, message: 'Could not generate your study plan. Please try again.' });
   }
 };
