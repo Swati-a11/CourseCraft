@@ -1,3 +1,4 @@
+import PageLoader from '../../components/common/PageLoader';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -91,7 +92,7 @@ const BrowseCourses = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="text-white p-6">Loading courses...</div>
+        <PageLoader text="Finding courses for you…" />
       </DashboardLayout>
     );
   }

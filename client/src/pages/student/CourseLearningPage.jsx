@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PageLoader from '../../components/common/PageLoader';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import TopicList from '../../components/learning/TopicList';
@@ -71,7 +72,7 @@ const CourseLearningPage = () => {
     }
   };
 
-  if (loading) return <div className="min-h-screen bg-black text-white flex items-center justify-center">Loading Course...</div>;
+  if (loading) return <PageLoader text="Preparing your course…" />;
   if (!course) return <div className="min-h-screen bg-black text-white flex items-center justify-center">Course not found.</div>;
 
   const activeTopic = course.topics[activeTopicIndex];

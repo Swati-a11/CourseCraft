@@ -1,3 +1,4 @@
+import PageLoader from '../../components/common/PageLoader';
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../layouts/DashboardLayout";
@@ -49,10 +50,7 @@ const CourseDetails = () => {
   if (!course) {
     return (
       <DashboardLayout>
-        <div className="text-azure-400 text-center mt-20 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-azure-500 mr-3"></div>
-          Loading course...
-        </div>
+        <PageLoader text="Loading course details…" />
       </DashboardLayout>
     );
   }

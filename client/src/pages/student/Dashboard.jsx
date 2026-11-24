@@ -7,7 +7,7 @@ import { useTheme } from '../../context/ThemeContext';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import StatCard from '../../components/dashboard/StatCard';
 import CourseCard from '../../components/dashboard/CourseCard';
-import RobotLoader from '../../components/common/RobotLoader';
+import PageLoader from '../../components/common/PageLoader';
 import { useDashboardData } from '../../context/DashboardDataContext';
 
 const Dashboard = () => {
@@ -99,7 +99,7 @@ const Dashboard = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <RobotLoader text="AI is analyzing your progress..." />
+        <PageLoader text="Preparing your dashboard…" />
       </DashboardLayout>
     );
   }

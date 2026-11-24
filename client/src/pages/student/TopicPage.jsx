@@ -1,3 +1,4 @@
+import PageLoader from '../../components/common/PageLoader';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -404,9 +405,7 @@ const TopicPage = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="flex justify-center items-center min-h-[60vh] text-azure-400 text-lg">
-          Loading topic details...
-        </div>
+        <PageLoader text="Preparing your lesson…" />
       </DashboardLayout>
     );
   }

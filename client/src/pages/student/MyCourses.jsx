@@ -4,7 +4,7 @@ import { Trash2 } from "lucide-react";
 import API from "../../services/api";
 import { toast } from "react-toastify";
 import DashboardLayout from "../../layouts/DashboardLayout";
-import RobotLoader from "../../components/common/RobotLoader";
+import PageLoader from "../../components/common/PageLoader";
 
 const MyCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -86,7 +86,7 @@ const MyCourses = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <RobotLoader text="Loading your courses..." />
+        <PageLoader text="Gathering your courses…" />
       </DashboardLayout>
     );
   }

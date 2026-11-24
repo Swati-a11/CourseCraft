@@ -1,3 +1,4 @@
+import PageLoader from '../../components/common/PageLoader';
 // client/src/pages/student/Achievements.jsx
 
 import { useEffect, useState } from 'react';
@@ -197,11 +198,7 @@ const Achievements = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="min-h-[60vh] flex items-center justify-center">
-          <div className="text-azure-400 text-xl font-semibold animate-pulse">
-            Loading your achievements...
-          </div>
-        </div>
+        <PageLoader text="Loading your achievements…" />
       </DashboardLayout>
     );
   }

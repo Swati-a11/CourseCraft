@@ -348,3 +348,35 @@ html.light :is(.border-white\/5, .border-white\/10, .border-azure-900\/40, .bord
   .cc-progress::-moz-progress-bar { transition: none; }
   .animate-spin, .animate-pulse, .animate-\[spin_3s_linear_infinite_reverse\] { animation: none !important; }
 }
+
+/* Shared loading state */
+.cc-page-loader {
+  min-height: min(70vh, 38rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  color: var(--cc-ink);
+  text-align: center;
+}
+.cc-loader-art { position: relative; display: grid; place-items: center; width: 136px; height: 136px; }
+.cc-loader-halo { position: absolute; inset: 17px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--cc-sky) 25%, transparent), transparent 70%); filter: blur(8px); }
+.cc-loader-orbit { position: absolute; border-radius: 50%; }
+.cc-loader-orbit-outer { inset: 4px; border: 1px solid color-mix(in srgb, var(--cc-sky) 24%, transparent); border-top-color: var(--cc-sky); }
+.cc-loader-orbit-inner { inset: 17px; border: 1px solid color-mix(in srgb, var(--cc-sky) 15%, transparent); border-bottom-color: color-mix(in srgb, var(--cc-sky) 75%, transparent); }
+.cc-loader-mark { display: grid; place-items: center; width: 64px; height: 64px; border: 1px solid var(--cc-line); border-radius: 20px; color: var(--cc-accent); background: var(--cc-surface); box-shadow: 0 14px 35px -20px var(--cc-sky); }
+.cc-loader-copy { margin-top: 1.75rem; }
+.cc-loader-label { color: var(--cc-accent); font: 500 .68rem/1.4 var(--font-mono); letter-spacing: .16em; }
+.cc-loader-copy p { margin-top: .65rem; font: 400 clamp(1.5rem, 3vw, 2rem)/1.2 var(--font-display); letter-spacing: -.02em; }
+.cc-loader-track { display: block; overflow: hidden; width: 100px; height: 3px; margin: 1.4rem auto 0; border-radius: 99px; background: var(--cc-raised); }
+.cc-loader-track > span { display: block; width: 40%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--color-azure-700), var(--cc-sky)); }
+@media (prefers-reduced-motion: no-preference) {
+  .cc-loader-orbit-outer { animation: cc-loader-spin 2.8s linear infinite; }
+  .cc-loader-orbit-inner { animation: cc-loader-spin 4s linear infinite reverse; }
+  .cc-loader-track > span { animation: cc-loader-travel 1.8s ease-in-out infinite alternate; }
+  .cc-loader-mark { animation: cc-loader-breathe 2.4s ease-in-out infinite; }
+}
+@keyframes cc-loader-spin { to { transform: rotate(360deg); } }
+@keyframes cc-loader-travel { from { transform: translateX(-5%); } to { transform: translateX(155%); } }
+@keyframes cc-loader-breathe { 50% { transform: translateY(-3px); } }
