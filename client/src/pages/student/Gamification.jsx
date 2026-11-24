@@ -2,10 +2,10 @@ import DashboardLayout from '../../layouts/DashboardLayout';
 
 const Gamification = () => {
   const badges = [
-    '🏅 First Step',
+    'First Step',
     'Quiz Master',
-    ' Consistency Champion',
-    ' Course Finisher',
+    'Consistency Champion',
+    'Course Finisher',
   ];
 
   return (

@@ -22,11 +22,10 @@ import Achievements from "./pages/student/Achievements";
 import Settings from "./pages/student/Settings";
 import YoutubeNotes from "./pages/student/YoutubeNotes";
 import CourseLearningPage from "./pages/student/CourseLearningPage";
+import DocumentAssistant from "./pages/student/DocumentAssistant";
 
 // Admin
 import AdminDashboard from "./pages/admin/adminDashboard";
-
-import { useEffect } from "react";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -91,6 +90,7 @@ function App() {
         <Route path="/achievements" element={token ? <Achievements /> : <Navigate to="/login" replace />} />
         <Route path="/settings" element={token ? <Settings /> : <Navigate to="/login" replace />} />
         <Route path="/youtube-notes" element={token ? <YoutubeNotes /> : <Navigate to="/login" replace />} />
+        <Route path="/documents" element={token ? <DocumentAssistant /> : <Navigate to="/login" replace />} />
 
         {/* ADMIN */}
         <Route

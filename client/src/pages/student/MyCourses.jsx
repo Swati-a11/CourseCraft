@@ -9,6 +9,7 @@ import RobotLoader from "../../components/common/RobotLoader";
 const MyCourses = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const handleDelete = (courseId) => {
 
@@ -73,6 +74,7 @@ const MyCourses = () => {
         setCourses(res.data.data || []);
       } catch (error) {
         console.error("Error fetching courses:", error);
+        setError("Could not load your courses. Please refresh and try again.");
       } finally {
         setLoading(false);
       }
@@ -96,7 +98,7 @@ const MyCourses = () => {
           My Courses
         </h1>
 
-        {courses.length === 0 ? (
+        {error ? <p role="alert" className="rounded-2xl border border-red-400/40 bg-red-500/10 p-6 text-[var(--cc-error)]">{error}</p> : courses.length === 0 ? (
           <div className="rounded-2xl border border-[var(--cc-line)] bg-[var(--cc-surface)] p-6">
             <p className="text-[var(--cc-muted)]">No courses enrolled.</p>
             <Link to="/browse-courses" className="mt-2 inline-flex min-h-11 items-center font-semibold text-[var(--cc-course-link)] hover:underline">

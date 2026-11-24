@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, BookOpen, Award, Flame, Sparkles } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 
 import DashboardLayout from '../../layouts/DashboardLayout';
@@ -11,6 +11,7 @@ import RobotLoader from '../../components/common/RobotLoader';
 import { useDashboardData } from '../../context/DashboardDataContext';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const { isLight } = useTheme();
   const { stats, loading, error } = useDashboardData();
   const [courses, setCourses] = useState([]);

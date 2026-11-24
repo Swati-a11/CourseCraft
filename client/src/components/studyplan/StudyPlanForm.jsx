@@ -23,7 +23,9 @@ const StudyPlanForm = ({ onGenerate, loading }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Goal */}
+      <label htmlFor="study-goal" className="block text-sm font-semibold">Learning goal</label>
       <input
+        id="study-goal"
         type="text"
         name="goal"
         placeholder="Your Goal (e.g. Learn MERN Stack)"
@@ -34,7 +36,9 @@ const StudyPlanForm = ({ onGenerate, loading }) => {
       />
 
       {/* Level Dropdown with Placeholder */}
+      <label htmlFor="study-level" className="block text-sm font-semibold">Current level</label>
       <select
+        id="study-level"
         name="level"
         value={formData.level}
         onChange={handleChange}
@@ -50,7 +54,9 @@ const StudyPlanForm = ({ onGenerate, loading }) => {
       </select>
 
       {/* Hours Per Day */}
+      <label htmlFor="study-hours" className="block text-sm font-semibold">Hours per day</label>
       <input
+        id="study-hours"
         type="number"
         name="hoursPerDay"
         placeholder="Hours Per Day (e.g. 2)"
@@ -62,7 +68,9 @@ const StudyPlanForm = ({ onGenerate, loading }) => {
       />
 
       {/* Duration */}
+      <label htmlFor="study-duration" className="block text-sm font-semibold">Duration in days</label>
       <input
+        id="study-duration"
         type="number"
         name="duration"
         placeholder="Total Duration in Days (e.g. 30)"

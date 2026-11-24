@@ -10,6 +10,7 @@ const BrowseCourses = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [error, setError] = useState('');
   const [generateTopic, setGenerateTopic] = useState('');
   const [generating, setGenerating] = useState(false);
@@ -38,6 +39,7 @@ const BrowseCourses = () => {
     const params = new URLSearchParams(location.search);
     const q = params.get('q')?.trim() || '';
     setSearchQuery(q);
+    setSearchInput(q);
     fetchCourses(q);
   }, [location.search]);
 
@@ -107,8 +109,16 @@ const BrowseCourses = () => {
           </p>
         </div>
 
+        <form onSubmit={(event) => { event.preventDefault(); navigate(`/browse-courses${searchInput.trim() ? `?q=${encodeURIComponent(searchInput.trim())}` : ''}`); }} className="flex flex-col gap-3 sm:flex-row">
+          <label htmlFor="course-search" className="sr-only">Search courses</label>
+          <input id="course-search" value={searchInput} onChange={(event) => setSearchInput(event.target.value)} placeholder="Search courses" className="cc-document-input" />
+          <button type="submit" className="cc-document-button">Search</button>
+        </form>
+
         <form onSubmit={handleGenerate} className="flex flex-col sm:flex-row gap-3">
+          <label htmlFor="generate-topic" className="sr-only">Topic for a new course</label>
           <input
+            id="generate-topic"
             value={generateTopic}
             onChange={(event) => setGenerateTopic(event.target.value)}
             placeholder="Enter a topic to generate a new course"

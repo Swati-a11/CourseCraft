@@ -30,3 +30,7 @@ Modern self-paced learning is highly fragmented. Students spend more time gather
 
 2. Prompt Structuring & Gemini Integration
 The foundational engine uses structured prompt topologies to force Gemini to return predictable payload structures. This ensures that the generated study plans, notes, and quizzes can be safely parsed as programmatic JSON matrices rather than raw text blobs. If a module requires self-testing, the backend forces schema adherence on the API response so the frontend can seamlessly render multiple-choice question components with an interactive point-counter.
+
+### Ask your documents
+
+Signed-in learners can upload a text-based PDF (up to 5 MB), select it in Documents, and ask questions. CourseCraft saves extracted passages under the user's account and retrieves passages using keyword overlap before sending the question and selected excerpts to Google Gemini. Answers include numbered passages to inspect. The feature needs the existing MongoDB connection, JWT secret, and `GEMINI_API_KEY` configured on the server. Scanned PDFs without selectable text are not supported. Retrieval uses keywords rather than semantic embeddings, so rephrasing a question with terms from the document can improve results. Deleting a document removes its saved text.

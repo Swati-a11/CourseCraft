@@ -8,6 +8,8 @@ import {
   Settings,
   LogOut,
   Wand2,
+  FileText,
+  Menu,
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -22,12 +24,14 @@ const menuItems = [
   { name: 'Progress', icon: BarChart3, path: '/progress' },
   { name: 'Achievements', icon: Award, path: '/achievements' },
   { name: 'AI Tools', icon: Wand2, path: '/youtube-notes' },
+  { name: 'Documents', icon: FileText, path: '/documents' },
   { name: 'Settings', icon: Settings, path: '/settings' },
 ];
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const dispatch = useDispatch();
   const { isLight } = useTheme();
+  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -77,7 +81,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     };
   }, [dispatch]);
 
-  const mobileMenuItems = menuItems;
+  const mobileMenuItems = menuItems.slice(0, 4);
 
   return (
     <>
@@ -168,6 +172,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       </aside>
 
       {/* 2. MOBILE VIEW NAVIGATION (Horizontal bottom bar dock, hidden on desktop screens) */}
+      {mobileMoreOpen && <nav aria-label="More navigation" className="fixed bottom-[4.5rem] right-3 z-50 w-56 rounded-2xl border border-[var(--cc-line)] bg-[var(--cc-surface)] p-2 shadow-xl md:hidden">
+        {menuItems.slice(4).map((item) => <NavLink key={item.path} to={item.path} onClick={() => setMobileMoreOpen(false)} className="flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium text-[var(--cc-ink)] hover:bg-[var(--cc-raised)]"><item.icon size={19} aria-hidden="true" />{item.name}</NavLink>)}
+        <button onClick={handleLogout} className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-medium text-[var(--cc-error)]"><LogOut size={19} aria-hidden="true" />Log out</button>
+      </nav>}
       <div
         aria-label="Mobile navigation"
         className="fixed bottom-0 left-0 right-0 flex h-[4.5rem] items-stretch gap-1 overflow-x-auto overscroll-x-contain border-t border-slate-200 bg-white px-2 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] dark:border-slate-800 dark:bg-slate-900 md:hidden"
@@ -191,14 +199,14 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             </NavLink>
           );
         })}
-        {/* Dedicated Mobile Logout button */}
         <button
-          onClick={handleLogout}
-          aria-label="Log out"
-          className="flex min-w-[3.25rem] flex-col items-center justify-center gap-1 rounded-lg px-1 py-2 text-[10px] font-medium text-red-500 transition-colors hover:bg-red-50"
+          onClick={() => setMobileMoreOpen(open => !open)}
+          aria-label="More navigation"
+          aria-expanded={mobileMoreOpen}
+          className="flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-lg px-1 py-2 text-[10px] font-medium text-[var(--cc-muted)]"
         >
-          <LogOut size={19} aria-hidden="true" />
-          <span>Log out</span>
+          <Menu size={19} aria-hidden="true" />
+          <span>More</span>
         </button>
       </div>
     </>

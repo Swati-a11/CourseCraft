@@ -138,12 +138,13 @@ export const generateYoutubeNotes = async (req, res) => {
     const final = await generateWithModelFallback(ai, `
       Create clean study notes from these summaries:
       ${combined}
+      Do not use emojis or decorative symbols.
       
       Format:
-      📌 Topic: [topic]
-      📝 Key Points: [bullet points]
-      💡 Important Concepts: [concepts]
-      ❓ Possible Questions: [questions]
+      Topic: [topic]
+      Key Points: [bullet points]
+      Important Concepts: [concepts]
+      Possible Questions: [questions]
     `);
 
     const summary = final.text || (typeof final.response?.text === 'function' ? await final.response.text() : final.response?.text) || '';

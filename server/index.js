@@ -24,6 +24,7 @@ import youtubeRoutes from './routes/youtubeRoutes.js';
 import pdfRoutes from './routes/pdfRoutes.js';
 import learningRoutes from './routes/learningRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
+import documentRoutes from './routes/documentRoutes.js';
 import Progress from './models/Progress.js';
 
 const app = express();
@@ -94,6 +95,7 @@ app.use('/api/youtube', youtubeRoutes);
 app.use('/api/pdf', pdfRoutes);
 app.use('/api/learning', learningRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/documents', documentRoutes);
 
 // static files
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));

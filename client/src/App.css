@@ -301,3 +301,13 @@ html.light :is(.border-white\/5, .border-white\/10, .border-azure-900\/40, .bord
 @media (prefers-reduced-motion: reduce) {
   .cc-enrolled-course { transition: none; }
 }
+
+.cc-document-card { background: var(--cc-surface); border: 1px solid var(--cc-line); border-radius: 1.25rem; padding: clamp(1.25rem, 3vw, 2rem); box-shadow: 0 14px 40px -30px var(--cc-shadow); }
+.cc-document-icon { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--cc-raised); color: var(--cc-accent); }
+.cc-document-input { display: block; width: 100%; border: 1px solid var(--cc-input-line); border-radius: .75rem; padding: .8rem 1rem; background: var(--cc-bg); color: var(--cc-ink); }
+.cc-document-button { min-height: 44px; padding: .7rem 1.2rem; border-radius: .75rem; background: var(--cc-action); color: var(--cc-action-ink); font-weight: 700; cursor: pointer; }
+.cc-document-button:hover { filter: brightness(.94); }
+.cc-document-button:disabled { opacity: .5; cursor: not-allowed; }
+.cc-document-answer { line-height: 1.7; }
+.cc-document-answer :is(p, ul, ol) { margin-bottom: .8rem; }
+.cc-document-answer ul { list-style: disc; padding-left: 1.5rem; }

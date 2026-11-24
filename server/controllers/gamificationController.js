@@ -31,15 +31,15 @@ export const getGamification = async (req, res) => {
       }
     }
 
-    const badges = ['🏅 First Step'];
+    const badges = ['First Step'];
     if (user.streak >= 5) {
-      badges.push('🔥 Consistency Champion');
+      badges.push('Consistency Champion');
     }
     if (user.xp >= 100) {
-      badges.push('🧠 Quiz Master');
+      badges.push('Quiz Master');
     }
     if (user.xp >= 500) {
-      badges.push('🏆 Course Finisher');
+      badges.push('Course Finisher');
     }
 
     res.json({
