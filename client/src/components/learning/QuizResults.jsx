@@ -1,7 +1,7 @@
 import React from 'react';
 import { Award, Zap, AlertTriangle, CheckCircle, RefreshCcw, ArrowRight } from 'lucide-react';
 
-const QuizResults = ({ results, onRetry, onNext }) => {
+const QuizResults = ({ results, onRetry, onNext, isLast = false }) => {
   if (!results) return null;
 
   const { score, passed, xpGained, newTotalXp, newStreak, weakTopic } = results;
@@ -74,7 +74,7 @@ const QuizResults = ({ results, onRetry, onNext }) => {
               onClick={onNext}
               className="flex items-center px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-bold transition shadow-[0_0_20px_rgba(79,70,229,0.3)] transform hover:-translate-y-1"
             >
-              Next Topic
+              {isLast ? 'My Courses' : 'Next Topic'}
               <ArrowRight className="w-5 h-5 ml-2" />
             </button>
           )}

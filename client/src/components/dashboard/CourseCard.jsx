@@ -31,7 +31,7 @@ const CourseCard = ({ course }) => {
         {course.nextTopicTitle && <p className="mb-3 text-sm text-[var(--cc-muted)]"><strong className="text-[var(--cc-ink)]">Up next:</strong> {course.nextTopicTitle}</p>}
         <div>
           <div className={`flex justify-between text-xs mb-1 transition-colors ${isLight ? 'text-slate-500' : 'text-gray-400'}`}>
-            <span>{typeof course.completedTopics === 'number' && course.topics > 0 ? `${course.completedTopics} of ${course.topics} lessons completed` : 'Progress'}</span>
+            <span>{typeof course.completedTopics === 'number' && course.topics > 0 && !(course.progress >= 100 && course.completedTopics < course.topics) ? `${course.completedTopics} of ${course.topics} lessons completed` : 'Progress'}</span>
             <span>{course.progress}%</span>
           </div>
           <div className={`w-full rounded-full h-2 transition-colors ${isLight ? 'bg-slate-100' : 'bg-zinc-800'}`}>

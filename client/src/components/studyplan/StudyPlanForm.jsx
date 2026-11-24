@@ -28,6 +28,7 @@ const StudyPlanForm = ({ onGenerate, loading }) => {
         id="study-goal"
         type="text"
         name="goal"
+        maxLength={300}
         placeholder="Your Goal (e.g. Learn MERN Stack)"
         value={formData.goal}
         onChange={handleChange}
@@ -59,6 +60,7 @@ const StudyPlanForm = ({ onGenerate, loading }) => {
         id="study-hours"
         type="number"
         name="hoursPerDay"
+        max="24"
         placeholder="Hours Per Day (e.g. 2)"
         value={formData.hoursPerDay}
         onChange={handleChange}
@@ -73,6 +75,7 @@ const StudyPlanForm = ({ onGenerate, loading }) => {
         id="study-duration"
         type="number"
         name="duration"
+        max="90"
         placeholder="Total Duration in Days (e.g. 30)"
         value={formData.duration}
         onChange={handleChange}

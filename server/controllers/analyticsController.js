@@ -1,20 +1,10 @@
+import WeakTopic from '../models/WeakTopic.js';
+
 export const getWeakTopics = async (req, res) => {
   try {
-    // Later this will come from MongoDB
-    const quizResults = [
-      { topic: 'React Hooks', score: 55 },
-      { topic: 'Node Authentication', score: 62 },
-      { topic: 'MongoDB Aggregation', score: 88 },
-    ];
-
-    const weakTopics = quizResults.filter(
-      (item) => item.score < 70
-    );
-
+    const weakTopics = await WeakTopic.find({ user: req.user._id, status: { $ne: 'Mastered' }, averageScore: { $lt: 70 } }).sort({ averageScore: 1 }).lean();
     res.json({ weakTopics });
-  } catch (error) {
-    res.status(500).json({
-      message: 'Failed to fetch weak topics',
-    });
+  } catch {
+    res.status(500).json({ message: 'Failed to fetch topics to review.' });
   }
 };

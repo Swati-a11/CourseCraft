@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PageLoader from '../../components/common/PageLoader';
+import { useDashboardData } from '../../context/DashboardDataContext';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../../services/api';
 import TopicList from '../../components/learning/TopicList';
@@ -13,6 +14,7 @@ import { PlayCircle, FileText } from 'lucide-react';
 const CourseLearningPage = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
+  const { refreshStats } = useDashboardData();
   const [searchParams] = useSearchParams();
 
   const [course, setCourse] = useState(null);
@@ -20,6 +22,7 @@ const CourseLearningPage = () => {
   const [activeTopicIndex, setActiveTopicIndex] = useState(0);
   const [activeTab, setActiveTab] = useState('video');
   const [loading, setLoading] = useState(true);
+  const [submitError, setSubmitError] = useState('');
 
   // States for Quiz
   const [showQuiz, setShowQuiz] = useState(false);
@@ -64,6 +67,7 @@ const CourseLearningPage = () => {
   };
 
   const handleQuizSubmit = async (answers) => {
+    setSubmitError('');
     try {
       const res = await api.post('/learning/quiz/submit', {
         courseId,
@@ -73,10 +77,12 @@ const CourseLearningPage = () => {
 
       setQuizResults(res.data);
       setShowQuiz(false);
+      refreshStats();
       // Update local progress State
       fetchCourseData(); 
     } catch (error) {
       console.error("Failed to submit quiz", error);
+      setSubmitError('Could not submit your quiz. Your answers are still here; please try again.');
     }
   };
 
@@ -105,23 +111,26 @@ const CourseLearningPage = () => {
           <p className="text-xs text-zinc-400 mt-2">{progress?.totalProgress || 0}% Completed</p>
         </div>
         
-        <div className="min-h-0 flex-1 overflow-y-auto custom-scrollbar">
+        <details open className="min-h-0 flex-1 overflow-y-auto custom-scrollbar">
+          <summary className="cursor-pointer px-4 py-3 font-semibold text-[var(--cc-ink)]">Course outline</summary>
           <TopicList 
             topics={course.topics} 
             progress={progress} 
             activeIndex={activeTopicIndex} 
             onSelect={handleTopicSelect} 
           />
-        </div>
+        </details>
       </div>
 
       {/* Main Content Area */}
       <div className="min-w-0 flex-1 md:h-full md:overflow-y-auto custom-scrollbar">
         <div className="mx-auto w-full max-w-5xl p-4 sm:p-6 lg:p-8">
           <h1 className="mb-6 break-words text-2xl font-extrabold sm:mb-8 sm:text-3xl">{activeTopic?.title}</h1>
+          <p className="mb-4 text-sm text-[var(--cc-muted)]">Lesson {activeTopicIndex + 1} of {course.topics.length}. Pass the quiz with at least 70% to complete this lesson and unlock the next.</p>
+          {submitError && <p role="alert" className="mb-4 rounded-xl border border-red-400/40 p-4 text-[var(--cc-error)]">{submitError}</p>}
           
           {quizResults ? (
-            <QuizResults results={quizResults} onRetry={() => setQuizResults(null)} onNext={() => handleTopicSelect(Math.min(activeTopicIndex + 1, course.topics.length - 1))} />
+            <QuizResults results={quizResults} isLast={activeTopicIndex === course.topics.length - 1} onRetry={() => { setQuizResults(null); setShowQuiz(true); }} onNext={() => activeTopicIndex + 1 < course.topics.length ? handleTopicSelect(activeTopicIndex + 1) : navigate('/my-courses')} />
           ) : showQuiz ? (
             <QuizEngine topic={activeTopic} onSubmit={handleQuizSubmit} onCancel={() => setShowQuiz(false)} />
           ) : (
@@ -182,6 +191,7 @@ const CourseLearningPage = () => {
               </section>
             </div>
           )}
+          {!showQuiz && !quizResults && <nav aria-label="Lesson navigation" className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--cc-line)] pt-5"><button type="button" onClick={() => handleTopicSelect(activeTopicIndex - 1)} disabled={activeTopicIndex === 0} className="min-h-11 rounded-xl border border-[var(--cc-line)] px-4 font-semibold disabled:opacity-40">Previous lesson</button><button type="button" onClick={() => handleTopicSelect(activeTopicIndex + 1)} disabled={activeTopicIndex >= course.topics.length - 1 || !progress?.completedTopics?.some(t => t.topicIndex === activeTopicIndex && t.quizPassed)} className="min-h-11 rounded-xl bg-[var(--cc-action)] px-4 font-semibold text-[var(--cc-action-ink)] disabled:opacity-40">Next lesson</button></nav>}
         </div>
       </div>
     </div>

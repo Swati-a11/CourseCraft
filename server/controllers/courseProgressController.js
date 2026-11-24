@@ -127,6 +127,7 @@ export const updateTopicProgress = async (req, res) => {
         completedAt: null,
       };
       progress.completedTopics.push(topic);
+      topic = progress.completedTopics[progress.completedTopics.length - 1];
     }
 
     if (notesCompleted !== undefined)
@@ -146,8 +147,6 @@ export const updateTopicProgress = async (req, res) => {
     }
 
     if (
-      topic.notesCompleted &&
-      topic.videoCompleted &&
       topic.quizPassed &&
       !topic.completedAt
     ) {
@@ -159,7 +158,7 @@ export const updateTopicProgress = async (req, res) => {
     const totalTopics = course.topics.length || 1;
 
     const completedCount = progress.completedTopics.filter(
-      (t) => t.notesCompleted && t.videoCompleted && t.quizPassed
+      (t) => t.quizPassed
     ).length;
 
     progress.totalProgress = Math.round(

@@ -73,7 +73,7 @@ export const getDashboardStats = async (req, res) => {
         : [];
 
       const completed = topics.filter(
-        (t) => t?.notesCompleted && t?.videoCompleted && t?.quizPassed
+        (t) => t?.quizPassed
       ).length;
 
       return count + completed;
@@ -149,8 +149,6 @@ export const getDashboardStats = async (req, res) => {
       const completedTopics = progress
         ? (progress.completedTopics || []).filter(
             (t) =>
-              t?.notesCompleted &&
-              t?.videoCompleted &&
               t?.quizPassed
           ).length
         : 0;
